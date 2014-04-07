@@ -1,8 +1,22 @@
-package com.erjr.diabetesi1;
+package com.erjr.cloop.entities;
 
 import java.util.Date;
 
-public class Portion {
+import com.erjr.diabetesi1.MyDateUtil;
+
+public class Course {
+	public static final String TABLE_COURSES = "courses";
+	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_CARBS = "carbs";
+	public static final String COLUMN_DATETIME = "datetime";
+	public static final String COLUMN_TRANSFERED = "transfered";
+
+	public static final String COURSES_CREATE = "create table "
+			+ TABLE_COURSES + "(" + COLUMN_ID
+			+ " integer primary key autoincrement, " + COLUMN_CARBS
+			+ " integer not null, " + COLUMN_DATETIME + " text not null, "
+			+ COLUMN_TRANSFERED + " text not null);";
+	
 	private long id;
 	private int carbs;
 	private Date datetime;
@@ -48,9 +62,9 @@ public class Portion {
 	}
 
 	public String toXML() {
-		return "<portion><id>" + id + "</id><carbs>" + carbs
+		return "<course><id>" + id + "</id><carbs>" + carbs
 				+ "</carbs><datetime>"
 				+ MyDateUtil.convertDateToString(datetime)
-				+ "</datetime></portion>";
+				+ "</datetime></course>";
 	}
 }

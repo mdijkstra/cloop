@@ -1,4 +1,6 @@
-package com.erjr.diabetesi1;
+package com.erjr.cloop.dao;
+
+import com.erjr.cloop.entities.Course;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,29 +9,18 @@ import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
-	public static final String TABLE_PORTIONS = "portions";
-	public static final String COLUMN_ID = "_id";
-	public static final String COLUMN_CARBS = "carbs";
-	public static final String COLUMN_DATETIME = "datetime";
-	public static final String COLUMN_TRANSFERED = "transfered";
 
 	private static final String DATABASE_NAME = "diabetes.db";
 	private static final int DATABASE_VERSION = 2;
 
-	// Database creation sql statement
-	private static final String DATABASE_CREATE = "create table "
-			+ TABLE_PORTIONS + "(" + COLUMN_ID
-			+ " integer primary key autoincrement, " + COLUMN_CARBS
-			+ " integer not null, " + COLUMN_DATETIME + " text not null, "
-			+ COLUMN_TRANSFERED + " text not null);";
-
+	
 	public MySQLiteHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
-		database.execSQL(DATABASE_CREATE);
+		database.execSQL(Course.COURSES_CREATE);
 	}
 
 	@Override
@@ -37,7 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		Log.w(MySQLiteHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PORTIONS);
+		db.execSQL("DROP TABLE IF EXISTS " + Course.TABLE_COURSES);
 		onCreate(db);
 	}
 

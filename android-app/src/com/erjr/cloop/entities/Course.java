@@ -6,65 +6,169 @@ import com.erjr.diabetesi1.MyDateUtil;
 
 public class Course {
 	public static final String TABLE_COURSES = "courses";
-	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_COURSE_ID = "course_id";
+	public static final String COLUMN_FOOD_ID = "food_id";
+	public static final String COLUMN_SERV_QUANTITY = "serv_quantity";
 	public static final String COLUMN_CARBS = "carbs";
-	public static final String COLUMN_DATETIME = "datetime";
+	public static final String COLUMN_DATETIME_CONSUMPTION = "datetime_consumption";
+	public static final String COLUMN_DATETIME_IDEAL_INJECTION = "datetime_ideal_injection";
 	public static final String COLUMN_TRANSFERED = "transfered";
 
-	public static final String COURSES_CREATE = "create table "
-			+ TABLE_COURSES + "(" + COLUMN_ID
-			+ " integer primary key autoincrement, " + COLUMN_CARBS
-			+ " integer not null, " + COLUMN_DATETIME + " text not null, "
-			+ COLUMN_TRANSFERED + " text not null);";
-	
-	private long id;
-	private int carbs;
-	private Date datetime;
+	public static final String COURSES_CREATE = "create table " + TABLE_COURSES
+			+ "(" + COLUMN_COURSE_ID + " integer primary key autoincrement, "
+			+ COLUMN_FOOD_ID + " integer, " + COLUMN_SERV_QUANTITY + " real, "
+			+ COLUMN_CARBS + " int not null, " + COLUMN_DATETIME_CONSUMPTION
+			+ " text not null, " + COLUMN_DATETIME_IDEAL_INJECTION
+			+ " text not null, " + COLUMN_TRANSFERED + " text not null);";
+
+	private long courseID;
+	private Integer foodID;
+	private Float servQuantity;
+	private Integer carbs;
+	private Date datetimeConsumption;
+	private Date datetimeIdealInjection;
 	private String transfered;
 
-	public long getId() {
-		return id;
+	public String getUpdateSql() {
+		String sql = " update " + TABLE_COURSES + " set " + COLUMN_FOOD_ID
+				+ "=" + foodID.toString() + ", " + COLUMN_SERV_QUANTITY + " = "
+				+ servQuantity.toString() + ", " + COLUMN_CARBS + " = "
+				+ carbs.toString() + ", " + COLUMN_DATETIME_CONSUMPTION
+				+ " = '" + MyDateUtil.convertDateToString(datetimeConsumption)
+				+ "', " + COLUMN_DATETIME_IDEAL_INJECTION + " = '"
+				+ MyDateUtil.convertDateToString(datetimeIdealInjection)
+				+ "', " + COLUMN_TRANSFERED + " = '" + transfered + "' where "
+				+ COLUMN_COURSE_ID + " = " + courseID + ";";
+		return sql;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	// Will be used by the ArrayAdapter in the ListView
-	@Override
 	public String toString() {
-		return MyDateUtil.convertDateToString(datetime) + " - "
-				+ Integer.toString(carbs) + " - " + transfered;
+		return "ID (" + courseID + ") food-" + foodID.toString() + " * "
+				+ servQuantity.toString() + " = " + carbs.toString()
+				+ " eaten at "
+				+ MyDateUtil.convertDateToString(datetimeConsumption)
+				+ " thus should inject at "
+				+ MyDateUtil.convertDateToString(datetimeIdealInjection)
+				+ ". Transfered = " + transfered;
 	}
 
-	public int getCarbs() {
+	public String toXML() {
+		return "<course><course_id>" + courseID + "</course_id><food_id>"
+				+ foodID + "</food_id><serv_quantity>" + servQuantity
+				+ "</serv_quantity><carbs>" + carbs
+				+ "</carbs><datetime_consumption>"
+				+ MyDateUtil.convertDateToString(datetimeConsumption)
+				+ "</datetime_consumption><datetime_ideal_injection>"
+				+ MyDateUtil.convertDateToString(datetimeConsumption)
+				+ "</datetime_ideal_injection></course>";
+	}
+
+	public long getId() {
+		return courseID;
+	}
+
+	/**
+	 * @return the courseID
+	 */
+	public long getCourseID() {
+		return courseID;
+	}
+
+	/**
+	 * @param courseID
+	 *            the courseID to set
+	 */
+	public void setCourseID(long courseID) {
+		this.courseID = courseID;
+	}
+
+	/**
+	 * @return the foodID
+	 */
+	public Integer getFoodID() {
+		return foodID;
+	}
+
+	/**
+	 * @param foodID
+	 *            the foodID to set
+	 */
+	public void setFoodID(Integer foodID) {
+		this.foodID = foodID;
+	}
+
+	/**
+	 * @return the serv_quantity
+	 */
+	public Float getServQuantity() {
+		return servQuantity;
+	}
+
+	/**
+	 * @param serv_quantity
+	 *            the serv_quantity to set
+	 */
+	public void setServQuantity(Float serv_quantity) {
+		this.servQuantity = serv_quantity;
+	}
+
+	/**
+	 * @return the carbs
+	 */
+	public Integer getCarbs() {
 		return carbs;
 	}
 
-	public void setCarbs(int carbs) {
+	/**
+	 * @param carbs
+	 *            the carbs to set
+	 */
+	public void setCarbs(Integer carbs) {
 		this.carbs = carbs;
 	}
 
-	public Date getDatetime() {
-		return datetime;
+	/**
+	 * @return the datetime_consumption
+	 */
+	public Date getDatetime_consumption() {
+		return datetimeConsumption;
 	}
 
-	public void setDatetime(Date datetime) {
-		this.datetime = datetime;
+	/**
+	 * @param datetime_consumption
+	 *            the datetime_consumption to set
+	 */
+	public void setDatetimeConsumption(Date datetime_consumption) {
+		this.datetimeConsumption = datetime_consumption;
 	}
 
+	/**
+	 * @return the datetime_ideal_injection
+	 */
+	public Date getDatetimeIdealInjection() {
+		return datetimeIdealInjection;
+	}
+
+	/**
+	 * @param datetime_ideal_injection
+	 *            the datetime_ideal_injection to set
+	 */
+	public void setDatetimeIdealInjection(Date datetime_ideal_injection) {
+		this.datetimeIdealInjection = datetime_ideal_injection;
+	}
+
+	/**
+	 * @return the transfered
+	 */
 	public String getTransfered() {
 		return transfered;
 	}
 
+	/**
+	 * @param transfered
+	 *            the transfered to set
+	 */
 	public void setTransfered(String transfered) {
 		this.transfered = transfered;
-	}
-
-	public String toXML() {
-		return "<course><id>" + id + "</id><carbs>" + carbs
-				+ "</carbs><datetime>"
-				+ MyDateUtil.convertDateToString(datetime)
-				+ "</datetime></course>";
 	}
 }

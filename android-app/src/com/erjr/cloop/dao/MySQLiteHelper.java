@@ -11,7 +11,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 
 	private static final String DATABASE_NAME = "cloop.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 6;
 
 	
 	public MySQLiteHelper(Context context) {
@@ -28,6 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		Log.w(MySQLiteHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
+		// TODO: Convert to Course.onUpgrade(db, oldVersion, newVersion)
 		db.execSQL("DROP TABLE IF EXISTS " + Course.TABLE_COURSES);
 		onCreate(db);
 	}

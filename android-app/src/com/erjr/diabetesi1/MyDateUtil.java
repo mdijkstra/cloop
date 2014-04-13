@@ -8,8 +8,9 @@ import java.util.Date;
 
 public class MyDateUtil {
 
+	public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
 	public static Date convertStringToDate(String string) {
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		DateFormat df = new SimpleDateFormat(dateFormat);
 
 		// Get the date today using Calendar object.
 		// Date d = Calendar.getInstance().getTime();
@@ -31,7 +32,7 @@ public class MyDateUtil {
 	public static String convertDateToString(Date date) {
 		// Create an instance of SimpleDateFormat used for formatting
 		// the string representation of date (month/day/year)
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		DateFormat df = new SimpleDateFormat(dateFormat);
 
 		// Get the date today using Calendar object.
 		// Date d = Calendar.getInstance().getTime();

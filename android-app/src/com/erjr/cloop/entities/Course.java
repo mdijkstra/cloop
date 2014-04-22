@@ -6,20 +6,21 @@ import com.erjr.diabetesi1.MyDateUtil;
 
 public class Course {
 	public static final String TABLE_COURSES = "courses";
-	public static final String COLUMN_COURSE_ID = "course_id";
-	public static final String COLUMN_FOOD_ID = "food_id";
-	public static final String COLUMN_SERV_QUANTITY = "serv_quantity";
-	public static final String COLUMN_CARBS = "carbs";
-	public static final String COLUMN_DATETIME_CONSUMPTION = "datetime_consumption";
-	public static final String COLUMN_DATETIME_IDEAL_INJECTION = "datetime_ideal_injection";
-	public static final String COLUMN_TRANSFERED = "transfered";
+	public static final String COL_COURSE_ID = "course_id";
+	public static final String COL_FOOD_ID = "food_id";
+	public static final String COL_SERV_QUANTITY = "serv_quantity";
+	public static final String COL_CARBS = "carbs";
+	public static final String COL_DATETIME_CONSUMPTION = "datetime_consumption";
+	public static final String COL_DATETIME_IDEAL_INJECTION = "datetime_ideal_injection";
+	public static final String COL_TRANSFERED = "transfered";
 
 	public static final String COURSES_CREATE = "create table " + TABLE_COURSES
-			+ "(" + COLUMN_COURSE_ID + " integer primary key autoincrement, "
-			+ COLUMN_FOOD_ID + " integer, " + COLUMN_SERV_QUANTITY + " real, "
-			+ COLUMN_CARBS + " int not null, " + COLUMN_DATETIME_CONSUMPTION
-			+ " text not null, " + COLUMN_DATETIME_IDEAL_INJECTION
-			+ " text not null, " + COLUMN_TRANSFERED + " text not null);";
+			+ "(" + COL_COURSE_ID + " integer primary key autoincrement, "
+			+ COL_FOOD_ID + " integer, " + COL_SERV_QUANTITY + " real, "
+			+ COL_CARBS + " int not null, " + COL_CARBS
+			+ " text not null, " + COL_DATETIME_CONSUMPTION
+			+ " text not null, "  + COL_DATETIME_IDEAL_INJECTION
+			+ " text, " + COL_TRANSFERED + " text not null);";
 
 	private long courseID;
 	private Integer foodID;
@@ -30,15 +31,15 @@ public class Course {
 	private String transfered;
 
 	public String getUpdateSql() {
-		String sql = " update " + TABLE_COURSES + " set " + COLUMN_FOOD_ID
-				+ "=" + foodID.toString() + ", " + COLUMN_SERV_QUANTITY + " = "
-				+ servQuantity.toString() + ", " + COLUMN_CARBS + " = "
-				+ carbs.toString() + ", " + COLUMN_DATETIME_CONSUMPTION
+		String sql = " update " + TABLE_COURSES + " set " + COL_FOOD_ID
+				+ "=" + foodID.toString() + ", " + COL_SERV_QUANTITY + " = "
+				+ servQuantity.toString() + ", " + COL_CARBS + " = "
+				+ carbs.toString() + ", " + COL_CARBS
 				+ " = '" + MyDateUtil.convertDateToString(datetimeConsumption)
-				+ "', " + COLUMN_DATETIME_IDEAL_INJECTION + " = '"
+				+ "', " + COL_DATETIME_CONSUMPTION + " = '"
 				+ MyDateUtil.convertDateToString(datetimeIdealInjection)
-				+ "', " + COLUMN_TRANSFERED + " = '" + transfered + "' where "
-				+ COLUMN_COURSE_ID + " = " + courseID + ";";
+				+ "', " + COL_TRANSFERED + " = '" + transfered + "' where "
+				+ COL_COURSE_ID + " = " + courseID + ";";
 		return sql;
 	}
 

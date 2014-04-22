@@ -3,6 +3,7 @@ package com.erjr.cloop.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.erjr.cloop.entities.CGMDataPoint;
 import com.erjr.cloop.entities.Course;
 import com.erjr.diabetesi1.MyDateUtil;
 
@@ -12,7 +13,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-public class CoursesDataSource {
+public class CGMDataSource {
 
 	// Database fields
 	private SQLiteDatabase database;
@@ -22,7 +23,7 @@ public class CoursesDataSource {
 			Course.COL_CARBS, Course.COL_DATETIME_CONSUMPTION,
 			Course.COL_DATETIME_IDEAL_INJECTION, Course.COL_TRANSFERED };
 
-	public CoursesDataSource(Context context) {
+	public CGMDataSource(Context context) {
 		dbHelper = new MySQLiteHelper(context);
 	}
 
@@ -54,30 +55,11 @@ public class CoursesDataSource {
 		return newCourse;
 	}
 
-	public void deleteComment(Course comment) {
-		long id = comment.getCourseID();
-		System.out.println("Comment deleted with id: " + id);
-		database.delete(Course.TABLE_COURSES, Course.COL_COURSE_ID + " = "
-				+ id, null);
+	public CGMDataPoint getCurrentBG() {
+		//TODO: query the db for the max cgm if > 30 min return null for not available
+		return null;
 	}
-
-	public List<Course> getAllCourses() {
-		List<Course> courses = new ArrayList<Course>();
-
-		Cursor cursor = database.query(Course.TABLE_COURSES, allColumns, null,
-				null, null, null, null);
-
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Course course = cursorToCourse(cursor);
-			courses.add(course);
-			cursor.moveToNext();
-		}
-		// make sure to close the cursor
-		cursor.close();
-		return courses;
-	}
-
+	
 	public List<Course> getCoursesToTransfer() {
 		List<Course> courses = new ArrayList<Course>();
 

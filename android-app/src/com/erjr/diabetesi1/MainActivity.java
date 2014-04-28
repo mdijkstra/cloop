@@ -94,18 +94,38 @@ public class MainActivity extends ListActivity {
 		// mId allows you to update the notification later on.
 		mNotificationManager.notify(myNotificationId, mBuilder.build());
 
-		// test 2
-		Intent myIntent = new Intent(MainActivity.this,
-				PersistentNotificationService.class);
-		myIntent.putExtra("myNotificationId", myNotificationId);
-		PendingIntent pendingIntent = PendingIntent.getActivity(
-				MainActivity.this, 0, myIntent, 0);
+//		// test 2
+//		Intent myIntent = new Intent(MainActivity.this,
+//				PersistentNotificationService.class);
+//		myIntent.putExtra("myNotificationId", myNotificationId);
+//		PendingIntent pendingIntent = PendingIntent.getActivity(
+//				MainActivity.this, 0, myIntent, 0);
+//
+//		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//		int reoccurance = 1 * 1 * 1000;
+//		Calendar cal = Calendar.getInstance();
+//		cal.setTimeInMillis(System.currentTimeMillis());
+//		cal.add(Calendar.SECOND, 5);
+////		long trigger = System.currentTimeMillis() + (5 * 1000);
+//		long trigger = SystemClock.elapsedRealtime();
+//		trigger += 5 * 1000;
+//		alarmManager.setRepeating(AlarmManager.RTC,
+//				trigger, reoccurance, pendingIntent);
 
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		int reoccurance = 1 * 1 * 1000;
-		long trigger = System.currentTimeMillis() + (10 * 1000); 
-		alarmManager.setInexactRepeating(AlarmManager.RTC,
-				trigger, reoccurance, pendingIntent);
+		// test 3 - http://www.coderzheaven.com/2011/07/31/how-to-setup-a-repeating-alarm-in-android/
+		Intent intent = new Intent(MainActivity.this, PersistentNotificationService.class);
+        PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this,
+                0, intent, 0);
+
+        // We want the alarm to go off 5 seconds from now.
+        long firstTime = SystemClock.elapsedRealtime();
+        firstTime += 5*1000;
+
+        // Schedule the alarm!
+        long freq = 2 * 60 * 1000;
+        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC,
+                        firstTime, freq, sender);
 
 	}
 

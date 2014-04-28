@@ -2,7 +2,7 @@ package com.erjr.cloop.entities;
 
 import java.util.Date;
 
-import com.erjr.diabetesi1.MyDateUtil;
+import com.erjr.diabetesi1.Util;
 
 public class Course {
 	public static final String TABLE_COURSES = "courses";
@@ -18,8 +18,13 @@ public class Course {
 			+ "(" + COL_COURSE_ID + " integer primary key autoincrement, "
 			+ COL_FOOD_ID + " integer, " + COL_SERV_QUANTITY + " real, "
 			+ COL_CARBS + " int not null, " + COL_DATETIME_CONSUMPTION
-			+ " text not null, "  + COL_DATETIME_IDEAL_INJECTION
-			+ " text, " + COL_TRANSFERED + " text not null);";
+			+ " text not null, " + COL_DATETIME_IDEAL_INJECTION + " text, "
+			+ COL_TRANSFERED + " text not null);";
+
+	public static String[] allColumns = { COL_COURSE_ID, COL_FOOD_ID,
+			COL_SERV_QUANTITY, COL_CARBS,
+			COL_DATETIME_CONSUMPTION,
+			COL_DATETIME_IDEAL_INJECTION, COL_TRANSFERED };
 
 	private long courseID;
 	private Integer foodID;
@@ -30,14 +35,14 @@ public class Course {
 	private String transfered;
 
 	public String getUpdateSql() {
-		String sql = " update " + TABLE_COURSES + " set " + COL_FOOD_ID
-				+ "=" + foodID.toString() + ", " + COL_SERV_QUANTITY + " = "
+		String sql = " update " + TABLE_COURSES + " set " + COL_FOOD_ID + "="
+				+ foodID.toString() + ", " + COL_SERV_QUANTITY + " = "
 				+ servQuantity.toString() + ", " + COL_CARBS + " = "
-				+ carbs.toString() + ", " + COL_CARBS
-				+ " = '" + MyDateUtil.convertDateToString(datetimeConsumption)
-				+ "', " + COL_DATETIME_CONSUMPTION + " = '"
-				+ MyDateUtil.convertDateToString(datetimeIdealInjection)
-				+ "', " + COL_TRANSFERED + " = '" + transfered + "' where "
+				+ carbs.toString() + ", " + COL_CARBS + " = '"
+				+ Util.convertDateToString(datetimeConsumption) + "', "
+				+ COL_DATETIME_CONSUMPTION + " = '"
+				+ Util.convertDateToString(datetimeIdealInjection) + "', "
+				+ COL_TRANSFERED + " = '" + transfered + "' where "
 				+ COL_COURSE_ID + " = " + courseID + ";";
 		return sql;
 	}
@@ -45,10 +50,9 @@ public class Course {
 	public String toString() {
 		return "ID (" + courseID + ") food-" + foodID.toString() + " * "
 				+ servQuantity.toString() + " = " + carbs.toString()
-				+ " eaten at "
-				+ MyDateUtil.convertDateToString(datetimeConsumption)
+				+ " eaten at " + Util.convertDateToString(datetimeConsumption)
 				+ " thus should inject at "
-				+ MyDateUtil.convertDateToString(datetimeIdealInjection)
+				+ Util.convertDateToString(datetimeIdealInjection)
 				+ ". Transfered = " + transfered;
 	}
 
@@ -57,9 +61,9 @@ public class Course {
 				+ foodID + "</food_id><serv_quantity>" + servQuantity
 				+ "</serv_quantity><carbs>" + carbs
 				+ "</carbs><datetime_consumption>"
-				+ MyDateUtil.convertDateToString(datetimeConsumption)
+				+ Util.convertDateToString(datetimeConsumption)
 				+ "</datetime_consumption><datetime_ideal_injection>"
-				+ MyDateUtil.convertDateToString(datetimeConsumption)
+				+ Util.convertDateToString(datetimeConsumption)
 				+ "</datetime_ideal_injection></course>";
 	}
 

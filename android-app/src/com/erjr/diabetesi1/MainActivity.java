@@ -71,7 +71,7 @@ public class MainActivity extends ListActivity {
 				.setContentTitle("Latest BG")
 				.setContentText(
 						"83 + "
-								+ MyDateUtil.convertDateToString(MyDateUtil
+								+ Util.convertDateToString(Util
 										.getCurrentDateTime()));
 		mBuilder.setOngoing(true);
 		// Creates an explicit intent for an Activity in your app
@@ -102,9 +102,11 @@ public class MainActivity extends ListActivity {
 				MainActivity.this, 0, myIntent, 0);
 
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		int reoccurance = 2 * 60 * 1000;
-		alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-				Calendar.getInstance().getTimeInMillis(), reoccurance, pendingIntent);
+		int reoccurance = 1 * 1 * 1000;
+		long trigger = System.currentTimeMillis() + (10 * 1000); 
+		alarmManager.setInexactRepeating(AlarmManager.RTC,
+				trigger, reoccurance, pendingIntent);
+
 	}
 
 	// Will be called via the onClick attribute
@@ -154,8 +156,9 @@ public class MainActivity extends ListActivity {
 		// }
 		// }
 		// Log.i(TAG, str);
-		AcceptThread btServer = new AcceptThread();
-		btServer.start();
+	 BTSyncServer btServer = new BTSyncServer(getBaseContext());
+		 btServer.start();
+		
 	}
 
 	@Override

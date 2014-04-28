@@ -5,10 +5,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 
-public class MyDateUtil {
+public class Util {
 
 	public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
+
 	public static Date convertStringToDate(String string) {
 		DateFormat df = new SimpleDateFormat(dateFormat);
 
@@ -48,4 +50,22 @@ public class MyDateUtil {
 		Date d = Calendar.getInstance().getTime();
 		return d;
 	}
+
+	public static String getValueFromXml(String xml, String tag) {
+		int start = xml.indexOf("<" + tag + ">");
+		int end = xml.indexOf("</" + tag + ">");
+		return xml.substring(start + tag.length() + 2, end);
+	}
+
+	public static String[] getValuesFromXml(String xml, String tag) {
+		LinkedList<String> values = new LinkedList<String>();
+		int end = 0;
+		while (xml.length() > 2) {
+			values.add(getValueFromXml(xml, tag));
+			end = xml.indexOf("</" + tag + ">");
+			xml = xml.substring(end + tag.length() + 2);
+		}
+		return (String[]) values.toArray();
+	}
+
 }

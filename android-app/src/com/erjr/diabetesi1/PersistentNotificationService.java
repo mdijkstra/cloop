@@ -22,7 +22,7 @@ public class PersistentNotificationService extends BroadcastReceiver {
 		 .setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Latest BG").setContentText(
 						"persistent "
-								+ MyDateUtil.convertDateToString(MyDateUtil
+								+ Util.convertDateToString(Util
 										.getCurrentDateTime()));
 		mBuilder.setOngoing(true);
 		// Creates an explicit intent for an Activity in your app

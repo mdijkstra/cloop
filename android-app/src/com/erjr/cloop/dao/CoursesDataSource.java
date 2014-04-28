@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.erjr.cloop.entities.Course;
-import com.erjr.diabetesi1.MyDateUtil;
+import com.erjr.diabetesi1.Util;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,10 +17,6 @@ public class CoursesDataSource {
 	// Database fields
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
-	private String[] allColumns = { Course.COL_COURSE_ID,
-			Course.COL_FOOD_ID, Course.COL_SERV_QUANTITY,
-			Course.COL_CARBS, Course.COL_DATETIME_CONSUMPTION,
-			Course.COL_DATETIME_IDEAL_INJECTION, Course.COL_TRANSFERED };
 
 	public CoursesDataSource(Context context) {
 		dbHelper = new MySQLiteHelper(context);
@@ -40,12 +36,12 @@ public class CoursesDataSource {
 		values.put(Course.COL_SERV_QUANTITY, 0);
 		values.put(Course.COL_CARBS, carbs);
 		values.put(Course.COL_DATETIME_CONSUMPTION,
-				MyDateUtil.convertDateToString(MyDateUtil.getCurrentDateTime()));
+				Util.convertDateToString(Util.getCurrentDateTime()));
 		values.put(Course.COL_DATETIME_IDEAL_INJECTION,
-				MyDateUtil.convertDateToString(MyDateUtil.getCurrentDateTime()));
+				Util.convertDateToString(Util.getCurrentDateTime()));
 		values.put(Course.COL_TRANSFERED, "no");
 		long insertId = database.insert(Course.TABLE_COURSES, null, values);
-		Cursor cursor = database.query(Course.TABLE_COURSES, allColumns,
+		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns,
 				Course.COL_COURSE_ID + " = " + insertId, null, null, null,
 				null);
 		cursor.moveToFirst();
@@ -64,7 +60,7 @@ public class CoursesDataSource {
 	public List<Course> getAllCourses() {
 		List<Course> courses = new ArrayList<Course>();
 
-		Cursor cursor = database.query(Course.TABLE_COURSES, allColumns, null,
+		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns, null,
 				null, null, null, null);
 
 		cursor.moveToFirst();
@@ -81,7 +77,7 @@ public class CoursesDataSource {
 	public List<Course> getCoursesToTransfer() {
 		List<Course> courses = new ArrayList<Course>();
 
-		Cursor cursor = database.query(Course.TABLE_COURSES, allColumns, null,
+		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns, null,
 				null, null, null, null);
 
 		cursor.moveToFirst();
@@ -103,9 +99,9 @@ public class CoursesDataSource {
 		course.setFoodID(cursor.getInt(1));
 		course.setServQuantity(cursor.getFloat(2));
 		course.setCarbs(cursor.getInt(3));
-		course.setDatetimeConsumption(MyDateUtil.convertStringToDate(cursor
+		course.setDatetimeConsumption(Util.convertStringToDate(cursor
 				.getString(4)));
-		course.setDatetimeIdealInjection(MyDateUtil.convertStringToDate(cursor
+		course.setDatetimeIdealInjection(Util.convertStringToDate(cursor
 				.getString(5)));
 		course.setTransfered(cursor.getString(6));
 		return course;

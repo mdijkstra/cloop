@@ -97,6 +97,32 @@ LOCK TABLES `injections` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `sgvs`
+--
+
+DROP TABLE IF EXISTS `sgvs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sgvs` (
+  `sgv_id` int(11) NOT NULL,
+  `device_id` int(11) NOT NULL COMMENT 'the id of the pump to differentiate if wearing two cgms',
+  `datetime_recorded` datetime NOT NULL,
+  `sgv` int(11) DEFAULT NULL COMMENT 'blood glucose recorded',
+  `transfered` varchar(45) NOT NULL,
+  PRIMARY KEY (`sgv_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sgvs`
+--
+
+LOCK TABLES `sgvs` WRITE;
+/*!40000 ALTER TABLE `sgvs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sgvs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping routines for database 'cloop'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -109,4 +135,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-13  0:24:19
+-- Dump completed on 2014-05-04 15:53:22

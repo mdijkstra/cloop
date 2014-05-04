@@ -113,7 +113,7 @@ public class MainActivity extends ListActivity {
 //				trigger, reoccurance, pendingIntent);
 
 		// test 3 - http://www.coderzheaven.com/2011/07/31/how-to-setup-a-repeating-alarm-in-android/
-		Intent intent = new Intent(MainActivity.this, PersistentNotificationService.class);
+		Intent intent = new Intent(MainActivity.this, PersistentNotification.class);
         PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this,
                 0, intent, 0);
 

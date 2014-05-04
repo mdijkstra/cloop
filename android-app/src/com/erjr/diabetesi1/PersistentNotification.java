@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-public class PersistentNotificationService extends BroadcastReceiver {
+public class PersistentNotification extends BroadcastReceiver {
 
 	private static final String TAG = "PersistentNotificationService";
 
@@ -24,6 +24,7 @@ public class PersistentNotificationService extends BroadcastReceiver {
 						"persistent "
 								+ Util.convertDateToString(Util
 										.getCurrentDateTime()));
+		mBuilder.setNumber(211);
 		mBuilder.setOngoing(true);
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(context, MainActivity.class);

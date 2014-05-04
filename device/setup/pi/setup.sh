@@ -13,7 +13,7 @@ sudo apt-get update
 sudo apt-get -y upgrade
 
 sudo apt-get -y autoremove
-sudo apt-get -y install vim bluetooth bluez-utils blueman wicd-curses wtop
+sudo apt-get -y install vim bluetooth bluez-utils blueman wicd-curses wtop bluetooth python-bluez python-gobject python-dbus
 
 sudo easy_install pudb
 

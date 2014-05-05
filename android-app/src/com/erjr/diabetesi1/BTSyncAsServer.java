@@ -15,6 +15,11 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.util.Log;
 
+/**
+ * @deprecated
+ * @author erobinson
+ *
+ */
 public class BTSyncAsServer extends Activity {
 
 	// TextView out;
@@ -49,7 +54,7 @@ public class BTSyncAsServer extends Activity {
 			}
 		}
 		
-		device.createBond();
+		//device.createBond();
 
 		// Two things are needed to make a connection:
 		// A MAC address, which we got above.

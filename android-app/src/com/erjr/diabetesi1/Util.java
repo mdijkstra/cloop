@@ -52,9 +52,15 @@ public class Util {
 	}
 
 	public static String getValueFromXml(String xml, String tag) {
-		int start = xml.indexOf("<" + tag + ">");
+		if(xml == null) {
+			return null;
+		}
+		int start = xml.indexOf("<" + tag + ">") + tag.length() + 2;
 		int end = xml.indexOf("</" + tag + ">");
-		return xml.substring(start + tag.length() + 2, end);
+		if(start + 1 == end) {
+			return "";
+		}
+		return xml.substring(start, end);
 	}
 
 	public static String[] getValuesFromXml(String xml, String tag) {

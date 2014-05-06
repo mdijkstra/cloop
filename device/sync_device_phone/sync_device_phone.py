@@ -14,7 +14,7 @@ import time
 #from bluetooth import *
 #from time import sleep
 
-
+dateFormat="%Y-%m-%dT%H:%M:%S"
 
 class DeviceBTPhoneTransData:
   uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
@@ -51,8 +51,8 @@ class DeviceBTPhoneTransData:
     return data
 
   def write(self, data_to_write):
-    print "DeviceBTPhoneTransData.write writing to bt socket : "+data_to_write
-    self.socket.send(data_to_write + "<EOM>")
+    print "DeviceBTPhoneTransData.write writing to bt socket : "+data_to_write + "</EOM>"
+    self.socket.send(data_to_write + "</EOM>")
 
   def open_con(self):
     service = bluetooth.find_service(address = self.phone_mac, uuid = self.uuid)
@@ -119,10 +119,10 @@ class DeviceDBTransData():
     xml = "<sgvs>"
     for row in self.db.fetchall():
       xml+= "<sgv_record>"
-      xml += "<sgv_id>" + row[0] + "</sgv_id>"
-      xml += "<device_id>" + row[1] + "</device_id>"
-      xml += "<datetime_recorded>" + row[2] + "</datetime_recorded>"
-      xml += "<sgv>" + row[3] + "</sgv>"
+      xml += "<sgv_id>" + str(row[0]) + "</sgv_id>"
+      xml += "<device_id>" + str(row[1]) + "</device_id>"
+      xml += "<datetime_recorded>" + row[2].strftime(dateFormat) + "</datetime_recorded>"
+      xml += "<sgv>" + str(row[3]) + "</sgv>"
       xml += "</sgv_record>"
     xml += "</sgvs>"
     self.db.execute("update sgvs set transfered = 'yes'")

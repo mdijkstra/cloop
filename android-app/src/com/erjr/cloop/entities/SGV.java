@@ -5,6 +5,8 @@ package com.erjr.cloop.entities;
 
 import java.util.Date;
 
+import android.util.Log;
+
 import com.erjr.diabetesi1.Util;
 
 /**
@@ -18,6 +20,7 @@ public class SGV {
 	public static final String COL_DEVICE_ID = "device_id";
 	public static final String COL_DATETIME_RECORDED = "datetime_recorded";
 	public static final String COL_SGV = "sgv";
+	public static final String TAG = "SGV";
 
 	public static final String TABLE_CREATE = "create table "
 			+ TABLE_SGVS + "(" + COL_SGV_ID
@@ -34,20 +37,26 @@ public class SGV {
 	private Integer sgv;
 
 	public void setFromXML(String xml) {
-		this.sgvID = Integer.valueOf(Util.getValueFromXml(xml,
-				COL_SGV_ID));
-		this.deviceID = Integer.valueOf(Util
-				.getValueFromXml(xml, COL_DEVICE_ID));
+		String sgv_id_str = Util.getValueFromXml(xml,
+				COL_SGV_ID);
+		String device_id_str = Util
+				.getValueFromXml(xml, COL_DEVICE_ID);
+		
+		Log.i(TAG, "sgv_id: "+sgv_id_str + " device_id: "+device_id_str);
+		
+		
+		this.sgvID = new Integer(sgv_id_str);
+		this.deviceID = new Integer(device_id_str);
 		this.datetimeRecorded = Util.convertStringToDate(Util.getValueFromXml(
 				xml, COL_DATETIME_RECORDED));
-		this.sgv = Integer.valueOf(Util.getValueFromXml(xml, COL_SGV));
+		this.sgv = new Integer(Util.getValueFromXml(xml, COL_SGV));
 	}
 
 	public String getSQLToSave() {
 		return "INSERT OR REPLACE INTO " + TABLE_SGVS + " ("
 				+ COL_SGV_ID + ", " + COL_DEVICE_ID + ", "
 				+ COL_DATETIME_RECORDED + ", " + COL_SGV + ") values ("
-				+ sgvID + ", " + deviceID + ", " + datetimeRecorded + ", "
+				+ sgvID + ", " + deviceID + ", '" + Util.convertDateToString(datetimeRecorded) + "', "
 				+ sgv + ")";
 	}
 

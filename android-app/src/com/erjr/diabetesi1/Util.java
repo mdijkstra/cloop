@@ -57,7 +57,7 @@ public class Util {
 		}
 		int start = xml.indexOf("<" + tag + ">") + tag.length() + 2;
 		int end = xml.indexOf("</" + tag + ">");
-		if(start + 1 == end) {
+		if(start == end) {
 			return "";
 		}
 		return xml.substring(start, end);
@@ -69,9 +69,9 @@ public class Util {
 		while (xml.length() > 2) {
 			values.add(getValueFromXml(xml, tag));
 			end = xml.indexOf("</" + tag + ">");
-			xml = xml.substring(end + tag.length() + 2);
+			xml = xml.substring(end + tag.length() + 3);
 		}
-		return (String[]) values.toArray();
+		return (String[]) values.toArray(new String[0]);
 	}
 
 }

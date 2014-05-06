@@ -178,7 +178,7 @@ public class BTSyncServer extends Thread {
 			Log.i(TAG, msg);
 		}
 		
-		return dataReceived;
+		return dataReceived.substring(0, dataReceived.length()-6);
 	}
 
 	/** Will cancel the listening socket, and cause the thread to finish */

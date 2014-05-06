@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.erjr.cloop.dao.SGVDataSource;
+import com.erjr.cloop.entities.SGV;
+
 public class PersistentNotification extends BroadcastReceiver {
 
 	private static final String TAG = "PersistentNotificationService";
@@ -17,14 +20,22 @@ public class PersistentNotification extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Log.i(TAG, "Updating notification");
 		int myNotificationId = intent.getExtras().getInt("myNotificationId");
+
+		SGVDataSource SGVDS = new SGVDataSource(context);
+		SGV latestSgv = SGVDS.getLatestSGV();
+		Integer sgv = 0;
+		String dateLastSgv = "couldn't find sgv";
+		if (latestSgv != null) {
+			sgv = latestSgv.getSg();
+			dateLastSgv = Util.convertDateToString(latestSgv
+					.getDatetimeRecorded());
+		}
+
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				context)
-		 .setSmallIcon(R.drawable.ic_launcher)
-				.setContentTitle("Latest BG").setContentText(
-						"persistent "
-								+ Util.convertDateToString(Util
-										.getCurrentDateTime()));
-		mBuilder.setNumber(211);
+				context).setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle("Latest BG - " + sgv)
+				.setContentText(sgv + " - " + dateLastSgv);
+		// mBuilder.setNumber(211);
 		mBuilder.setOngoing(true);
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(context, MainActivity.class);
@@ -49,5 +60,4 @@ public class PersistentNotification extends BroadcastReceiver {
 		mNotificationManager.notify(myNotificationId, mBuilder.build());
 
 	}
-
 }

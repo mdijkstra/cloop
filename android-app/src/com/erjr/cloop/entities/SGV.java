@@ -11,44 +11,44 @@ import com.erjr.diabetesi1.Util;
  * @author erobinson
  * 
  */
-public class CGMDataPoint {
-	public static final String TABLE_CGM_DATA_POINT = "cgm_data";
-	public static final String ROW_DESC = "cgm_data_point";
-	public static final String COL_CGM_DATA_ID = "cgm_data_id";
+public class SGV {
+	public static final String TABLE_SGVS = "sgvs";
+	public static final String ROW_DESC = "sgv_record";
+	public static final String COL_SGV_ID = "sgv_id";
 	public static final String COL_DEVICE_ID = "device_id";
 	public static final String COL_DATETIME_RECORDED = "datetime_recorded";
-	public static final String COL_SG = "sg";
+	public static final String COL_SGV = "sgv";
 
-	public static final String CGM_TABLE_CREATE = "create table "
-			+ TABLE_CGM_DATA_POINT + "(" + COL_CGM_DATA_ID
+	public static final String TABLE_CREATE = "create table "
+			+ TABLE_SGVS + "(" + COL_SGV_ID
 			+ " integer primary key, " + COL_DEVICE_ID + " integer not null, "
-			+ COL_DATETIME_RECORDED + " text not null, " + COL_SG
+			+ COL_DATETIME_RECORDED + " text not null, " + COL_SGV
 			+ " int not null);";
 	
-	public static final String[] allColumns = { COL_CGM_DATA_ID, COL_DEVICE_ID,
-			COL_DATETIME_RECORDED, COL_SG };
+	public static final String[] allColumns = { COL_SGV_ID, COL_DEVICE_ID,
+			COL_DATETIME_RECORDED, COL_SGV };
 
-	private long cgmDataID;
+	private long sgvID;
 	private Integer deviceID;
 	private Date datetimeRecorded;
-	private Integer sg;
+	private Integer sgv;
 
 	public void setFromXML(String xml) {
-		this.cgmDataID = Integer.valueOf(Util.getValueFromXml(xml,
-				COL_CGM_DATA_ID));
+		this.sgvID = Integer.valueOf(Util.getValueFromXml(xml,
+				COL_SGV_ID));
 		this.deviceID = Integer.valueOf(Util
 				.getValueFromXml(xml, COL_DEVICE_ID));
 		this.datetimeRecorded = Util.convertStringToDate(Util.getValueFromXml(
 				xml, COL_DATETIME_RECORDED));
-		this.sg = Integer.valueOf(Util.getValueFromXml(xml, COL_SG));
+		this.sgv = Integer.valueOf(Util.getValueFromXml(xml, COL_SGV));
 	}
 
 	public String getSQLToSave() {
-		return "INSERT OR REPLACE INTO " + TABLE_CGM_DATA_POINT + " ("
-				+ COL_CGM_DATA_ID + ", " + COL_DEVICE_ID + ", "
-				+ COL_DATETIME_RECORDED + ", " + COL_SG + ") values ("
-				+ cgmDataID + ", " + deviceID + ", " + datetimeRecorded + ", "
-				+ sg + ")";
+		return "INSERT OR REPLACE INTO " + TABLE_SGVS + " ("
+				+ COL_SGV_ID + ", " + COL_DEVICE_ID + ", "
+				+ COL_DATETIME_RECORDED + ", " + COL_SGV + ") values ("
+				+ sgvID + ", " + deviceID + ", " + datetimeRecorded + ", "
+				+ sgv + ")";
 	}
 
 	public String getDBUpdateSql() {
@@ -56,7 +56,7 @@ public class CGMDataPoint {
 	}
 
 	public String toString() {
-		return sg.toString() + " at "
+		return sgv.toString() + " at "
 				+ Util.convertDateToString(datetimeRecorded);
 	}
 
@@ -64,7 +64,7 @@ public class CGMDataPoint {
 	 * @return the cgmDataID
 	 */
 	public long getCgmDataID() {
-		return cgmDataID;
+		return sgvID;
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class CGMDataPoint {
 	 *            the cgmDataID to set
 	 */
 	public void setCgmDataID(long cgmDataID) {
-		this.cgmDataID = cgmDataID;
+		this.sgvID = cgmDataID;
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class CGMDataPoint {
 	 * @return the bg
 	 */
 	public Integer getSg() {
-		return sg;
+		return sgv;
 	}
 
 	/**
@@ -117,6 +117,6 @@ public class CGMDataPoint {
 	 *            the bg to set
 	 */
 	public void setSg(Integer sg) {
-		this.sg = sg;
+		this.sgv = sg;
 	}
 }

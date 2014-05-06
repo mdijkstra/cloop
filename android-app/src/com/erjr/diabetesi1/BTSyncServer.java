@@ -12,9 +12,9 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.util.Log;
 
-import com.erjr.cloop.dao.CGMDataSource;
+import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.dao.CoursesDataSource;
-import com.erjr.cloop.entities.CGMDataPoint;
+import com.erjr.cloop.entities.SGV;
 import com.erjr.cloop.entities.Course;
 
 public class BTSyncServer extends Thread {
@@ -25,11 +25,11 @@ public class BTSyncServer extends Thread {
 	public static final UUID MY_UUID = UUID
 			.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
 
-	private CGMDataSource CGMDS = null;
+	private SGVDataSource SGVDS = null;
 	private CoursesDataSource CoursesDS = null;
-	
+
 	public BTSyncServer(Context context) {
-		CGMDS = new CGMDataSource(context);
+		SGVDS = new SGVDataSource(context);
 		CoursesDS = new CoursesDataSource(context);
 		// Use a temporary object that is later assigned to mmServerSocket,
 		// because mmServerSocket is final
@@ -76,7 +76,7 @@ public class BTSyncServer extends Thread {
 				break;
 			}
 		}
-		if (dataReceived != null) {
+		if (dataReceived != null && !dataReceived.isEmpty()) {
 			processDataReceived(dataReceived);
 		}
 	}
@@ -87,51 +87,46 @@ public class BTSyncServer extends Thread {
 	 * @param dataReceived
 	 */
 	private void processDataReceived(String dataReceived) {
-		String fullCGMXml = Util.getValueFromXml(dataReceived, CGMDataPoint.TABLE_CGM_DATA_POINT);
-		String[] cgmsXmlAsArray = Util.getValuesFromXml(fullCGMXml, CGMDataPoint.ROW_DESC);
-		
-		for(String cgmXml : cgmsXmlAsArray) {
-			CGMDataPoint cgm = new CGMDataPoint();
-			cgm.setFromXML(cgmXml);
-			CGMDS.saveCGMDataPoint(cgm);
+		String fullSGVXml = Util.getValueFromXml(dataReceived, SGV.TABLE_SGVS);
+		if(fullSGVXml == null || fullSGVXml.isEmpty()) {
+			return;
+		}
+		String[] sgvsXmlAsArray = Util.getValuesFromXml(fullSGVXml,
+				SGV.ROW_DESC);
+
+		for (String sgvXml : sgvsXmlAsArray) {
+			SGV sgv = new SGV();
+			sgv.setFromXML(sgvXml);
+			SGVDS.saveSGV(sgv);
 		}
 	}
 
 	private String getDataToSend() {
-		Log.i(TAG, "in sync()");
-		List<Course> courses = CoursesDS.getCoursesToTransfer();
-		String transStr = "<courses>";
-		for (Course course : courses) {
-			transStr += course.toXML();
-		}
-		transStr += "</courses>";
-		return transStr;
+		String xml = getCourseDataToSend();
+		return xml;
 	}
-	
+
+	private String getCourseDataToSend() {
+		List<Course> courses = CoursesDS.getCoursesToTransfer();
+		String transXml = "<courses>";
+		if (courses != null) {
+			for (Course course : courses) {
+				transXml += course.toXML();
+			}
+		}
+		transXml += "</courses>";
+		return transXml;
+	}
+
+	/**
+	 * sends data (dataToSend) then receives and returns the data.
+	 * 
+	 * @param btSocket
+	 * @param dataToSend
+	 * @return
+	 */
 	private String sync(BluetoothSocket btSocket, String dataToSend) {
-		OutputStream outStream = null;
-		try {
-			outStream = btSocket.getOutputStream();
-		} catch (IOException e) {
-			Log.i(TAG,
-					"In onResume() and output stream creation failed:"
-							+ e.getMessage() + ".");
-		}
-
-		byte[] msgBuffer = dataToSend.getBytes();
-		try {
-			Log.i(TAG, "writing : "+dataToSend);
-			outStream.write(msgBuffer);
-			outStream.write("</EOM>".getBytes());
-		} catch (IOException e) {
-			String msg = "In sync() and an exception occurred during write: "
-					+ e.getMessage();
-			msg = msg + ".\n\nCheck that the SPP UUID: " + MY_UUID.toString()
-					+ " exists on server.\n\n";
-
-			Log.i(TAG, msg);
-		}
-		Log.i(TAG, "done writing, going to read...");
+		Log.i(TAG, "going to read...");
 		int treshHold = 0;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -145,6 +140,10 @@ public class BTSyncServer extends Thread {
 			while (btSocket.getInputStream().available() > 0) {
 				baos.write(btSocket.getInputStream().read());
 				Thread.sleep(1);
+				String data = new String(baos.toByteArray());
+				if(data.endsWith("</EOM>")) {
+					break;
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -152,7 +151,33 @@ public class BTSyncServer extends Thread {
 			e.printStackTrace();
 		}
 		String dataReceived = new String(baos.toByteArray());
-		Log.i(TAG, "done reading : "+dataReceived);
+		Log.i(TAG, "done reading. read: " + dataReceived);
+		
+		Log.i(TAG, "Going to write...");
+		OutputStream outStream = null;
+		try {
+			outStream = btSocket.getOutputStream();
+		} catch (IOException e) {
+			Log.i(TAG,
+					"In onResume() and output stream creation failed:"
+							+ e.getMessage() + ".");
+		}
+
+		dataToSend += "</EOM>";
+		byte[] msgBuffer = dataToSend.getBytes();
+		try {
+			Log.i(TAG, "writing : " + dataToSend);
+			outStream.write(msgBuffer);
+//			outStream.write("</EOM>".getBytes());
+		} catch (IOException e) {
+			String msg = "In sync() and an exception occurred during write: "
+					+ e.getMessage();
+			msg = msg + ".\n\nCheck that the SPP UUID: " + MY_UUID.toString()
+					+ " exists on server.\n\n";
+
+			Log.i(TAG, msg);
+		}
+		
 		return dataReceived;
 	}
 

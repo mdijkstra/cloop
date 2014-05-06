@@ -3,7 +3,7 @@ package com.erjr.cloop.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.erjr.cloop.entities.CGMDataPoint;
+import com.erjr.cloop.entities.SGV;
 import com.erjr.cloop.entities.Course;
 import com.erjr.diabetesi1.Util;
 
@@ -13,14 +13,15 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-public class CGMDataSource {
+public class HaltDataSource {
 
 	// Database fields
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
 
-	public CGMDataSource(Context context) {
+	public HaltDataSource(Context context) {
 		dbHelper = new MySQLiteHelper(context);
+		open();
 	}
 
 	public void open() throws SQLException {
@@ -29,6 +30,14 @@ public class CGMDataSource {
 
 	public void close() {
 		dbHelper.close();
+	}
+	
+	public void addHalt() {
+		
+	}
+	
+	public String getHaltsToTransfer() {
+		return null;
 	}
 
 	// public Course createCourse(int carbs) {
@@ -51,23 +60,26 @@ public class CGMDataSource {
 	// return newCourse;
 	// }
 
-	public CGMDataPoint getLatestCGM() {
+	public SGV getLatestSGV() {
 		// Cursor cursor = database.query(Course.TABLE_COURSES, allColumns,
 		// null,
 		// null, null, null, CGMDataPoint.COL_CGM_DATA_ID);
-		Cursor cursor = database.query(CGMDataPoint.TABLE_CGM_DATA_POINT,
-				CGMDataPoint.allColumns, null, null, null, null,
-				CGMDataPoint.COL_CGM_DATA_ID, "1");
+		Cursor cursor = database.query(SGV.TABLE_SGVS,
+				SGV.allColumns, null, null, null, null,
+				SGV.COL_SGV_ID, "1");
+		if(cursor.getCount() <=0) {
+			return null;
+		}
 		cursor.moveToFirst();
 		return cursorToCGMDataPoint(cursor);
 	}
 
-	public void saveCGMDataPoint(CGMDataPoint cgm) {
+	public void saveSGV(SGV cgm) {
 		database.execSQL(cgm.getSQLToSave());
 	}
 	
-	private CGMDataPoint cursorToCGMDataPoint(Cursor cursor) {
-		CGMDataPoint cgm = new CGMDataPoint();
+	private SGV cursorToCGMDataPoint(Cursor cursor) {
+		SGV cgm = new SGV();
 		cgm.setCgmDataID(cursor.getInt(0));
 		cgm.setDeviceID(cursor.getInt(1));
 		cgm.setDatetimeRecorded(Util.convertStringToDate(cursor.getString(2)));

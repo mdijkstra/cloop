@@ -6,6 +6,7 @@ import com.erjr.diabetesi1.Util;
 
 public class Course {
 	public static final String TABLE_COURSES = "courses";
+	public static final String ROW_DESC = "course";
 	public static final String COL_COURSE_ID = "course_id";
 	public static final String COL_FOOD_ID = "food_id";
 	public static final String COL_SERV_QUANTITY = "serv_quantity";
@@ -14,7 +15,7 @@ public class Course {
 	public static final String COL_DATETIME_IDEAL_INJECTION = "datetime_ideal_injection";
 	public static final String COL_TRANSFERED = "transfered";
 
-	public static final String COURSES_CREATE = "create table " + TABLE_COURSES
+	public static final String TABLE_CREATE = "create table " + TABLE_COURSES
 			+ "(" + COL_COURSE_ID + " integer primary key autoincrement, "
 			+ COL_FOOD_ID + " integer, " + COL_SERV_QUANTITY + " real, "
 			+ COL_CARBS + " int not null, " + COL_DATETIME_CONSUMPTION
@@ -22,8 +23,7 @@ public class Course {
 			+ COL_TRANSFERED + " text not null);";
 
 	public static String[] allColumns = { COL_COURSE_ID, COL_FOOD_ID,
-			COL_SERV_QUANTITY, COL_CARBS,
-			COL_DATETIME_CONSUMPTION,
+			COL_SERV_QUANTITY, COL_CARBS, COL_DATETIME_CONSUMPTION,
 			COL_DATETIME_IDEAL_INJECTION, COL_TRANSFERED };
 
 	private long courseID;
@@ -57,14 +57,16 @@ public class Course {
 	}
 
 	public String toXML() {
-		return "<course><course_id>" + courseID + "</course_id><food_id>"
-				+ foodID + "</food_id><serv_quantity>" + servQuantity
+		// TODO: Convert to using column names instead of hard coded strings
+		return "<" + ROW_DESC + "><" + COL_COURSE_ID + ">" + courseID + "</"
+				+ COL_COURSE_ID + "><food_id>" + foodID
+				+ "</food_id><serv_quantity>" + servQuantity
 				+ "</serv_quantity><carbs>" + carbs
 				+ "</carbs><datetime_consumption>"
 				+ Util.convertDateToString(datetimeConsumption)
 				+ "</datetime_consumption><datetime_ideal_injection>"
 				+ Util.convertDateToString(datetimeConsumption)
-				+ "</datetime_ideal_injection></course>";
+				+ "</datetime_ideal_injection></"+ROW_DESC+">";
 	}
 
 	public long getId() {

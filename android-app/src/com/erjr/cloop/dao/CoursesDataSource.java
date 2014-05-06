@@ -20,6 +20,7 @@ public class CoursesDataSource {
 
 	public CoursesDataSource(Context context) {
 		dbHelper = new MySQLiteHelper(context);
+		open();
 	}
 
 	public void open() throws SQLException {
@@ -79,7 +80,9 @@ public class CoursesDataSource {
 
 		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns, null,
 				null, null, null, null);
-
+		if(cursor.getCount() <= 0) {
+			return null;
+		}
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Course course = cursorToCourse(cursor);

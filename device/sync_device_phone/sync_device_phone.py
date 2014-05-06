@@ -8,27 +8,38 @@
 #############################################
 
 import os
-from bluetooth import *
-from time import sleep
+import MySQLdb
+import bluetooth
+import time
+#from bluetooth import *
+#from time import sleep
 
 
 
 class DeviceBTPhoneTransData:
   uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
   phone_mac = "30:19:66:80:2F:B2"
+  socket = None
 
   def __init__(self):
     self.open_con()
 
   def __del__(self):
-    self.close_con()
+    if not self.socket is None:
+      self.close_con()
 
   def transfer(self, xml_to_send):
-    read_str = read()
-    write(xml_to_send)
+    if self.socket is None:
+      return None
+    self.write(xml_to_send)
+    time.sleep(2)
+    read_str = self.read()
+    print "**summary of bt**"
+    print "wrote the following to bt  : " + xml_to_send
+    print "read the following from bt : " + read_str
     return read_str
 
-  def read(self, socket):
+  def read(self):
     try:
       while True:
         data = self.socket.recv(1024)
@@ -44,7 +55,7 @@ class DeviceBTPhoneTransData:
     self.socket.send(data_to_write + "<EOM>")
 
   def open_con(self):
-    service = bluetooth.find_service(address = phone_mac, uuid = uuid)
+    service = bluetooth.find_service(address = self.phone_mac, uuid = self.uuid)
     if len(service) == 0:
       print "DeviceBTPhoneTransData.open_con ERROR: Couldn't find phone BT Service"
       return None
@@ -57,9 +68,11 @@ class DeviceBTPhoneTransData:
 
 # TODO: move get_value functions to a lib.py file
 def get_value_from_xml (string, tag):
-    start = string.index("<"+tag+">")
+    start = string.index("<"+tag+">") + len(tag) + 2
     end = string.index("</"+tag+">", start)
-    return string[start+len(tag)+2:end]
+    if start + 1 == end:
+      return ""
+    return string[start:end]
 
 def get_values_from_xml (full_xml, tag):
     a = []
@@ -80,14 +93,14 @@ class DeviceDBTransData():
   db_db = "cloop"
 
   def __init__(self):
-    self.db_conn = MySQLdb.connect(host=db_host, port=db_port, user=db_user, passwd=db_pass, db=db_db)
+    self.db_conn = MySQLdb.connect(host=self.db_host, port=self.db_port, user=self.db_user, passwd=self.db_pass, db=self.db_db)
     self.db = self.db_conn.cursor()  
 
   def __del__(self):
     self.db.close()
     self.db_conn.close()
 
-  def get_data_to_sent(self):
+  def get_data_to_send(self):
     return self.export_sgvs()
 
   def import_data(self, xml):
@@ -102,9 +115,9 @@ class DeviceDBTransData():
     print "      The API for importing data from the pump should probably be in a diff file"
 
   def export_sgvs(self):
-    db.execute("select sgv_id, device_id, datetime_recorded, sgv from sgvs where transfered != 'yes'")
+    self.db.execute("select sgv_id, device_id, datetime_recorded, sgv from sgvs where transfered != 'yes'")
     xml = "<sgvs>"
-    for row in db.fetchall():
+    for row in self.db.fetchall():
       xml+= "<sgv_record>"
       xml += "<sgv_id>" + row[0] + "</sgv_id>"
       xml += "<device_id>" + row[1] + "</device_id>"
@@ -112,12 +125,15 @@ class DeviceDBTransData():
       xml += "<sgv>" + row[3] + "</sgv>"
       xml += "</sgv_record>"
     xml += "</sgvs>"
-    db.execute("update sgvs set transfered = 'yes'")
+    self.db.execute("update sgvs set transfered = 'yes'")
     return xml
 
   def import_courses(self, courses_xml):
-    if courses_xml.index("<courses>") != 0:
+    index = courses_xml.index("<courses>")
+    if courses_xml.index("<courses>") == 0:
       courses_xml = get_value_from_xml(courses_xml, "courses")
+    if courses_xml == "":
+      return
     courses = get_values_from_xml(courses_xml, "course")
     for course_xml in courses:
         insert_sql = course_xml_to_sql_insert(course_xml)
@@ -148,11 +164,18 @@ class DeviceDBTransData():
     # print " SQL : "+sql
     return sql
 
+'''
+########## Test import courses with empty data #######
+db_trans = DeviceDBTransData()
+db_trans.import_courses("<courses></courses>")
+'''
 
 
 if __name__ == '__main__':
-  db = DeviceDBTransData()
-  data_to_send = db.get_data_to_send()
+  db_trans = DeviceDBTransData()
+  data_to_send = db_trans.get_data_to_send()
   bt_trans = DeviceBTPhoneTransData()
   data_from_phone = bt_trans.transfer(data_to_send)
-  db.import_data(data_from_phone)  
+  if not data_from_phone is None:
+    db_trans.import_data(data_from_phone)  
+

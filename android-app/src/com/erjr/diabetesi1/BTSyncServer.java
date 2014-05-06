@@ -76,7 +76,7 @@ public class BTSyncServer extends Thread {
 				break;
 			}
 		}
-		if (dataReceived != null) {
+		if (dataReceived != null && !dataReceived.isEmpty()) {
 			processDataReceived(dataReceived);
 		}
 	}
@@ -126,29 +126,7 @@ public class BTSyncServer extends Thread {
 	 * @return
 	 */
 	private String sync(BluetoothSocket btSocket, String dataToSend) {
-		OutputStream outStream = null;
-		try {
-			outStream = btSocket.getOutputStream();
-		} catch (IOException e) {
-			Log.i(TAG,
-					"In onResume() and output stream creation failed:"
-							+ e.getMessage() + ".");
-		}
-
-		byte[] msgBuffer = dataToSend.getBytes();
-		try {
-			Log.i(TAG, "writing : " + dataToSend);
-			outStream.write(msgBuffer);
-			outStream.write("</EOM>".getBytes());
-		} catch (IOException e) {
-			String msg = "In sync() and an exception occurred during write: "
-					+ e.getMessage();
-			msg = msg + ".\n\nCheck that the SPP UUID: " + MY_UUID.toString()
-					+ " exists on server.\n\n";
-
-			Log.i(TAG, msg);
-		}
-		Log.i(TAG, "done writing, going to read...");
+		Log.i(TAG, "going to read...");
 		int treshHold = 0;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -162,6 +140,10 @@ public class BTSyncServer extends Thread {
 			while (btSocket.getInputStream().available() > 0) {
 				baos.write(btSocket.getInputStream().read());
 				Thread.sleep(1);
+				String data = new String(baos.toByteArray());
+				if(data.endsWith("</EOM>")) {
+					break;
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -169,7 +151,33 @@ public class BTSyncServer extends Thread {
 			e.printStackTrace();
 		}
 		String dataReceived = new String(baos.toByteArray());
-		Log.i(TAG, "done reading : " + dataReceived);
+		Log.i(TAG, "done reading. read: " + dataReceived);
+		
+		Log.i(TAG, "Going to write...");
+		OutputStream outStream = null;
+		try {
+			outStream = btSocket.getOutputStream();
+		} catch (IOException e) {
+			Log.i(TAG,
+					"In onResume() and output stream creation failed:"
+							+ e.getMessage() + ".");
+		}
+
+		dataToSend += "</EOM>";
+		byte[] msgBuffer = dataToSend.getBytes();
+		try {
+			Log.i(TAG, "writing : " + dataToSend);
+			outStream.write(msgBuffer);
+//			outStream.write("</EOM>".getBytes());
+		} catch (IOException e) {
+			String msg = "In sync() and an exception occurred during write: "
+					+ e.getMessage();
+			msg = msg + ".\n\nCheck that the SPP UUID: " + MY_UUID.toString()
+					+ " exists on server.\n\n";
+
+			Log.i(TAG, msg);
+		}
+		
 		return dataReceived;
 	}
 

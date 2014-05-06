@@ -19,7 +19,7 @@ public class SGV {
 	public static final String COL_DATETIME_RECORDED = "datetime_recorded";
 	public static final String COL_SGV = "sgv";
 
-	public static final String CGM_TABLE_CREATE = "create table "
+	public static final String TABLE_CREATE = "create table "
 			+ TABLE_SGVS + "(" + COL_SGV_ID
 			+ " integer primary key, " + COL_DEVICE_ID + " integer not null, "
 			+ COL_DATETIME_RECORDED + " text not null, " + COL_SGV

@@ -1,5 +1,6 @@
 package com.erjr.cloop.dao;
 
+import com.erjr.cloop.entities.Halt;
 import com.erjr.cloop.entities.SGV;
 import com.erjr.cloop.entities.Course;
 
@@ -21,8 +22,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
-		database.execSQL(Course.COURSES_CREATE);
-		database.execSQL(SGV.CGM_TABLE_CREATE);
+		database.execSQL(Course.TABLE_CREATE);
+		database.execSQL(SGV.TABLE_CREATE);
+		database.execSQL(Halt.TABLE_CREATE);
 	}
 
 	@Override
@@ -33,6 +35,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		// TODO: Convert to Course.onUpgrade(db, oldVersion, newVersion)
 		db.execSQL("DROP TABLE IF EXISTS " + Course.TABLE_COURSES);
 		db.execSQL("DROP TABLE IF EXISTS " + SGV.TABLE_SGVS);
+		db.execSQL("DROP TABLE IF EXISTS " + Halt.TABLE_HALTS);
 		onCreate(db);
 	}
 

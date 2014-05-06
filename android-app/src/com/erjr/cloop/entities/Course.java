@@ -15,7 +15,7 @@ public class Course {
 	public static final String COL_DATETIME_IDEAL_INJECTION = "datetime_ideal_injection";
 	public static final String COL_TRANSFERED = "transfered";
 
-	public static final String COURSES_CREATE = "create table " + TABLE_COURSES
+	public static final String TABLE_CREATE = "create table " + TABLE_COURSES
 			+ "(" + COL_COURSE_ID + " integer primary key autoincrement, "
 			+ COL_FOOD_ID + " integer, " + COL_SERV_QUANTITY + " real, "
 			+ COL_CARBS + " int not null, " + COL_DATETIME_CONSUMPTION

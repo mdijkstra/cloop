@@ -9,8 +9,8 @@
 
 import os
 import MySQLdb
-import bluetooth
 import time
+import sys
 #from bluetooth import *
 #from time import sleep
 
@@ -110,24 +110,91 @@ class downloadPumpData():
   port="/dev/ttyUSB0"
   cur_page=19
 
+  def get_latest_sgv(self):
+    self.download_cgm_data()
+    bytes = self.data_file_to_bytes()
+    last_sgv = get_last_sgv_from_bytes(bytes)
+    return sgv_to_xml(last_sgv)
+
   def download_cgm_data(self, output_file=output_file_default):
     self.get_cur_cgm_page()
-    
+    command = decoding_dir+"/bin/mm-send-comm.py --init"
+    command += " --serial " + str(self.device_id)
+    command += " --port " + self.port
+    command += " --prefix-path " + cgm_download_file
+    command += " tweak ReadGlucoseHistory"
+    command += " --page" + str(self.cur_page)
+    command += " --save "
+    print "About to execute : " + command
+    # os.system(command)
 
   def get_cur_cgm_page(self):
     return self.cur_page
 
+  def data_file_to_bytes(self, data_file=cgm_download_file):
+    myBytes = bytearray()
+    with open(data_file, 'rb') as file:
+      while 1:
+        byte = file.read(1)
+        if not byte:
+          break
+        myBytes.append(byte)
+
+  def get_last_sgv_from_bytes(self, bytes)
+    latest_sg = 0
+    # for each byte: convert it to a decimal, double it
+    # 	check that it is a valid sg and then mark it as the latest
+    for i in range(0, len(myBytes)):
+    	bin = '{0:08b}'.format(myBytes[i])
+    	hex = '{0:02x}'.format(myBytes[i])
+    	dec = int(hex, 16)
+    	sg = dec * 2
+    	if sg == 0:
+    		numZerosCounter = numZerosCounter + 1
+    	else:
+    		numZerosCounter = 0
+    	if numZerosCounter > 20:
+    		break
+    	if sg > 40 and sg < 400:
+    		latest_sg = sg
+    
+  def sgv_to_xml(self, sgv)
+    xml =  "<sgv>"
+    xml += "<device_id>" + str(self.device_id) + "</device_id>"
+    xml += "<datetime_recorded>" + datetime.now().strftime(dateFormat) + "</datetime_recorded>"
+    xml += "<sgv>" + str(sgv) + "</sgv>"
+    xml += "</sgv>"
+    return xml
+    
+
 if __name__ == '__main__':
-  db_trans = DeviceDBTransData()
-  data_to_send = db_trans.get_data_to_send()
-  bt_trans = DeviceBTPhoneTransData()
-  data_from_phone = bt_trans.transfer(data_to_send)
-  if not data_from_phone is None:
-    db_trans.import_data(data_from_phone)  
+  # downlaod the data from the pump
+  # parse it to get the latest sgv
+  download_pump = DwonloadPumpData()
+  last_sgv_xml = download_pump.get_last_sgv()
+  # import that sgv into the db
+  db_trans = PumpDeviceDBTrans()
+  db_trans.import_sgv(last_sgv_xml)
+  
 
 
 
-dt=$(date +%Y%m%d_%H%M%S)
-sudo ./bin/mm-send-comm.py --init --prefix-path logs/$dt- --serial 584923 --port /dev/ttyUSB0 tweak ReadGlucoseHistory --page 18 --save | tee analysis/pg-18-$dt-ReadGlucoseHistory.markdown
-sudo ./bin/mm-send-comm.py --prefix-path logs/$dt- --serial 584923 --port /dev/ttyUSB0 tweak ReadISIGHistory --page 18 --save | tee analysis/pg-18-$dt-ReadISIGHistory.markdown
+
+  
+#  db_trans = DeviceDBTransData()
+#  data_to_send = db_trans.get_data_to_send()
+#  bt_trans = DeviceBTPhoneTransData()
+#  data_from_phone = bt_trans.transfer(data_to_send)
+#  if not data_from_phone is None:
+#    db_trans.import_data(data_from_phone)  
+
+#sudo ./bin/mm-send-comm.py --prefix-path logs/$dt- --serial 584923 --port /dev/ttyUSB0 tweak ReadISIGHistory --page 18 --save | tee analysis/pg-18-$dt-ReadISIGHistory.markdown
+
+#fileInName = "20140421_030133-ReadGlucoseHistory-page-16.data"
+#fileInName = "20140421_042530-ReadGlucoseHistory-page-0.data"
+#fileOutName = "latest-sg.xml"
+#j = 0
+#fileOut = open(fileOutName, 'w')
+#numZerosCounter = 0
+#fileOut.write("<latest_sg>"+str(latest_sg)+"</latest_sg>")
 

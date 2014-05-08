@@ -11,10 +11,12 @@ import os
 import MySQLdb
 import time
 import sys
+import datetime
 #from bluetooth import *
 #from time import sleep
 
 dateFormat="%Y-%m-%dT%H:%M:%S"
+mySQLDateFormat="%Y-%m-%d %H:%M:%S"
 
 # TODO: move get_value functions to a lib.py file
 def get_value_from_xml (string, tag):
@@ -70,18 +72,22 @@ class PumpDeviceDBTrans():
     device_id = get_value_from_xml(sgv_xml, "device_id")
     datetime_recorded = get_value_from_xml(sgv_xml, "datetime_recorded")
     sgv = get_value_from_xml(sgv_xml, "sgv")
-    if not sgv_exists(datetime_recorded, device_id, sgv):
-      sql = "insert into sgvs (device_id, datetime_recorded, sgv) values ("
+    if not self.sgv_exists(datetime_recorded, device_id, sgv):
+      sql = "insert into sgvs (device_id, datetime_recorded, sgv, transfered) values ("
       sql += device_id + ", "
       sql += "'" + datetime_recorded + "',"
-      sql += sgv + ")"
+      sql += sgv + ", 'no')"
       try:
         self.db.execute(sql) 
         self.db_conn.commit()
       except:
         self.db_conn.rollback()
-        print "******* rolled back insert : "+insert_sql
+        print "******* rolled back insert : "+sql
         
+  def sgv_exists(self, datetime_recorded, device_id, sgv):
+    print "TODO: implement sgv_exists()"
+    return False
+    
   # TODO: Delete below, just keeping as reference for now
   def course_xml_to_sql_insert(self, course_xml):
     course_id = get_value_from_xml(course_xml, "course_id")
@@ -102,29 +108,46 @@ class PumpDeviceDBTrans():
     return sql
 
 
-class downloadPumpData():
+class DownloadPumpData():
   decoding_dir = "/home/pi/diabetes/decoding-carelink"
-  output_file_default = "/tmp/pump_output.xml"
-  cgm_download_file = "/tmp/cgm_download.data"
+  output_file_default = "/tmp/"
+  cgm_download_file = "/tmp/"
   device_id=584923
   port="/dev/ttyUSB0"
-  cur_page=19
+  cur_page=18
+  
 
   def get_latest_sgv(self):
     self.download_cgm_data()
     bytes = self.data_file_to_bytes()
-    last_sgv = get_last_sgv_from_bytes(bytes)
-    return sgv_to_xml(last_sgv)
+    last_sgv = self.get_last_sgv_from_bytes(bytes)
+    return self.sgv_to_xml(last_sgv)
 
   def download_cgm_data(self, output_file=output_file_default):
+    # delete file if exists
+  
+    include_init = True  
     self.get_cur_cgm_page()
-    command = decoding_dir+"/bin/mm-send-comm.py --init"
+    command = "sudo"
+    command += " " + self.decoding_dir + "/bin/mm-send-comm.py"
+    if include_init:
+      command += " --init"
     command += " --serial " + str(self.device_id)
     command += " --port " + self.port
-    command += " --prefix-path " + cgm_download_file
+    command += " --prefix-path " + self.cgm_download_file
     command += " tweak ReadGlucoseHistory"
-    command += " --page" + str(self.cur_page)
+    command += " --page " + str(self.cur_page)
     command += " --save "
+    print "About to execute : " + command
+    os.system(command)
+    
+    # if no file return false
+    # otherwise return true
+
+  def run_sticky(self):
+    command = "sudo python"
+    command += " " + self.decoding_dir + "/decocare/sticky.py"
+    command += " " + self.port
     print "About to execute : " + command
     # os.system(command)
 
@@ -133,20 +156,22 @@ class downloadPumpData():
 
   def data_file_to_bytes(self, data_file=cgm_download_file):
     myBytes = bytearray()
+    data_file = "/tmp/ReadGlucoseHistory-page-" + str(self.cur_page) + ".data"
     with open(data_file, 'rb') as file:
       while 1:
         byte = file.read(1)
         if not byte:
           break
         myBytes.append(byte)
+    return myBytes
 
-  def get_last_sgv_from_bytes(self, bytes)
+  def get_last_sgv_from_bytes(self, bytes):
     latest_sg = 0
     # for each byte: convert it to a decimal, double it
     # 	check that it is a valid sg and then mark it as the latest
-    for i in range(0, len(myBytes)):
-    	bin = '{0:08b}'.format(myBytes[i])
-    	hex = '{0:02x}'.format(myBytes[i])
+    for i in range(0, len(bytes)-10):
+    	bin = '{0:08b}'.format(bytes[i])
+    	hex = '{0:02x}'.format(bytes[i])
     	dec = int(hex, 16)
     	sg = dec * 2
     	if sg == 0:
@@ -157,21 +182,22 @@ class downloadPumpData():
     		break
     	if sg > 40 and sg < 400:
     		latest_sg = sg
-    
-  def sgv_to_xml(self, sgv)
-    xml =  "<sgv>"
+    return latest_sg
+        
+  def sgv_to_xml(self, sgv):
+    xml =  "<sgv_record>"
     xml += "<device_id>" + str(self.device_id) + "</device_id>"
-    xml += "<datetime_recorded>" + datetime.now().strftime(dateFormat) + "</datetime_recorded>"
+    xml += "<datetime_recorded>" + datetime.datetime.now().strftime(mySQLDateFormat) + "</datetime_recorded>"
     xml += "<sgv>" + str(sgv) + "</sgv>"
-    xml += "</sgv>"
+    xml += "</sgv_record>"
     return xml
     
 
 if __name__ == '__main__':
   # downlaod the data from the pump
   # parse it to get the latest sgv
-  download_pump = DwonloadPumpData()
-  last_sgv_xml = download_pump.get_last_sgv()
+  download_pump = DownloadPumpData()
+  last_sgv_xml = download_pump.get_latest_sgv()
   # import that sgv into the db
   db_trans = PumpDeviceDBTrans()
   db_trans.import_sgv(last_sgv_xml)

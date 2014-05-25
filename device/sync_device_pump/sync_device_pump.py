@@ -57,11 +57,11 @@ class PumpDeviceDBTrans():
     print "TODO: Import the various data elements from xml (currenlty just imports courses)"
 
   ################### Internal methods below ############################
-  #switch from xml to json objects
+  # TODO: possibly switch from xml to json objects
   def import_sgvs(self, svgs_xml):
     if sgvs_xml.startswith("<sgvs>"):
       sgvs_xml = get_value_from_xml(sgvs_xml, "sgvs")
-    if not sgvs_xml == "":
+    if sgvs_xml == "":
       print "No SGVs to import. Done."
       return
     sgvs_array = get_values_from_xml(sgvs_xml, "sgv_record")
@@ -111,59 +111,112 @@ class PumpDeviceDBTrans():
 class DownloadPumpData():
   decoding_dir = "/home/pi/diabetes/decoding-carelink"
   output_file_default = "/tmp/"
-  cgm_download_file = "/tmp/"
+  cgm_download_dir = "/tmp/"
   device_id=584923
   port="/dev/ttyUSB0"
   cur_page=18
   
 
   def get_latest_sgv(self):
-    self.download_cgm_data()
-    bytes = self.data_file_to_bytes()
-    last_sgv = self.get_last_sgv_from_bytes(bytes)
-    return self.sgv_to_xml(last_sgv)
+    page_data_file = self.download_cgm_data()
+    if page_data_file != 'ERRORCouldNotDownload':      
+      bytes = self.file_to_bytes(page_data_file)
+      last_sgv = self.get_last_sgv_from_bytes(bytes)
+      return self.sgv_to_xml(last_sgv)
+    else:
+      return
 
-  def download_cgm_data(self, output_file=output_file_default):
+  def download_cgm_data(self, output_file=output_file_default, include_init=True):
     # delete file if exists
-  
-    include_init = True  
     self.get_cur_cgm_page()
+    data_file = self.cgm_download_dir+"/ReadGlucoseHistory-page-" + str(self.cur_page) + ".data"
+    self.rm_file(data_file)
+
+    # download cgm data
     command = "sudo"
     command += " " + self.decoding_dir + "/bin/mm-send-comm.py"
     if include_init:
       command += " --init"
     command += " --serial " + str(self.device_id)
     command += " --port " + self.port
-    command += " --prefix-path " + self.cgm_download_file
+    command += " --prefix-path " + self.cgm_download_dir
     command += " tweak ReadGlucoseHistory"
     command += " --page " + str(self.cur_page)
     command += " --save "
     print "About to execute : " + command
     os.system(command)
+
+    return data_file
+
+  def cgm_data_file_to_sgv_xml(self, file_name):
+    sys.path.insert(0, self.decoding_dir)
+    import list_cgm
+    records = []
+    for stream in file_name:
+      page = PagedData(stream)
+      records.extend(page.decode)
     
-    # if no file return false
-    # otherwise return true
+    # convert the records to sgv xml
+    xml = "<sgvs>"
+    for record in records:
+      if record['name'] == 'GlucoseSensorData':
+        xml += self.sgv_to_xml(record['sgv'],record['date'])
+    xml += "</sgvs>"
+    return xml
 
   def run_sticky(self):
     command = "sudo python"
     command += " " + self.decoding_dir + "/decocare/sticky.py"
     command += " " + self.port
     print "About to execute : " + command
-    # os.system(command)
+    os.system(command)
+   
+  def get_cur_cgm_page(self, include_init=True):
+    # clear the previous download file 
+    download_file = self.cgm_download_dir+"/ReadCurGlucosePageNumber.data"
+    self.rm_file(download_file)
 
-  def get_cur_cgm_page(self):
+    # download the page from the pump
+    command = "sudo"
+    command += " " + self.decoding_dir + "/bin/mm-send-comm.py"
+    if include_init:
+      command += " --init" 
+    command += " --serial " + str(self.device_id)
+    command += " --port " + self.port
+    command += " --prefix-path " + self.cgm_download_dir
+    command += " --prefix ReadCurGlucosePageNumber"
+    command += " --save "
+    command += " sleep 0"
+    print "INFO: About to execute : " + command
+    os.system(command)
+    
+    # decode the page number
+    if not os.path.isfile(download_file):
+       print "ERROR: Current Page was not downloaded"
+       return 'ERRORNotDownloaded'
+    cur_page_data = file_to_bytes(download_file)
+    cur_page = int(cur_page_data[5]) - 1 #array style count
+    if cur_page < 0 or cur_page > 500:
+      print "ERROR: Could not download the current page"
+      return 'ERRORCouldNotParse'
+    self.cur_page = cur_page
     return self.cur_page
 
-  def data_file_to_bytes(self, data_file=cgm_download_file):
+  def file_to_bytes(self, file_name):
     myBytes = bytearray()
-    data_file = "/tmp/ReadGlucoseHistory-page-" + str(self.cur_page) + ".data"
-    with open(data_file, 'rb') as file:
+    with open(file_name, 'rb') as file:
       while 1:
         byte = file.read(1)
         if not byte:
           break
         myBytes.append(byte)
     return myBytes
+
+  def rm_file(self, file_name):
+    try:
+      os.remove(file_name)
+    except OSError:
+      pass
 
   def get_last_sgv_from_bytes(self, bytes):
     latest_sg = 0
@@ -184,10 +237,11 @@ class DownloadPumpData():
     		latest_sg = sg
     return latest_sg
         
-  def sgv_to_xml(self, sgv):
+  def sgv_to_xml(self, sgv, date_isoformat):
     xml =  "<sgv_record>"
     xml += "<device_id>" + str(self.device_id) + "</device_id>"
-    xml += "<datetime_recorded>" + datetime.datetime.now().strftime(mySQLDateFormat) + "</datetime_recorded>"
+#    xml += "<datetime_recorded>" + datetime.datetime.now().strftime(mySQLDateFormat) + "</datetime_recorded>"
+    xml += "<datetime_recorded>" + date_isoformat + "</datetime_recorded>"
     xml += "<sgv>" + str(sgv) + "</sgv>"
     xml += "</sgv_record>"
     return xml

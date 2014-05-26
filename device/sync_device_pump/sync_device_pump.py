@@ -12,11 +12,15 @@ import MySQLdb
 import time
 import sys
 import datetime
+import logging
 #from bluetooth import *
 #from time import sleep
 
 dateFormat="%Y-%m-%dT%H:%M:%S"
 mySQLDateFormat="%Y-%m-%d %H:%M:%S"
+skip_commands = False # debug tool to skip cli commands
+logging.basicConfig(level=logging.DEBUG)
+
 
 # TODO: move get_value functions to a lib.py file
 def get_value_from_xml (string, tag):
@@ -58,7 +62,7 @@ class PumpDeviceDBTrans():
 
   ################### Internal methods below ############################
   # TODO: possibly switch from xml to json objects
-  def import_sgvs(self, svgs_xml):
+  def import_sgvs(self, sgvs_xml):
     if sgvs_xml.startswith("<sgvs>"):
       sgvs_xml = get_value_from_xml(sgvs_xml, "sgvs")
     if sgvs_xml == "":
@@ -73,11 +77,16 @@ class PumpDeviceDBTrans():
     datetime_recorded = get_value_from_xml(sgv_xml, "datetime_recorded")
     sgv = get_value_from_xml(sgv_xml, "sgv")
     if not self.sgv_exists(datetime_recorded, device_id, sgv):
-      sql = "insert into sgvs (device_id, datetime_recorded, sgv, transfered) values ("
+      sql = "insert into sgvs (device_id, datetime_recorded, sgv, transfered) select * from (select "
       sql += device_id + ", "
       sql += "'" + datetime_recorded + "',"
       sql += sgv + ", 'no')"
+      sql += " as tmp where not exists (select sgv from sgvs where "
+      sql += " device_id = " + device_id
+      sql += " and datetime_recorded = '" + datetime_recorded + "'"
+      sql += ") limit 1"
       try:
+        print "INFO: Running sql '" + sql +"'"
         self.db.execute(sql) 
         self.db_conn.commit()
       except:
@@ -104,7 +113,7 @@ class PumpDeviceDBTrans():
             % (int(course_id), int(food_id), float(serv_quantity), int(carbs), \
             datetime_consumption, datetime_ideal_injection)
 
-    # print " SQL : "+sql
+    print " SQL : "+sql
     return sql
 
 
@@ -126,9 +135,13 @@ class DownloadPumpData():
     else:
       return
 
-  def download_cgm_data(self, output_file=output_file_default, include_init=True):
-    # delete file if exists
-    self.get_cur_cgm_page()
+  def download_cgm_data(self, page_num=None, include_init=True):
+    # if didn't pass a page get the current
+    if page_num is None:
+      self.get_cur_cgm_page(include_init=True)
+      include_init=False
+    
+    # clean out previous file
     data_file = self.cgm_download_dir+"/ReadGlucoseHistory-page-" + str(self.cur_page) + ".data"
     self.rm_file(data_file)
 
@@ -143,18 +156,19 @@ class DownloadPumpData():
     command += " tweak ReadGlucoseHistory"
     command += " --page " + str(self.cur_page)
     command += " --save "
-    print "About to execute : " + command
-    os.system(command)
+    self.cli(command)
 
     return data_file
 
   def cgm_data_file_to_sgv_xml(self, file_name):
     sys.path.insert(0, self.decoding_dir)
     import list_cgm
+    from list_cgm import PagedData
     records = []
-    for stream in file_name:
+    with open(file_name, 'rb') as stream:
+#      for stream in file_name:
       page = PagedData(stream)
-      records.extend(page.decode)
+      records.extend(page.decode())
     
     # convert the records to sgv xml
     xml = "<sgvs>"
@@ -168,8 +182,7 @@ class DownloadPumpData():
     command = "sudo python"
     command += " " + self.decoding_dir + "/decocare/sticky.py"
     command += " " + self.port
-    print "About to execute : " + command
-    os.system(command)
+    self.cli(command)
    
   def get_cur_cgm_page(self, include_init=True):
     # clear the previous download file 
@@ -187,20 +200,25 @@ class DownloadPumpData():
     command += " --prefix ReadCurGlucosePageNumber"
     command += " --save "
     command += " sleep 0"
-    print "INFO: About to execute : " + command
-    os.system(command)
-    
+    self.cli(command)
+
     # decode the page number
     if not os.path.isfile(download_file):
        print "ERROR: Current Page was not downloaded"
        return 'ERRORNotDownloaded'
-    cur_page_data = file_to_bytes(download_file)
+    cur_page_data = self.file_to_bytes(download_file)
     cur_page = int(cur_page_data[5]) - 1 #array style count
     if cur_page < 0 or cur_page > 500:
       print "ERROR: Could not download the current page"
       return 'ERRORCouldNotParse'
+    print "INFO: Found the current page to be '" + str(cur_page) + "'"
     self.cur_page = cur_page
     return self.cur_page
+
+  def cli(self, command):
+    if not skip_commands:
+      print "INFO: About to execute command: \n\t " + command
+      os.system(command)
 
   def file_to_bytes(self, file_name):
     myBytes = bytearray()
@@ -213,6 +231,8 @@ class DownloadPumpData():
     return myBytes
 
   def rm_file(self, file_name):
+    if skip_commands:
+      return
     try:
       os.remove(file_name)
     except OSError:
@@ -251,10 +271,13 @@ if __name__ == '__main__':
   # downlaod the data from the pump
   # parse it to get the latest sgv
   download_pump = DownloadPumpData()
-  last_sgv_xml = download_pump.get_latest_sgv()
+  file_output = download_pump.download_cgm_data()
+  cgm_xml = download_pump.cgm_data_file_to_sgv_xml(file_output)
+#  last_sgv_xml = download_pump.get_latest_sgv()
   # import that sgv into the db
   db_trans = PumpDeviceDBTrans()
-  db_trans.import_sgv(last_sgv_xml)
+#  db_trans.import_sgv(latest_sgv_xml)
+  db_trans.import_sgvs(cgm_xml)
   
 
 

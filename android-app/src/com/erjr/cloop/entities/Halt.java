@@ -16,32 +16,32 @@ public class Halt {
 	public static final String ROW_DESC = "halt_record";
 	public static final String COL_HALT_ID = "halt_id";
 	public static final String COL_DATETIME_ISSUED = "datetime_issued";
-	public static final String COL_TRANSFERED = "transfered";
+	public static final String COL_TRANSFERRED = "transferred";
 
 	public static final String TABLE_CREATE = "create table "
 			+ TABLE_HALTS + "(" + COL_HALT_ID
 			+ " integer primary key autoincrement, " + COL_DATETIME_ISSUED
-			+ " text not null, " + COL_TRANSFERED + " text not null);";
+			+ " text not null, " + COL_TRANSFERRED + " text not null);";
 
 	public static String[] allColumns = { COL_HALT_ID, COL_DATETIME_ISSUED,
-			COL_TRANSFERED };
+			COL_TRANSFERRED };
 
 	private long haltID;
 	private Date datetimeIssued;
-	private String transfered;
+	private String transferred;
 
 	public String getUpdateSql() {
 		String sql = " update " + TABLE_HALTS + " set " + COL_DATETIME_ISSUED
 				+ " = '" + Util.convertDateToString(datetimeIssued) + "', "
-				+ COL_TRANSFERED + " = '" + transfered + "' where "
+				+ COL_TRANSFERRED + " = '" + transferred + "' where "
 				+ COL_HALT_ID + " = " + haltID + ";";
 		return sql;
 	}
 
 	public String toString() {
 		return "ID (" + haltID + ") issued at : "
-				+ Util.convertDateToString(datetimeIssued) + ". Transfered = "
-				+ transfered;
+				+ Util.convertDateToString(datetimeIssued) + ". Transferred = "
+				+ transferred;
 	}
 
 	public String toXML() {
@@ -81,17 +81,17 @@ public class Halt {
 	}
 
 	/**
-	 * @return the transfered
+	 * @return the transferred
 	 */
-	public String getTransfered() {
-		return transfered;
+	public String getTransferred() {
+		return transferred;
 	}
 
 	/**
-	 * @param transfered the transfered to set
+	 * @param transferred the transferred to set
 	 */
-	public void setTransfered(String transfered) {
-		this.transfered = transfered;
+	public void setTransferred(String transferred) {
+		this.transferred = transferred;
 	}
 
 }

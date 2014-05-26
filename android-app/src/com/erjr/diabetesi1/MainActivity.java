@@ -171,7 +171,7 @@ public class MainActivity extends ListActivity {
 		// String str = btSync.read();
 		// if(str.contains("transfer successful")) {
 		// for(Course c: courses) {
-		// c.setTransfered("yes");
+		// c.setTransferred("yes");
 		// datasource.saveCourse(c);
 		// }
 		// }

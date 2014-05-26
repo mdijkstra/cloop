@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.Style;
 import android.util.Log;
 
 import com.erjr.cloop.dao.SGVDataSource;
@@ -27,7 +28,7 @@ public class PersistentNotification extends BroadcastReceiver {
 		String dateLastSgv = "couldn't find sgv";
 		if (latestSgv != null) {
 			sgv = latestSgv.getSg();
-			dateLastSgv = Util.convertDateToString(latestSgv
+			dateLastSgv = Util.convertDateToPrettyString(latestSgv
 					.getDatetimeRecorded());
 		}
 
@@ -35,7 +36,10 @@ public class PersistentNotification extends BroadcastReceiver {
 				context).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Latest BG - " + sgv)
 				.setContentText(sgv + " - " + dateLastSgv);
+		
+		
 		// mBuilder.setNumber(211);
+//		mBuilder.setProgress(300, sgv, false); // eh, shows value out of max
 		mBuilder.setOngoing(true);
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(context, MainActivity.class);

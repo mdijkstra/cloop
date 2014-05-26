@@ -108,7 +108,7 @@ CREATE TABLE `sgvs` (
   `device_id` int(11) NOT NULL COMMENT 'the id of the pump to differentiate if wearing two cgms',
   `datetime_recorded` datetime NOT NULL,
   `sgv` int(11) DEFAULT NULL COMMENT 'blood glucose recorded',
-  `transfered` varchar(45) NOT NULL,
+  `transferred` varchar(45) NOT NULL,
   PRIMARY KEY (`sgv_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
 /*!40101 SET character_set_client = @saved_cs_client */;

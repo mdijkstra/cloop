@@ -115,7 +115,7 @@ class DeviceDBTransData():
     print "      The API for importing data from the pump should probably be in a diff file"
 
   def export_sgvs(self):
-    self.db.execute("select sgv_id, device_id, datetime_recorded, sgv from sgvs where transfered != 'yes'")
+    self.db.execute("select sgv_id, device_id, datetime_recorded, sgv from sgvs where transferred != 'yes'")
     xml = "<sgvs>"
     for row in self.db.fetchall():
       xml+= "<sgv_record>"
@@ -125,7 +125,7 @@ class DeviceDBTransData():
       xml += "<sgv>" + str(row[3]) + "</sgv>"
       xml += "</sgv_record>"
     xml += "</sgvs>"
-    self.db.execute("update sgvs set transfered = 'yes'")
+    self.db.execute("update sgvs set transferred = 'yes' where transferred = 'no'")
     return xml
 
   def import_courses(self, courses_xml):
@@ -154,7 +154,7 @@ class DeviceDBTransData():
     datetime_consumption = get_value_from_xml(course_xml, "datetime_consumption")
     datetime_ideal_injection = get_value_from_xml(course_xml, "datetime_ideal_injection")
     # not needed on device, only needed on original location (app)
-    #    transfered = get_value_from_xml(xml, "transfered")
+    #    transferred = get_value_from_xml(xml, "transferred")
     sql = " insert into courses (course_id, food_id, serv_quantity, carbs, \
             datetime_consumption, datetime_ideal_injection) \
             values ( %d, %d, %f, %d, '%s','%s')" \

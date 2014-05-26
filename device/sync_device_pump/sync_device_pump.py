@@ -77,7 +77,7 @@ class PumpDeviceDBTrans():
     datetime_recorded = get_value_from_xml(sgv_xml, "datetime_recorded")
     sgv = get_value_from_xml(sgv_xml, "sgv")
     if not self.sgv_exists(datetime_recorded, device_id, sgv):
-      sql = "insert into sgvs (device_id, datetime_recorded, sgv, transfered) select * from (select "
+      sql = "insert into sgvs (device_id, datetime_recorded, sgv, transferred) select * from (select "
       sql += device_id + ", "
       sql += "'" + datetime_recorded + "',"
       sql += sgv + ", 'no')"
@@ -106,7 +106,7 @@ class PumpDeviceDBTrans():
     datetime_consumption = get_value_from_xml(course_xml, "datetime_consumption")
     datetime_ideal_injection = get_value_from_xml(course_xml, "datetime_ideal_injection")
     # not needed on device, only needed on original location (app)
-    #    transfered = get_value_from_xml(xml, "transfered")
+    #    transferred = get_value_from_xml(xml, "transferred")
     sql = " insert into courses (course_id, food_id, serv_quantity, carbs, \
             datetime_consumption, datetime_ideal_injection) \
             values ( %d, %d, %f, %d, '%s','%s')" \

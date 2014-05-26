@@ -13,14 +13,16 @@ import time
 import sys
 import datetime
 import logging
+import signal
+import subprocess
 #from bluetooth import *
 #from time import sleep
 
 dateFormat="%Y-%m-%dT%H:%M:%S"
 mySQLDateFormat="%Y-%m-%d %H:%M:%S"
 skip_commands = False # debug tool to skip cli commands
-logging.basicConfig(level=logging.DEBUG)
-
+logging.basicConfig(filename='sync_device_pump.log',level=logging.DEBUG,\
+                format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s ')
 
 # TODO: move get_value functions to a lib.py file
 def get_value_from_xml (string, tag):
@@ -39,6 +41,29 @@ def get_values_from_xml (full_xml, tag):
         end_tag_loc = full_xml.index(end_xml_tag)
         full_xml = full_xml[end_tag_loc+len(end_xml_tag):]
     return a
+
+# TODO: move to library file
+class Timeout():
+  """
+  Timeout class using ALARM signal
+  http://pythonadventures.wordpress.com/2012/12/08/raise-a-timeout-exception-after-x-seconds/
+  """
+
+  class Timeout(Exception):
+    pass
+
+  def __init__(self, sec):
+    self.sec = sec
+                 
+  def __enter__(self):
+    signal.signal(signal.SIGALRM, self.raise_timeout)
+    signal.alarm(self.sec)
+                                            
+  def __exit__(self, *args):
+    signal.alarm(0)    # disable alarm
+                                                                   
+  def raise_timeout(self, *args):
+    raise Timeout.Timeout()
 
 
 class PumpDeviceDBTrans():
@@ -63,35 +88,37 @@ class PumpDeviceDBTrans():
   ################### Internal methods below ############################
   # TODO: possibly switch from xml to json objects
   def import_sgvs(self, sgvs_xml):
+    logging.debug('importing sgvs xml : ' + sgvs_xml)
     if sgvs_xml.startswith("<sgvs>"):
       sgvs_xml = get_value_from_xml(sgvs_xml, "sgvs")
     if sgvs_xml == "":
-      print "No SGVs to import. Done."
+      logging.debug('No SGVs to import. Done.')
       return
     sgvs_array = get_values_from_xml(sgvs_xml, "sgv_record")
     for sgv in sgvs_array:
       self.import_sgv(sgv)
 
   def import_sgv(self, sgv_xml):
+    logging.debug('importing sgv : ' + sgv_xml)
     device_id = get_value_from_xml(sgv_xml, "device_id")
     datetime_recorded = get_value_from_xml(sgv_xml, "datetime_recorded")
     sgv = get_value_from_xml(sgv_xml, "sgv")
-    if not self.sgv_exists(datetime_recorded, device_id, sgv):
-      sql = "insert into sgvs (device_id, datetime_recorded, sgv, transferred) select * from (select "
-      sql += device_id + ", "
-      sql += "'" + datetime_recorded + "',"
-      sql += sgv + ", 'no')"
-      sql += " as tmp where not exists (select sgv from sgvs where "
-      sql += " device_id = " + device_id
-      sql += " and datetime_recorded = '" + datetime_recorded + "'"
-      sql += ") limit 1"
-      try:
-        print "INFO: Running sql '" + sql +"'"
-        self.db.execute(sql) 
-        self.db_conn.commit()
-      except:
-        self.db_conn.rollback()
-        print "******* rolled back insert : "+sql
+    sql = "insert into sgvs (device_id, datetime_recorded, sgv, transferred) select * from (select "
+    sql += device_id + ", "
+    sql += "'" + datetime_recorded + "',"
+    sql += sgv + ", 'no')"
+    sql += " as tmp where not exists (select sgv from sgvs where "
+    sql += " device_id = " + device_id
+    sql += " and datetime_recorded = '" + datetime_recorded + "'"
+    sql += ") limit 1"
+    try:
+      logging.debug("Running sql '" + sql +"'")
+      self.db.execute(sql) 
+      self.db_conn.commit()
+    except:
+      self.db_conn.rollback()
+      logging.error('importing sgv : ' + sgv_xml)
+      logging.error("******* rolled back insert : "+sql)
         
   def sgv_exists(self, datetime_recorded, device_id, sgv):
     print "TODO: implement sgv_exists()"
@@ -136,6 +163,7 @@ class DownloadPumpData():
       return
 
   def download_cgm_data(self, page_num=None, include_init=True):
+    logging.info("Going to try to download CGM data from the pump")
     # if didn't pass a page get the current
     if page_num is None:
       self.get_cur_cgm_page(include_init=True)
@@ -156,15 +184,34 @@ class DownloadPumpData():
     command += " tweak ReadGlucoseHistory"
     command += " --page " + str(self.cur_page)
     command += " --save "
-    self.cli(command)
+    for i in range(0,2):
+      result = self.cli_w_time(command=command)
+      if result == 'ERRORTimeout': 
+        logging.warning("WARNING: command timeout. Trying to clean \
+                         the stick buffer. On ("+str(i)+") try")
+        self.run_sticky()
+      elif not os.path.isfile(data_file):
+        logging.warning("file not created on ("+str(i)+") try. Running sticky...")
+        self.run_sticky()
+      else:
+        break
 
-    return data_file
+    if not os.path.isfile(data_file):
+      logging.error("ERROR: Could not download cgm page data")
+      return "ERRORCouldNotDownload"
+    else:
+      logging.info("INFO: Sucessfully downloaded cgm page data")
+      return data_file
 
   def cgm_data_file_to_sgv_xml(self, file_name):
+    logging.info("Going to try to convert the cgm data file ("+file_name+")")
     sys.path.insert(0, self.decoding_dir)
     import list_cgm
     from list_cgm import PagedData
     records = []
+    if not os.path.isfile(file_name):
+      logging.error("file does not exist to decode ("+file_name+")")
+      return 'ERRORFileDoesNotExist'
     with open(file_name, 'rb') as stream:
 #      for stream in file_name:
       page = PagedData(stream)
@@ -176,15 +223,21 @@ class DownloadPumpData():
       if record['name'] == 'GlucoseSensorData':
         xml += self.sgv_to_xml(record['sgv'],record['date'])
     xml += "</sgvs>"
+    logging.info("sucessfully decoded cgm data file : "+xml)
     return xml
 
   def run_sticky(self):
+    logging.info("in run_sticky")
     command = "sudo python"
     command += " " + self.decoding_dir + "/decocare/sticky.py"
     command += " " + self.port
-    self.cli(command)
-   
+    result = self.cli_w_time(command=command, timeout=30)
+    if result == 'ERRORTimeout': 
+      logging.error("WARNING: sticky command timeout.")
+    logging.info("sucessfully ran sticky")
+
   def get_cur_cgm_page(self, include_init=True):
+    logging.info("going to try to download the current cgm page")
     # clear the previous download file 
     download_file = self.cgm_download_dir+"/ReadCurGlucosePageNumber.data"
     self.rm_file(download_file)
@@ -200,27 +253,59 @@ class DownloadPumpData():
     command += " --prefix ReadCurGlucosePageNumber"
     command += " --save "
     command += " sleep 0"
-    self.cli(command)
-
-    # decode the page number
+    for i in range(0,2):
+      result = self.cli_w_time(command=command)
+      if result == 'ERRORTimeout': 
+        logging.warning("WARNING: command timeout. Trying to clean \
+                         the stick buffer. On ("+str(i)+") try")
+        self.run_sticky()
+      elif not os.path.isfile(download_file):
+        logging.warning('file not downloaded. on ('+str(i)+') try')
+        self.run_sticky()
+      else:
+        break
     if not os.path.isfile(download_file):
-       print "ERROR: Current Page was not downloaded"
+       logging.error("ERROR: Current Page was not downloaded")
        return 'ERRORNotDownloaded'
+    
+    # decode the page number
     cur_page_data = self.file_to_bytes(download_file)
     cur_page = int(cur_page_data[5]) - 1 #array style count
     if cur_page < 0 or cur_page > 500:
-      print "ERROR: Could not download the current page"
+      logging.error("ERROR: Could not decode the current \
+                     page ("+str(cur_page)+")")
       return 'ERRORCouldNotParse'
-    print "INFO: Found the current page to be '" + str(cur_page) + "'"
+    logging.info("INFO: Found the current page to be '" + str(cur_page) + "'")
     self.cur_page = cur_page
     return self.cur_page
 
   def cli(self, command):
     if not skip_commands:
-      print "INFO: About to execute command: \n\t " + command
+      logging.info("INFO: About to execute command: \n\t " + command)
       os.system(command)
 
+  def cli_w_time(self, command=None, timeout=60):
+    """
+    call shell-command and either return its output or kill it
+    if it doesn't normally exit within timeout seconds and return None
+    """
+    logging.info("INFO: About to execute command (time "+str(timeout)\
+                  +"): \n\t " + command)
+    start = datetime.datetime.now()
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    while process.poll() is None:
+      time.sleep(0.1)
+      now = datetime.datetime.now()
+      if (now - start).seconds> timeout:
+        os.kill(process.pid, signal.SIGKILL)
+        os.waitpid(-1, os.WNOHANG)
+        logging.error("Reached timeout")
+        return 'ERRORTimeout'
+    logging.info("ran command without timeout")
+    return process.stdout.read()
+
   def file_to_bytes(self, file_name):
+    logging.debug("file_to_bytes ("+file_name+")")
     myBytes = bytearray()
     with open(file_name, 'rb') as file:
       while 1:
@@ -270,14 +355,19 @@ class DownloadPumpData():
 if __name__ == '__main__':
   # downlaod the data from the pump
   # parse it to get the latest sgv
+  logging.info("NEW SYNC...")
   download_pump = DownloadPumpData()
   file_output = download_pump.download_cgm_data()
   cgm_xml = download_pump.cgm_data_file_to_sgv_xml(file_output)
+  if cgm_xml == 'ERRORFileDoesNotExist':
+    logging.error('Could not complete sync\n\n\n\n')
+  else: 
 #  last_sgv_xml = download_pump.get_latest_sgv()
   # import that sgv into the db
-  db_trans = PumpDeviceDBTrans()
+    db_trans = PumpDeviceDBTrans()
 #  db_trans.import_sgv(latest_sgv_xml)
-  db_trans.import_sgvs(cgm_xml)
+    db_trans.import_sgvs(cgm_xml)
+    logging.info("DONE WITH SYNC.\n\n\n\n")
   
 
 

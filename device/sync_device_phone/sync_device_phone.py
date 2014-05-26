@@ -11,10 +11,16 @@ import os
 import MySQLdb
 import bluetooth
 import time
+import logging
+import signal
 #from bluetooth import *
 #from time import sleep
 
+# use ISO format
 dateFormat="%Y-%m-%dT%H:%M:%S"
+
+logging.basicConfig(filename='sync_device_phone.log',level=logging.DEBUG,\
+                format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 
 class DeviceBTPhoneTransData:
   uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
@@ -29,14 +35,15 @@ class DeviceBTPhoneTransData:
       self.close_con()
 
   def transfer(self, xml_to_send):
+    logging.info("going to try to sync via BT")
     if self.socket is None:
       return None
     self.write(xml_to_send)
     time.sleep(2)
     read_str = self.read()
-    print "**summary of bt**"
-    print "wrote the following to bt  : " + xml_to_send
-    print "read the following from bt : " + read_str
+    logging.info("**summary of bt**")
+    logging.info("wrote the following to bt  : " + xml_to_send)
+    logging.info("read the following from bt : " + read_str)
     return read_str
 
   def read(self):
@@ -44,24 +51,26 @@ class DeviceBTPhoneTransData:
       while True:
         data = self.socket.recv(1024)
         if len(data) == 0: break
-        print("DeviceBTPhoneTransData.read read : [%s]" % data)
+        logging.info("DeviceBTPhoneTransData.read read : [%s]" % data)
         if "</EOM>" in data: break
     except IOError:
       pass
     return data
 
   def write(self, data_to_write):
-    print "DeviceBTPhoneTransData.write writing to bt socket : "+data_to_write + "</EOM>"
+    logging.info("DeviceBTPhoneTransData.write writing to bt socket : "\
+                    +data_to_write + "</EOM>")
     self.socket.send(data_to_write + "</EOM>")
 
   def open_con(self):
     service = bluetooth.find_service(address = self.phone_mac, uuid = self.uuid)
     if len(service) == 0:
-      print "DeviceBTPhoneTransData.open_con ERROR: Couldn't find phone BT Service"
+      logging.error("DeviceBTPhoneTransData.open_con ERROR: Couldn't find phone BT Service")
       return None
     self.socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
     self.socket.connect((service[0]["host"], service[0]["port"]))
-    print "DeviceBTPhoneTransData.open_con connecting to \"%s\" on %s" % (service[0]["name"], service[0]["host"])
+    logging.info("DeviceBTPhoneTransData.open_con connecting to \"%s\" on %s" \
+                    % (service[0]["name"], service[0]["host"]))
 
   def close_con(self):
     self.socket.close()
@@ -93,7 +102,11 @@ class DeviceDBTransData():
   db_db = "cloop"
 
   def __init__(self):
-    self.db_conn = MySQLdb.connect(host=self.db_host, port=self.db_port, user=self.db_user, passwd=self.db_pass, db=self.db_db)
+    self.db_conn = MySQLdb.connect(host=self.db_host, \
+                    port=self.db_port, \
+                    user=self.db_user, \
+                    passwd=self.db_pass, \
+                    db=self.db_db)
     self.db = self.db_conn.cursor()  
 
   def __del__(self):
@@ -105,7 +118,7 @@ class DeviceDBTransData():
 
   def import_data(self, xml):
     self.import_courses(xml)
-    print "TODO: Import the various data elements from xml (currenlty just imports courses)"
+    logging.info("TODO: Import the various data elements from xml (currenlty just imports courses)")
 
   ################### Internal methods below ############################
   #switch from xml to json objects
@@ -115,7 +128,9 @@ class DeviceDBTransData():
     print "      The API for importing data from the pump should probably be in a diff file"
 
   def export_sgvs(self):
-    self.db.execute("select sgv_id, device_id, datetime_recorded, sgv from sgvs where transferred != 'yes'")
+    sql_select_sgvs = "select sgv_id, device_id, datetime_recorded, sgv from sgvs where transferred != 'yes'"
+    logging.info('Exporting SGValues: '+ sql_select_sgvs)
+    self.db.execute(sql_select_sgvs)
     xml = "<sgvs>"
     for row in self.db.fetchall():
       xml+= "<sgv_record>"
@@ -125,7 +140,15 @@ class DeviceDBTransData():
       xml += "<sgv>" + str(row[3]) + "</sgv>"
       xml += "</sgv_record>"
     xml += "</sgvs>"
-    self.db.execute("update sgvs set transferred = 'yes' where transferred = 'no'")
+    sql_update_exported = "update sgvs set transferred = 'yes' where transferred = 'no'" 
+    logging.info('export_sgvs: updating transferred: '+sql_update_exported)
+    try:
+      self.db.execute(sql_update_exported)
+      self.db_conn.commit()
+    except:
+      self.db_conn.rollback()
+      logging.error("******* rolled back update : "+sql_update_exported)
+    logging.info('returning the following xml from export_sgvs:'+xml)
     return xml
 
   def import_courses(self, courses_xml):
@@ -143,7 +166,7 @@ class DeviceDBTransData():
             self.db_conn.commit()
         except:
             self.db_conn.rollback()
-            print "******* rolled back insert : "+insert_sql
+            logging.error("******* rolled back insert : "+insert_sql)
 
 
   def course_xml_to_sql_insert(self, course_xml):
@@ -161,7 +184,7 @@ class DeviceDBTransData():
             % (int(course_id), int(food_id), float(serv_quantity), int(carbs), \
             datetime_consumption, datetime_ideal_injection)
 
-    # print " SQL : "+sql
+    logging.info(" courses_xml_to_sql_insert : "+sql)
     return sql
 
 '''
@@ -172,10 +195,14 @@ db_trans.import_courses("<courses></courses>")
 
 
 if __name__ == '__main__':
+  logging.info('Going to try to sync device db and phone db...')
   db_trans = DeviceDBTransData()
   data_to_send = db_trans.get_data_to_send()
   bt_trans = DeviceBTPhoneTransData()
   data_from_phone = bt_trans.transfer(data_to_send)
   if not data_from_phone is None:
+    logging.info('main: going to import data from phone')
     db_trans.import_data(data_from_phone)  
-
+  else:
+    logging.warning('no data from phone')
+  logging.info('DONE WITH PHONE SYNC\n\n\n\n')

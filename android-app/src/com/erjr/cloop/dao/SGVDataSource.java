@@ -58,7 +58,7 @@ public class SGVDataSource {
 		// null, null, null, CGMDataPoint.COL_CGM_DATA_ID);
 		Cursor cursor = database.query(SGV.TABLE_SGVS,
 				SGV.allColumns, null, null, null, null,
-				SGV.COL_SGV_ID+" DESC", "1");
+				SGV.COL_DATETIME_RECORDED+" DESC", "1");
 		if(cursor.getCount() <=0) {
 			return null;
 		}

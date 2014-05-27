@@ -29,6 +29,10 @@ public class MainActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// start the BTSync service (if not already running)
+		Intent intent = new Intent(this, BTSyncService.class);
+		startService(intent);
+		
 		setContentView(R.layout.fragment_main);
 
 		datasource = new CoursesDataSource(this);
@@ -176,7 +180,7 @@ public class MainActivity extends ListActivity {
 		// }
 		// }
 		// Log.i(TAG, str);
-	 BTSyncServer btServer = new BTSyncServer(getBaseContext());
+	 BTSyncThread btServer = new BTSyncThread(getBaseContext());
 		 btServer.start();
 		
 	}

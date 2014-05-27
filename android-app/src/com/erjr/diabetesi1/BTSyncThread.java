@@ -17,8 +17,8 @@ import com.erjr.cloop.dao.CoursesDataSource;
 import com.erjr.cloop.entities.SGV;
 import com.erjr.cloop.entities.Course;
 
-public class BTSyncServer extends Thread {
-	private final BluetoothServerSocket mmServerSocket;
+public class BTSyncThread extends Thread {
+	private BluetoothServerSocket mmServerSocket;
 	private BluetoothAdapter mBluetoothAdapter;
 	private String NAME = "DiabetesBTSync";
 	private static final String TAG = "BTSyncServer";
@@ -27,12 +27,69 @@ public class BTSyncServer extends Thread {
 
 	private SGVDataSource SGVDS = null;
 	private CoursesDataSource CoursesDS = null;
+	private boolean stopThread = false;
 
-	public BTSyncServer(Context context) {
+	public BTSyncThread(Context context) {
 		SGVDS = new SGVDataSource(context);
 		CoursesDS = new CoursesDataSource(context);
 		// Use a temporary object that is later assigned to mmServerSocket,
 		// because mmServerSocket is final
+	}
+
+	public void run() {
+		BluetoothSocket socket = null;
+		String dataReceived = null;
+		// Keep listening until exception occurs or a socket is returned
+		Log.i(TAG, "In Run");
+		while (!stopThread) {
+			setBTAdapter();
+			if(mmServerSocket == null) {
+				Log.e(TAG, "mmServerSocket is null");
+				continue;
+			}
+			Log.i(TAG,
+					"Going to wait for a connection on :"
+							+ mmServerSocket.toString());
+			while (!stopThread) {
+				socket = waitForSocketConnection();
+				// If a connection was accepted
+				if (socket != null) {
+					Log.i(TAG, "connection made!!");
+					// Do work to manage the connection (in a separate thread)
+					// send data and read data back
+					dataReceived = sync(socket, getDataToSend());
+					closeSocket();
+					break;
+				}
+			}
+			if (dataReceived != null && !dataReceived.isEmpty()) {
+				processDataReceived(dataReceived);
+			}
+		}
+		closeSocket();
+	}
+
+	private void closeSocket() {
+		try {
+			if (mmServerSocket != null) {
+				mmServerSocket.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private BluetoothSocket waitForSocketConnection() {
+		BluetoothSocket socket = null;
+		try {
+			socket = mmServerSocket.accept();
+		} catch (IOException e) {
+			return null;
+		}
+		return socket;
+	}
+
+	private void setBTAdapter() {
 		BluetoothServerSocket tmp = null;
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -48,39 +105,6 @@ public class BTSyncServer extends Thread {
 		mmServerSocket = tmp;
 	}
 
-	public void run() {
-		BluetoothSocket socket = null;
-		String dataReceived = null;
-		// Keep listening until exception occurs or a socket is returned
-		Log.i(TAG,
-				"Going to wait for a connection on :"
-						+ mmServerSocket.toString());
-		while (true) {
-			try {
-				socket = mmServerSocket.accept();
-			} catch (IOException e) {
-				break;
-			}
-			// If a connection was accepted
-			if (socket != null) {
-				Log.i(TAG, "connection made!!");
-				// Do work to manage the connection (in a separate thread)
-				// send data and read data back
-				dataReceived = sync(socket, getDataToSend());
-				try {
-					mmServerSocket.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
-			}
-		}
-		if (dataReceived != null && !dataReceived.isEmpty()) {
-			processDataReceived(dataReceived);
-		}
-	}
-
 	/**
 	 * process any data that is received from the device
 	 * 
@@ -88,7 +112,7 @@ public class BTSyncServer extends Thread {
 	 */
 	private void processDataReceived(String dataReceived) {
 		String fullSGVXml = Util.getValueFromXml(dataReceived, SGV.TABLE_SGVS);
-		if(fullSGVXml == null || fullSGVXml.isEmpty()) {
+		if (fullSGVXml == null || fullSGVXml.isEmpty()) {
 			return;
 		}
 		String[] sgvsXmlAsArray = Util.getValuesFromXml(fullSGVXml,
@@ -141,7 +165,7 @@ public class BTSyncServer extends Thread {
 				baos.write(btSocket.getInputStream().read());
 				Thread.sleep(1);
 				String data = new String(baos.toByteArray());
-				if(data.endsWith("</EOM>")) {
+				if (data.endsWith("</EOM>")) {
 					break;
 				}
 			}
@@ -152,7 +176,7 @@ public class BTSyncServer extends Thread {
 		}
 		String dataReceived = new String(baos.toByteArray());
 		Log.i(TAG, "done reading. read: " + dataReceived);
-		
+
 		Log.i(TAG, "Going to write...");
 		OutputStream outStream = null;
 		try {
@@ -168,7 +192,7 @@ public class BTSyncServer extends Thread {
 		try {
 			Log.i(TAG, "writing : " + dataToSend);
 			outStream.write(msgBuffer);
-//			outStream.write("</EOM>".getBytes());
+			// outStream.write("</EOM>".getBytes());
 		} catch (IOException e) {
 			String msg = "In sync() and an exception occurred during write: "
 					+ e.getMessage();
@@ -177,12 +201,19 @@ public class BTSyncServer extends Thread {
 
 			Log.i(TAG, msg);
 		}
-		
-		return dataReceived.substring(0, dataReceived.length()-6);
+
+		return dataReceived.substring(0, dataReceived.length() - 6);
 	}
 
 	/** Will cancel the listening socket, and cause the thread to finish */
 	public void cancel() {
+		// give it a few seconds to end
+		stopThread = true;
+		try {
+			sleep(5);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		try {
 			mmServerSocket.close();
 		} catch (IOException e) {

@@ -35,7 +35,7 @@ public class PersistentNotification extends BroadcastReceiver {
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				context).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Latest BG - " + sgv)
-				.setContentText(sgv + " - " + dateLastSgv);
+				.setContentText(latestSgv.getDeviceID() + " - " + dateLastSgv);
 		
 		
 		// mBuilder.setNumber(211);

@@ -184,6 +184,11 @@ public class MainActivity extends ListActivity {
 		 btServer.start();
 		
 	}
+	
+	public void showCGMActivity(View view) {
+		Intent intent = new Intent(this, CGMGraph.class);
+		startActivity(intent);
+	}
 
 	@Override
 	protected void onResume() {

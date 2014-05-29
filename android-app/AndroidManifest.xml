@@ -28,19 +28,24 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".PersistentNotification" />
-        <receiver android:name=".BootStrapSyncService" >
+        <receiver android:name="com.erjr.diabetesi1.PersistentNotification" />
+        <receiver android:name="com.erjr.diabetesi1.BootStrapSyncService" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".BTSyncService"
+            android:name="com.erjr.diabetesi1.BTSyncService"
             android:enabled="true"
             android:exported="false"
             android:label="BTSyncService" >
         </service>
+
+        <activity
+            android:name="com.erjr.diabetesi1.CGMGraph"
+            android:label="@string/title_activity_cgmgraph" >
+        </activity>
     </application>
 
 </manifest>

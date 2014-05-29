@@ -26,16 +26,18 @@ public class PersistentNotification extends BroadcastReceiver {
 		SGV latestSgv = SGVDS.getLatestSGV();
 		Integer sgv = 0;
 		String dateLastSgv = "couldn't find sgv";
+		Integer deviceId = 0;
 		if (latestSgv != null) {
 			sgv = latestSgv.getSg();
 			dateLastSgv = Util.convertDateToPrettyString(latestSgv
 					.getDatetimeRecorded());
+			deviceId = latestSgv.getDeviceID();
 		}
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				context).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Latest BG - " + sgv)
-				.setContentText(latestSgv.getDeviceID() + " - " + dateLastSgv);
+				.setContentText(deviceId + " - " + dateLastSgv);
 		
 		
 		// mBuilder.setNumber(211);

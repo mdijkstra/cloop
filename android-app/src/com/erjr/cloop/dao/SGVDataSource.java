@@ -63,14 +63,29 @@ public class SGVDataSource {
 			return null;
 		}
 		cursor.moveToFirst();
-		return cursorToCGMDataPoint(cursor);
+		return cursorToSGV(cursor);
+	}
+	
+	public SGV[] getRecentSGVs(int hours) {
+		Cursor cursor = database.query(SGV.TABLE_SGVS,
+				SGV.allColumns, null, null, null, null,
+				SGV.COL_DATETIME_RECORDED+" ASC", Integer.toString(hours * 12));
+		if(cursor.getCount() <=0) {
+			return null;
+		}
+		SGV[] sgvs = new SGV[cursor.getCount()];
+		for (int i=0; i<cursor.getCount(); i++) {
+			cursor.moveToNext();
+			sgvs[i] = cursorToSGV(cursor); 
+		}
+		return sgvs;
 	}
 
 	public void saveSGV(SGV cgm) {
 		database.execSQL(cgm.getSQLToSave());
 	}
 	
-	private SGV cursorToCGMDataPoint(Cursor cursor) {
+	private SGV cursorToSGV(Cursor cursor) {
 		SGV cgm = new SGV();
 		cgm.setCgmDataID(cursor.getInt(0));
 		cgm.setDeviceID(cursor.getInt(1));

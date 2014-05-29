@@ -21,17 +21,20 @@ public class BTSyncThread extends Thread {
 	private BluetoothServerSocket mmServerSocket;
 	private BluetoothAdapter mBluetoothAdapter;
 	private String NAME = "DiabetesBTSync";
-	private static final String TAG = "BTSyncServer";
+	private static final String TAG = "BTSyncThread";
 	public static final UUID MY_UUID = UUID
 			.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
 
-	private SGVDataSource SGVDS = null;
-	private CoursesDataSource CoursesDS = null;
+//	private SGVDataSource SGVDS = null;
+//	private CoursesDataSource CoursesDS = null;
 	private boolean stopThread = false;
+	private boolean breakInnerLoop;
+	private Context context;
 
 	public BTSyncThread(Context context) {
-		SGVDS = new SGVDataSource(context);
-		CoursesDS = new CoursesDataSource(context);
+		this.context = context;
+		//SGVDS = new SGVDataSource(context);
+		//CoursesDS = new CoursesDataSource(context);
 		// Use a temporary object that is later assigned to mmServerSocket,
 		// because mmServerSocket is final
 	}
@@ -50,18 +53,22 @@ public class BTSyncThread extends Thread {
 			Log.i(TAG,
 					"Going to wait for a connection on :"
 							+ mmServerSocket.toString());
-			while (!stopThread) {
+			breakInnerLoop = false;
+			while (!stopThread && !breakInnerLoop) {
 				socket = waitForSocketConnection();
 				// If a connection was accepted
 				if (socket != null) {
 					Log.i(TAG, "connection made!!");
 					// Do work to manage the connection (in a separate thread)
 					// send data and read data back
+					dataReceived = null;
 					dataReceived = sync(socket, getDataToSend());
 					closeSocket();
-					break;
+					breakInnerLoop = true;
+					Log.i(TAG, "Breaking inner loop");
 				}
 			}
+			Log.i(TAG, "Outside inner loop. Going to process data..");
 			if (dataReceived != null && !dataReceived.isEmpty()) {
 				processDataReceived(dataReceived);
 			}
@@ -74,6 +81,7 @@ public class BTSyncThread extends Thread {
 			if (mmServerSocket != null) {
 				mmServerSocket.close();
 			}
+			mmServerSocket = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -111,18 +119,20 @@ public class BTSyncThread extends Thread {
 	 * @param dataReceived
 	 */
 	private void processDataReceived(String dataReceived) {
+		Log.i(TAG, "Processing Data Recieved");
 		String fullSGVXml = Util.getValueFromXml(dataReceived, SGV.TABLE_SGVS);
 		if (fullSGVXml == null || fullSGVXml.isEmpty()) {
 			return;
 		}
 		String[] sgvsXmlAsArray = Util.getValuesFromXml(fullSGVXml,
 				SGV.ROW_DESC);
-
+		SGVDataSource SGVDS = new SGVDataSource(context);
 		for (String sgvXml : sgvsXmlAsArray) {
 			SGV sgv = new SGV();
 			sgv.setFromXML(sgvXml);
 			SGVDS.saveSGV(sgv);
 		}
+		Log.i(TAG, "Done processing Received data");
 	}
 
 	private String getDataToSend() {
@@ -131,7 +141,8 @@ public class BTSyncThread extends Thread {
 	}
 
 	private String getCourseDataToSend() {
-		List<Course> courses = CoursesDS.getCoursesToTransfer();
+		CoursesDataSource CoursesDs = new CoursesDataSource(context);
+		List<Course> courses = CoursesDs.getCoursesToTransfer();
 		String transXml = "<courses>";
 		if (courses != null) {
 			for (Course course : courses) {
@@ -202,6 +213,7 @@ public class BTSyncThread extends Thread {
 			Log.i(TAG, msg);
 		}
 
+		// substring to remove </EOM>
 		return dataReceived.substring(0, dataReceived.length() - 6);
 	}
 
@@ -209,6 +221,7 @@ public class BTSyncThread extends Thread {
 	public void cancel() {
 		// give it a few seconds to end
 		stopThread = true;
+		breakInnerLoop = true;
 		try {
 			sleep(5);
 		} catch (InterruptedException e1) {

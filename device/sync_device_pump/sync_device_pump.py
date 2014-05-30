@@ -150,7 +150,7 @@ class DownloadPumpData():
   cgm_download_dir = "/tmp/"
   device_id=584923
   port="/dev/ttyUSB0"
-  cur_page=18
+  cur_page=None
   
 
   def get_latest_sgv(self):
@@ -165,10 +165,17 @@ class DownloadPumpData():
   def download_cgm_data(self, page_num=None, include_init=True):
     logging.info("Going to try to download CGM data from the pump")
     # if didn't pass a page get the current
+    self.cur_page = None
+
     if page_num is None:
       self.get_cur_cgm_page(include_init=True)
       include_init=False
-    
+    else:
+      self.cur_page = page_num
+
+    if self.cur_page is None:
+      logging.error("Could not get the CGM page to download. Returning")
+      return 'ERRORNoPage'
     # clean out previous file
     data_file = self.cgm_download_dir+"/ReadGlucoseHistory-page-" + str(self.cur_page) + ".data"
     self.rm_file(data_file)
@@ -189,10 +196,10 @@ class DownloadPumpData():
       if result == 'ERRORTimeout': 
         logging.warning("WARNING: command timeout. Trying to clean \
                          the stick buffer. On ("+str(i)+") try")
-        self.run_sticky()
+        self.run_stick()
       elif not os.path.isfile(data_file):
         logging.warning("file not created on ("+str(i)+") try. Running sticky...")
-        self.run_sticky()
+        self.run_stick()
       else:
         break
 
@@ -226,10 +233,10 @@ class DownloadPumpData():
     logging.info("sucessfully decoded cgm data file : "+xml)
     return xml
 
-  def run_sticky(self):
-    logging.info("in run_sticky")
+  def run_stick(self):
+    logging.info("in run_stick")
     command = "sudo python"
-    command += " " + self.decoding_dir + "/decocare/sticky.py"
+    command += " " + self.decoding_dir + "/decocare/stick.py"
     command += " " + self.port
     result = self.cli_w_time(command=command, timeout=30)
     if result == 'ERRORTimeout': 
@@ -258,10 +265,10 @@ class DownloadPumpData():
       if result == 'ERRORTimeout': 
         logging.warning("WARNING: command timeout. Trying to clean \
                          the stick buffer. On ("+str(i)+") try")
-        self.run_sticky()
+        self.run_stick()
       elif not os.path.isfile(download_file):
         logging.warning('file not downloaded. on ('+str(i)+') try')
-        self.run_sticky()
+        self.run_stick()
       else:
         break
     if not os.path.isfile(download_file):
@@ -293,16 +300,22 @@ class DownloadPumpData():
                   +"): \n\t " + command)
     start = datetime.datetime.now()
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    out, err = process.communicate()
     while process.poll() is None:
       time.sleep(0.1)
       now = datetime.datetime.now()
       if (now - start).seconds> timeout:
         os.kill(process.pid, signal.SIGKILL)
         os.waitpid(-1, os.WNOHANG)
+        logging.info("STDOUT: "+out)
+        logging.info("STDERR: "+err)
         logging.error("Reached timeout")
         return 'ERRORTimeout'
+    logging.info("STDOUT: "+out)
+    logging.info("STDERR: "+err)
+    logging.info("RETURN CODE: " + str(process.returncode))
     logging.info("ran command without timeout")
-    return process.stdout.read()
+    return "SUCESSRanCommand" 
 
   def file_to_bytes(self, file_name):
     logging.debug("file_to_bytes ("+file_name+")")

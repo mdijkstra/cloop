@@ -140,6 +140,10 @@ class DeviceDBTransData():
       xml += "<sgv>" + str(row[3]) + "</sgv>"
       xml += "</sgv_record>"
     xml += "</sgvs>"
+    logging.info('returning the following xml from export_sgvs:'+xml)
+    return xml
+
+  def export_sgvs_success(self):
     sql_update_exported = "update sgvs set transferred = 'yes' where transferred = 'no'" 
     logging.info('export_sgvs: updating transferred: '+sql_update_exported)
     try:
@@ -148,8 +152,6 @@ class DeviceDBTransData():
     except:
       self.db_conn.rollback()
       logging.error("******* rolled back update : "+sql_update_exported)
-    logging.info('returning the following xml from export_sgvs:'+xml)
-    return xml
 
   def import_courses(self, courses_xml):
     index = courses_xml.index("<courses>")
@@ -201,6 +203,8 @@ if __name__ == '__main__':
   bt_trans = DeviceBTPhoneTransData()
   data_from_phone = bt_trans.transfer(data_to_send)
   if not data_from_phone is None:
+    logging.info('sucessfully transferred data from device to phone.')
+    db_trans.export_sgvs_success()
     logging.info('main: going to import data from phone')
     db_trans.import_data(data_from_phone)  
   else:

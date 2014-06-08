@@ -45,6 +45,7 @@ public class BTSyncThread extends Thread {
 		// Keep listening until exception occurs or a socket is returned
 		Log.i(TAG, "In Run");
 		while (!stopThread) {
+			Log.i(TAG, "start of outer loop");
 			setBTAdapter();
 			if(mmServerSocket == null) {
 				Log.e(TAG, "mmServerSocket is null");
@@ -72,6 +73,7 @@ public class BTSyncThread extends Thread {
 			if (dataReceived != null && !dataReceived.isEmpty()) {
 				processDataReceived(dataReceived);
 			}
+			Log.i(TAG, "end of outer loop");
 		}
 		closeSocket();
 	}
@@ -106,7 +108,9 @@ public class BTSyncThread extends Thread {
 			// tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME ,
 			// BTSync.MY_UUID);
 			// TODO: possibly change to secure connection
-			tmp = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(
+//			tmp = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(
+//					NAME, MY_UUID);
+			tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(
 					NAME, MY_UUID);
 		} catch (IOException e) {
 		}

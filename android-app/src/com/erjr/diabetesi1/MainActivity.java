@@ -125,8 +125,8 @@ public class MainActivity extends ListActivity {
         long firstTime = SystemClock.elapsedRealtime();
         firstTime += 5*1000;
 
-        // Schedule the alarm!
-        long freq = 2 * 60 * 1000;
+        // Schedule the alarm! (every 1 minute)
+        long freq = 1 * 60 * 1000;
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC,
                         firstTime, freq, sender);

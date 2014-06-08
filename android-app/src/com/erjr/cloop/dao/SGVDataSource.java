@@ -1,6 +1,8 @@
 package com.erjr.cloop.dao;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.erjr.cloop.entities.SGV;
@@ -32,59 +34,42 @@ public class SGVDataSource {
 		dbHelper.close();
 	}
 
-	// public Course createCourse(int carbs) {
-	// ContentValues values = new ContentValues();
-	// values.put(Course.COL_FOOD_ID, 0);
-	// values.put(Course.COL_SERV_QUANTITY, 0);
-	// values.put(Course.COL_CARBS, carbs);
-	// values.put(Course.COL_DATETIME_CONSUMPTION,
-	// Util.convertDateToString(Util.getCurrentDateTime()));
-	// values.put(Course.COL_DATETIME_IDEAL_INJECTION,
-	// Util.convertDateToString(Util.getCurrentDateTime()));
-	// values.put(Course.COL_TRANSFERRED, "no");
-	// long insertId = database.insert(Course.TABLE_COURSES, null, values);
-	// Cursor cursor = database.query(Course.TABLE_COURSES, allColumns,
-	// Course.COL_COURSE_ID + " = " + insertId, null, null, null,
-	// null);
-	// cursor.moveToFirst();
-	// Course newCourse = cursorToCourse(cursor);
-	// cursor.close();
-	// return newCourse;
-	// }
-
 	public SGV getLatestSGV() {
-		// Cursor cursor = database.query(Course.TABLE_COURSES, allColumns,
-		// null,
-		// null, null, null, CGMDataPoint.COL_CGM_DATA_ID);
-		Cursor cursor = database.query(SGV.TABLE_SGVS,
-				SGV.allColumns, null, null, null, null,
-				SGV.COL_DATETIME_RECORDED+" DESC", "1");
-		if(cursor.getCount() <=0) {
+		Cursor cursor = database.query(SGV.TABLE_SGVS, SGV.allColumns, null,
+				null, null, null, SGV.COL_DATETIME_RECORDED + " DESC", "1");
+		if (cursor.getCount() <= 0) {
 			return null;
 		}
 		cursor.moveToFirst();
 		return cursorToSGV(cursor);
 	}
-	
+
 	public SGV[] getRecentSGVs(int hours) {
-		Cursor cursor = database.query(SGV.TABLE_SGVS,
-				SGV.allColumns, null, null, null, null,
-				SGV.COL_DATETIME_RECORDED+" ASC", Integer.toString(hours * 12));
-		if(cursor.getCount() <=0) {
+		Date currentDate = Util.getCurrentDateTime();
+		Calendar c = Calendar.getInstance();
+		c.setTime(currentDate);
+		c.add(Calendar.HOUR, -hours);
+		String dateLimit = Util.convertDateToString(c.getTime());
+		Cursor cursor = database.query(SGV.TABLE_SGVS, SGV.allColumns,
+				SGV.COL_DATETIME_RECORDED + " > '" + dateLimit + "'", null,
+				null, null, SGV.COL_DATETIME_RECORDED + " DESC",
+				Integer.toString(hours * 12)); // 12 data points per hour thus limit to hour * 12
+		if (cursor.getCount() <= 0) {
 			return null;
 		}
 		SGV[] sgvs = new SGV[cursor.getCount()];
-		for (int i=0; i<cursor.getCount(); i++) {
+		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
-			sgvs[i] = cursorToSGV(cursor); 
+			sgvs[sgvs.length - i - 1] = cursorToSGV(cursor);
 		}
+
 		return sgvs;
 	}
 
 	public void saveSGV(SGV cgm) {
 		database.execSQL(cgm.getSQLToSave());
 	}
-	
+
 	private SGV cursorToSGV(Cursor cursor) {
 		SGV cgm = new SGV();
 		cgm.setCgmDataID(cursor.getInt(0));

@@ -81,12 +81,13 @@ public class Util {
 		c.setTime(currentDate);
 		c.add(Calendar.DATE, -1);
 		Date yesterday = c.getTime();
-		if(yesterday.compareTo(datetimeRecorded) > 1) {
+		
+		if(yesterday.after(datetimeRecorded)) {
 			str += datetimeRecorded.getMonth() + "/"+datetimeRecorded.getDate();
 		} 
 		c.add(Calendar.YEAR, -1);
 		Date lastYear = c.getTime();
-		if(lastYear.compareTo(datetimeRecorded) > 1) {
+		if(lastYear.after(datetimeRecorded)) {
 			str += "/"+String.valueOf(datetimeRecorded.getYear()).substring(1);
 		}
 		SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");

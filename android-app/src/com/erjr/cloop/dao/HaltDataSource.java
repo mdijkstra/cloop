@@ -49,7 +49,7 @@ public class HaltDataSource {
 	// Util.convertDateToString(Util.getCurrentDateTime()));
 	// values.put(Course.COL_DATETIME_IDEAL_INJECTION,
 	// Util.convertDateToString(Util.getCurrentDateTime()));
-	// values.put(Course.COL_TRANSFERED, "no");
+	// values.put(Course.COL_TRANSFERRED, "no");
 	// long insertId = database.insert(Course.TABLE_COURSES, null, values);
 	// Cursor cursor = database.query(Course.TABLE_COURSES, allColumns,
 	// Course.COL_COURSE_ID + " = " + insertId, null, null, null,
@@ -96,7 +96,7 @@ public class HaltDataSource {
 	// cursor.moveToFirst();
 	// while (!cursor.isAfterLast()) {
 	// Course course = cursorToCourse(cursor);
-	// if (course.getTransfered().equals("no")) {
+	// if (course.getTransferred().equals("no")) {
 	// courses.add(course);
 	// } // TODO: just add where clause to database.query call above.
 	// cursor.moveToNext();
@@ -116,7 +116,7 @@ public class HaltDataSource {
 	// .getString(4)));
 	// course.setDatetimeIdealInjection(Util.convertStringToDate(cursor
 	// .getString(5)));
-	// course.setTransfered(cursor.getString(6));
+	// course.setTransferred(cursor.getString(6));
 	// return course;
 	// }
 

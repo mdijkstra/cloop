@@ -13,18 +13,18 @@ public class Course {
 	public static final String COL_CARBS = "carbs";
 	public static final String COL_DATETIME_CONSUMPTION = "datetime_consumption";
 	public static final String COL_DATETIME_IDEAL_INJECTION = "datetime_ideal_injection";
-	public static final String COL_TRANSFERED = "transfered";
+	public static final String COL_TRANSFERRED = "transferred";
 
 	public static final String TABLE_CREATE = "create table " + TABLE_COURSES
 			+ "(" + COL_COURSE_ID + " integer primary key autoincrement, "
 			+ COL_FOOD_ID + " integer, " + COL_SERV_QUANTITY + " real, "
 			+ COL_CARBS + " int not null, " + COL_DATETIME_CONSUMPTION
 			+ " text not null, " + COL_DATETIME_IDEAL_INJECTION + " text, "
-			+ COL_TRANSFERED + " text not null);";
+			+ COL_TRANSFERRED + " text not null);";
 
 	public static String[] allColumns = { COL_COURSE_ID, COL_FOOD_ID,
 			COL_SERV_QUANTITY, COL_CARBS, COL_DATETIME_CONSUMPTION,
-			COL_DATETIME_IDEAL_INJECTION, COL_TRANSFERED };
+			COL_DATETIME_IDEAL_INJECTION, COL_TRANSFERRED };
 
 	private long courseID;
 	private Integer foodID;
@@ -32,7 +32,7 @@ public class Course {
 	private Integer carbs;
 	private Date datetimeConsumption;
 	private Date datetimeIdealInjection;
-	private String transfered;
+	private String transferred;
 
 	public String getUpdateSql() {
 		String sql = " update " + TABLE_COURSES + " set " + COL_FOOD_ID + "="
@@ -42,7 +42,7 @@ public class Course {
 				+ Util.convertDateToString(datetimeConsumption) + "', "
 				+ COL_DATETIME_CONSUMPTION + " = '"
 				+ Util.convertDateToString(datetimeIdealInjection) + "', "
-				+ COL_TRANSFERED + " = '" + transfered + "' where "
+				+ COL_TRANSFERRED + " = '" + transferred + "' where "
 				+ COL_COURSE_ID + " = " + courseID + ";";
 		return sql;
 	}
@@ -53,7 +53,7 @@ public class Course {
 				+ " eaten at " + Util.convertDateToString(datetimeConsumption)
 				+ " thus should inject at "
 				+ Util.convertDateToString(datetimeIdealInjection)
-				+ ". Transfered = " + transfered;
+				+ ". Transferred = " + transferred;
 	}
 
 	public String toXML() {
@@ -164,17 +164,17 @@ public class Course {
 	}
 
 	/**
-	 * @return the transfered
+	 * @return the transferred
 	 */
-	public String getTransfered() {
-		return transfered;
+	public String getTransferred() {
+		return transferred;
 	}
 
 	/**
-	 * @param transfered
-	 *            the transfered to set
+	 * @param transferred
+	 *            the transferred to set
 	 */
-	public void setTransfered(String transfered) {
-		this.transfered = transfered;
+	public void setTransferred(String transferred) {
+		this.transferred = transferred;
 	}
 }

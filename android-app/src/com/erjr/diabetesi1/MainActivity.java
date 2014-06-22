@@ -1,6 +1,5 @@
 package com.erjr.diabetesi1;
 
-import java.util.Calendar;
 import java.util.List;
 
 import android.app.AlarmManager;
@@ -11,12 +10,12 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
-import android.widget.Toast;
 
 import com.erjr.cloop.dao.CoursesDataSource;
 import com.erjr.cloop.entities.Course;
@@ -29,6 +28,8 @@ public class MainActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+	    StrictMode.setThreadPolicy(policy);
 		// start the BTSync service (if not already running)
 		Intent intent = new Intent(this, BTSyncService.class);
 		startService(intent);
@@ -130,7 +131,24 @@ public class MainActivity extends ListActivity {
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC,
                         firstTime, freq, sender);
+        
+        runManageBGLService();
+	}
 
+	private void runManageBGLService() {
+		Intent intent = new Intent(MainActivity.this, ManageBGLSyncService.class);
+        PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this,
+                0, intent, 0);
+
+        // We want the alarm to go off 5 seconds from now.
+        long firstTime = SystemClock.elapsedRealtime();
+        firstTime += 5*1000;
+
+        // Schedule the alarm! (every 1 minute)
+        long freq = 1 * 60 * 1000;
+        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC,
+                        firstTime, freq, sender);
 	}
 
 	// Will be called via the onClick attribute
@@ -188,6 +206,15 @@ public class MainActivity extends ListActivity {
 	public void showCGMActivity(View view) {
 		Intent intent = new Intent(this, CGMGraph.class);
 		startActivity(intent);
+	}
+	
+	public void showNightActivity(View view) {
+		Intent intent = new Intent(this, FullScreenBG.class);
+		startActivity(intent);
+	}
+	
+	public void testManageBGL(View view) {
+		return;
 	}
 
 	@Override

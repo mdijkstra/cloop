@@ -30,11 +30,45 @@ public class Util {
 
 		return reportDate;
 	}
+	
+	public static Date convertManageBGLStringToDate(String string) {
+		DateFormat df = new SimpleDateFormat(ManageBGLThread.ManageBGLTimeFormat);
+
+		// Get the date today using Calendar object.
+		// Date d = Calendar.getInstance().getTime();
+
+		// Using DateFormat format method we can create a string
+		// representation of a date with the defined format.
+		Date reportDate;
+		try {
+			reportDate = df.parse(string);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+		return reportDate;
+	}
 
 	public static String convertDateToString(Date date) {
 		// Create an instance of SimpleDateFormat used for formatting
 		// the string representation of date (month/day/year)
 		DateFormat df = new SimpleDateFormat(dateFormat);
+
+		// Get the date today using Calendar object.
+		// Date d = Calendar.getInstance().getTime();
+
+		// Using DateFormat format method we can create a string
+		// representation of a date with the defined format.
+		String reportDate = df.format(date);
+
+		return reportDate;
+	}
+	public static String convertDateToManageBGLString(Date date) {
+		// Create an instance of SimpleDateFormat used for formatting
+		// the string representation of date (month/day/year)
+		DateFormat df = new SimpleDateFormat(ManageBGLThread.ManageBGLTimeFormat);
 
 		// Get the date today using Calendar object.
 		// Date d = Calendar.getInstance().getTime();

@@ -8,5 +8,8 @@
     <string name="sync_button">Sync</string>
     <string name="cgm_graph_button">CGM Graph</string>
     <string name="title_activity_cgmgraph">CGMGraph</string>
+    <string name="title_activity_full_screen_bg">FullScreenBG</string>
+    <string name="open_night_button">Night</string>
+    <string name="button_snooze_alarm">Snooze Alarm</string>
 
 </resources>

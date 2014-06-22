@@ -53,7 +53,8 @@ public class SGVDataSource {
 		Cursor cursor = database.query(SGV.TABLE_SGVS, SGV.allColumns,
 				SGV.COL_DATETIME_RECORDED + " > '" + dateLimit + "'", null,
 				null, null, SGV.COL_DATETIME_RECORDED + " DESC",
-				Integer.toString(hours * 12)); // 12 data points per hour thus limit to hour * 12
+				Integer.toString(hours * 12)); // 12 data points per hour thus
+												// limit to hour * 12
 		if (cursor.getCount() <= 0) {
 			return null;
 		}
@@ -66,8 +67,23 @@ public class SGVDataSource {
 		return sgvs;
 	}
 
-	public void saveSGV(SGV cgm) {
-		database.execSQL(cgm.getSQLToSave());
+	public SGV[] getSGVToSendToCloud() {
+		Cursor cursor = database.query(SGV.TABLE_SGVS, SGV.allColumns,
+				SGV.COL_IN_CLOUD + " != 'yes'", null, null, null,
+				SGV.COL_DATETIME_RECORDED + " ASC", null);
+		if (cursor.getCount() <= 0) {
+			return null;
+		}
+		SGV[] sgvs = new SGV[cursor.getCount()];
+		for (int i = 0; i < cursor.getCount(); i++) {
+			cursor.moveToNext();
+			sgvs[sgvs.length - i - 1] = cursorToSGV(cursor);
+		}
+		return sgvs;
+	}
+
+	public void saveSGV(SGV sgv) {
+		database.execSQL(sgv.getSQLToSave());
 	}
 
 	private SGV cursorToSGV(Cursor cursor) {

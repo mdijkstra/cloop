@@ -9,6 +9,27 @@
         android:layout_height="wrap_content" >
 
         <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="testManageBGL"
+            android:text="MBGL" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/open_night_button"
+            android:onClick="showNightActivity" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="showCGMActivity"
+            android:text="@string/cgm_graph_button" />
+
+        <Button
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -22,18 +43,12 @@
             android:onClick="onClick"
             android:text="Delete First" />
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cgm_graph_button"
-            android:onClick="showCGMActivity" />
-        
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="388dp" >
+        android:layout_height="388dp"
+        android:layout_weight="0.32" >
 
         <NumberPicker
             android:id="@+id/numberPicker100s"
@@ -60,14 +75,11 @@
             android:id="@android:id/list"
             android:layout_width="wrap_content"
             android:layout_height="158dp"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/numberPicker100s"
             android:layout_marginTop="19dp"
             android:text="@string/hello" >
-
         </ListView>
-
     </RelativeLayout>
 
-</LinearLayout> 
+</LinearLayout>

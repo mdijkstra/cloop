@@ -2,8 +2,9 @@
 #
 # Edward Robinson
 #
-# Python script to sync the device db
-# and the phone db. Sync via xml messages.
+# Python script to read data off the pump
+# and load it into the device db. 
+# Sync via xml messages.
 #
 #############################################
 
@@ -21,7 +22,10 @@ import subprocess
 dateFormat="%Y-%m-%dT%H:%M:%S"
 mySQLDateFormat="%Y-%m-%d %H:%M:%S"
 skip_commands = False # debug tool to skip cli commands
-logging.basicConfig(filename='sync_device_pump.log',level=logging.DEBUG,\
+
+now = datetime.datetime.now()
+currentDate = str(now.year) + "-" + str(now.month) + "-" + str(now.day)
+logging.basicConfig(filename='./log/' + currentDate + '.log',level=logging.DEBUG,\
                 format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s ')
 
 # TODO: move get_value functions to a lib.py file

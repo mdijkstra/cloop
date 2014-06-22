@@ -13,13 +13,16 @@ import bluetooth
 import time
 import logging
 import signal
+import datetime
 #from bluetooth import *
 #from time import sleep
 
 # use ISO format
 dateFormat="%Y-%m-%dT%H:%M:%S"
 
-logging.basicConfig(filename='sync_device_phone.log',level=logging.DEBUG,\
+now = datetime.datetime.now()
+currentDate = str(now.year) + "-" + str(now.month) + "-" + str(now.day)
+logging.basicConfig(filename='./log/' + currentDate + '.log',level=logging.DEBUG,\
                 format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 
 class DeviceBTPhoneTransData:

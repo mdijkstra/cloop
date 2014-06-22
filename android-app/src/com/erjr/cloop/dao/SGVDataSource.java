@@ -41,7 +41,9 @@ public class SGVDataSource {
 			return null;
 		}
 		cursor.moveToFirst();
-		return cursorToSGV(cursor);
+		SGV sgv = cursorToSGV(cursor);
+		cursor.close();
+		return sgv;
 	}
 
 	public SGV[] getRecentSGVs(int hours) {
@@ -64,6 +66,7 @@ public class SGVDataSource {
 			sgvs[sgvs.length - i - 1] = cursorToSGV(cursor);
 		}
 
+		cursor.close();
 		return sgvs;
 	}
 
@@ -79,6 +82,7 @@ public class SGVDataSource {
 			cursor.moveToNext();
 			sgvs[sgvs.length - i - 1] = cursorToSGV(cursor);
 		}
+		cursor.close();
 		return sgvs;
 	}
 

@@ -65,5 +65,9 @@ public class PersistentNotification extends BroadcastReceiver {
 		// mId allows you to update the notification later on.
 		mNotificationManager.notify(myNotificationId, mBuilder.build());
 
+		
+		// check that BT sync is running:
+		Intent i = new Intent(context, BTSyncService.class);
+		context.startService(i);
 	}
 }

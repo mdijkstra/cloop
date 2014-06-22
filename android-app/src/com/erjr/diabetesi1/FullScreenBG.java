@@ -95,75 +95,47 @@ public class FullScreenBG extends Activity {
 						.before(c.getTime())) {
 			// if stale data then clear numbers
 			updateNumber(null, R.id.BGMostRecent);
-			// updateNumber(null, R.id.BG15MinAgo);
-			// updateNumber(null, R.id.BG30MinAgo);
-			// updateNumber(null, R.id.BG45MinAgo);
-			// updateNumber(null, R.id.BG60MinAgo);
-			// updateNumber(null, R.id.BG75MinAgo);
-			// updateNumber(null, R.id.BG90MinAgo);
 		} else {
 			SGV mostRecentSGV = recentSGVs[recentSGVs.length - 1];
 			// if semi current then update
 			updateNumber(mostRecentSGV, R.id.BGMostRecent);
-			// if (recentSGVs.length > 6) {
-			// updateNumber(recentSGVs[recentSGVs.length - 4], R.id.BG15MinAgo);
-			// }
-			// if (recentSGVs.length > 9) {
-			// updateNumber(recentSGVs[recentSGVs.length - 7], R.id.BG30MinAgo);
-			// }
-			// if (recentSGVs.length > 12) {
-			// updateNumber(recentSGVs[recentSGVs.length - 10],
-			// R.id.BG45MinAgo);
-			// }
-			// if (recentSGVs.length > 15) {
-			// updateNumber(recentSGVs[recentSGVs.length - 13],
-			// R.id.BG60MinAgo);
-			// }
-			// if (recentSGVs.length > 18) {
-			// updateNumber(recentSGVs[recentSGVs.length - 16],
-			// R.id.BG75MinAgo);
-			// }
-			// if (recentSGVs.length > 20) {
-			// updateNumber(recentSGVs[recentSGVs.length - 19],
-			// R.id.BG90MinAgo);
-			// }
 		}
 	}
 
 	private void updateNumber(SGV sgv, int idToUpdate) {
-		if (sgv != null) {
-			TextView text = ((TextView) findViewById(idToUpdate));
-			text.setText(sgv.getSg() + " - "
-					+ Util.convertDateToPrettyString(sgv.getDatetimeRecorded()));
-			if (sgv.getSg() > highBgLimit) {
-				text.setTextColor(Color.BLUE);
-			} else if (sgv.getSg() < lowBgLimit) {
-				text.setTextColor(Color.RED);
-			} else {
-				text.setTextColor(Color.GREEN);
-				snoozeAlarmUntil = null;
-			}
-
-			Date currentDate = Util.getCurrentDateTime();
-			// if extremely low or high then play alert regardless
-			if (sgv.getSg() < extremeLowBgLimit
-					|| sgv.getSg() > extremeHighBgLimit) {
-				playAlertSound(true);
-			} else if ((sgv.getSg() < lowBgLimit || sgv.getSg() > highBgLimit)
-					&& (snoozeAlarmUntil == null || currentDate
-							.after(snoozeAlarmUntil))) {
-				playAlertSound(false);
-			}
-		} else {
+		if (sgv == null) {
 			((TextView) findViewById(idToUpdate)).setText("NO DATA");
 			((TextView) findViewById(idToUpdate)).setTextColor(Color.WHITE);
+			return;
 		}
+		TextView text = ((TextView) findViewById(idToUpdate));
+		text.setText(sgv.getSg() + " - "
+				+ Util.convertDateToPrettyString(sgv.getDatetimeRecorded()));
+		if (sgv.getSg() > highBgLimit) {
+			text.setTextColor(Color.BLUE);
+		} else if (sgv.getSg() < lowBgLimit) {
+			text.setTextColor(Color.RED);
+		} else {
+			text.setTextColor(Color.GREEN);
+			snoozeAlarmUntil = null;
+		}
+
+		Date currentDate = Util.getCurrentDateTime();
+		// if extremely low or high then play alert regardless
+		if (sgv.getSg() < extremeLowBgLimit || sgv.getSg() > extremeHighBgLimit) {
+			playAlertSound(true);
+		} else if ((sgv.getSg() < lowBgLimit || sgv.getSg() > highBgLimit)
+				&& (snoozeAlarmUntil == null || currentDate
+						.after(snoozeAlarmUntil))) {
+			playAlertSound(false);
+		}
+
 	}
 
 	private void playAlertSound(boolean isExtreme) {
-		// play alarm twice
+		MediaPlayer mp = MediaPlayer.create(getApplicationContext(),
+				R.raw.alarm);
 		for (int i = 0; i < 4; i++) {
-			MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.alarm);
 			mp.start();
 		}
 	}
@@ -175,8 +147,10 @@ public class FullScreenBG extends Activity {
 		SGVDataSource SGVDS = new SGVDataSource(getBaseContext());
 		SGV[] recentSGVs = SGVDS.getRecentSGVs(1);
 		SGV mostRecentSGV = recentSGVs[recentSGVs.length - 1];
-		// if low snooze 30 min
-		if (mostRecentSGV.getSg() < lowBgLimit) {
+		if (mostRecentSGV == null) {
+			c.add(Calendar.MINUTE, 30);
+			snoozeAlarmUntil = c.getTime();
+		} else if (mostRecentSGV.getSg() < lowBgLimit) {
 			c.add(Calendar.MINUTE, 30);
 			snoozeAlarmUntil = c.getTime();
 		} else if (mostRecentSGV.getSg() > highBgLimit) {

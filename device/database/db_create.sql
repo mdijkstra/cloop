@@ -18,6 +18,39 @@ USE `cloop`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `alerts`
+--
+
+DROP TABLE IF EXISTS `alerts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `alerts` (
+  `alert_id` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime_recorded` datetime NOT NULL,
+  `src` varchar(45) NOT NULL,
+  `code` varchar(45) NOT NULL,
+  `type` varchar(45) NOT NULL,
+  `message` varchar(500) NOT NULL,
+  `value` varchar(45) DEFAULT NULL,
+  `option1` varchar(500) DEFAULT NULL,
+  `option2` varchar(500) DEFAULT NULL,
+  `transferred` varchar(45) NOT NULL DEFAULT 'NO',
+  `datetime_dismissed` datetime DEFAULT NULL,
+  `src_dismissed` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`alert_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `alerts`
+--
+
+LOCK TABLES `alerts` WRITE;
+/*!40000 ALTER TABLE `alerts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `alerts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `courses`
 --
 
@@ -29,7 +62,7 @@ CREATE TABLE `courses` (
   `food_id` int(11) DEFAULT NULL,
   `serv_quantity` float DEFAULT NULL,
   `carbs` int(11) NOT NULL,
-  `datetime_consumption` datetime DEFAULT NULL,
+  `datetime_consumption` datetime NOT NULL,
   `datetime_ideal_injection` datetime DEFAULT NULL,
   PRIMARY KEY (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store individual items eaten';
@@ -54,6 +87,7 @@ DROP TABLE IF EXISTS `courses_to_injections`;
 CREATE TABLE `courses_to_injections` (
   `course_id` int(11) NOT NULL,
   `injection_id` int(11) NOT NULL,
+  `transferred` varchar(45) NOT NULL DEFAULT 'NO',
   PRIMARY KEY (`course_id`,`injection_id`),
   KEY `FK_injection_id_idx` (`injection_id`),
   CONSTRAINT `FK_course_id` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -83,6 +117,15 @@ CREATE TABLE `injections` (
   `units_delivered` int(11) DEFAULT NULL,
   `datetime_intended` datetime NOT NULL,
   `datetime_delivered` datetime DEFAULT NULL,
+  `iob` float NOT NULL,
+  `carbs` int(11) NOT NULL,
+  `carb_sensitivity` float NOT NULL,
+  `units_for_carbs` float NOT NULL,
+  `bg_current` int(11) NOT NULL,
+  `units_for_bg` float NOT NULL,
+  `current_basal` float NOT NULL,
+  `status` varchar(45) NOT NULL,
+  `transferred` varchar(45) NOT NULL DEFAULT 'NO',
   PRIMARY KEY (`injection_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -97,6 +140,36 @@ LOCK TABLES `injections` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `logs`
+--
+
+DROP TABLE IF EXISTS `logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `logs` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `src_device` varchar(45) NOT NULL,
+  `datetime_logged` datetime NOT NULL,
+  `code` varchar(45) NOT NULL,
+  `type` varchar(45) NOT NULL,
+  `message` varchar(500) NOT NULL,
+  `option1` varchar(500) DEFAULT NULL,
+  `option2` varchar(500) DEFAULT NULL,
+  `transferred` varchar(45) NOT NULL DEFAULT 'NO',
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to record logs';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `logs`
+--
+
+LOCK TABLES `logs` WRITE;
+/*!40000 ALTER TABLE `logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sgvs`
 --
 
@@ -108,7 +181,7 @@ CREATE TABLE `sgvs` (
   `device_id` int(11) NOT NULL COMMENT 'the id of the pump to differentiate if wearing two cgms',
   `datetime_recorded` datetime NOT NULL,
   `sgv` int(11) DEFAULT NULL COMMENT 'blood glucose recorded',
-  `transferred` varchar(45) NOT NULL,
+  `transfered` varchar(45) NOT NULL DEFAULT 'NO',
   PRIMARY KEY (`sgv_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -135,4 +208,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-05-07  0:21:52
+-- Dump completed on 2014-06-22 22:22:11

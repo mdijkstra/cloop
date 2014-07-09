@@ -11,5 +11,7 @@
     <string name="title_activity_full_screen_bg">FullScreenBG</string>
     <string name="open_night_button">Night</string>
     <string name="button_snooze_alarm">Snooze Alarm</string>
+    <string name="title_activity_enter_meal">EnterMealActivity</string>
+    <string name="newMealButton">Add Meal</string>
 
 </resources>

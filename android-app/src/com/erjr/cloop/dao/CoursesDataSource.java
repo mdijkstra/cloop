@@ -1,6 +1,7 @@
 package com.erjr.cloop.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.erjr.cloop.entities.Course;
@@ -11,14 +12,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 public class CoursesDataSource {
 
 	// Database fields
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
+	private Context context;
 
 	public CoursesDataSource(Context context) {
+		this.context = context;
 		dbHelper = new MySQLiteHelper(context);
 		open();
 	}
@@ -42,27 +46,33 @@ public class CoursesDataSource {
 				Util.convertDateToString(Util.getCurrentDateTime()));
 		values.put(Course.COL_TRANSFERRED, "no");
 		long insertId = database.insert(Course.TABLE_COURSES, null, values);
-		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns,
-				Course.COL_COURSE_ID + " = " + insertId, null, null, null,
-				null);
+		Cursor cursor = database
+				.query(Course.TABLE_COURSES, Course.allColumns,
+						Course.COL_COURSE_ID + " = " + insertId, null, null,
+						null, null);
 		cursor.moveToFirst();
 		Course newCourse = cursorToCourse(cursor);
 		cursor.close();
+		toastNewCourse(newCourse);
 		return newCourse;
 	}
 
-	public void deleteComment(Course comment) {
-		long id = comment.getCourseID();
-		System.out.println("Comment deleted with id: " + id);
-		database.delete(Course.TABLE_COURSES, Course.COL_COURSE_ID + " = "
-				+ id, null);
+	public void deleteCourse(Course course) {
+		long id = course.getCourseID();
+		System.out.println("Course deleted with id: " + id);
+		database.delete(Course.TABLE_COURSES,
+				Course.COL_COURSE_ID + " = " + id, null);
+		Toast.makeText(
+				context,
+				"Deleted course id " + course.getId() + " of "
+						+ course.getCarbs() + "g.", Toast.LENGTH_LONG).show();
 	}
 
 	public List<Course> getAllCourses() {
 		List<Course> courses = new ArrayList<Course>();
 
-		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns, null,
-				null, null, null, null);
+		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns,
+				null, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -78,9 +88,9 @@ public class CoursesDataSource {
 	public List<Course> getCoursesToTransfer() {
 		List<Course> courses = new ArrayList<Course>();
 
-		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns, null,
-				null, null, null, null);
-		if(cursor.getCount() <= 0) {
+		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns,
+				null, null, null, null, null);
+		if (cursor.getCount() <= 0) {
 			return null;
 		}
 		cursor.moveToFirst();
@@ -112,5 +122,47 @@ public class CoursesDataSource {
 
 	public void saveCourse(Course c) {
 		database.execSQL(c.getUpdateSql());
+	}
+
+	public Course createCourse(int carbs, Date timeToConsume, String comment) {
+		ContentValues values = new ContentValues();
+		values.put(Course.COL_CARBS, carbs);
+		values.put(Course.COL_COMMENT, comment);
+		values.put(Course.COL_DATETIME_CONSUMPTION,
+				Util.convertDateToString(timeToConsume));
+
+		values.put(Course.COL_FOOD_ID, 0);
+		values.put(Course.COL_SERV_QUANTITY, 0);
+		values.put(Course.COL_DATETIME_IDEAL_INJECTION,
+				Util.convertDateToString(Util.getCurrentDateTime()));
+		values.put(Course.COL_TRANSFERRED, "no");
+
+		long insertId = database.insert(Course.TABLE_COURSES, null, values);
+		Cursor cursor = database
+				.query(Course.TABLE_COURSES, Course.allColumns,
+						Course.COL_COURSE_ID + " = " + insertId, null, null,
+						null, null);
+		cursor.moveToFirst();
+		Course newCourse = cursorToCourse(cursor);
+		cursor.close();
+		toastNewCourse(newCourse);
+		return newCourse;
+	}
+
+	private void toastNewCourse(Course course) {
+		String toastText = "Added meal "
+				+ course.getId()
+				+ ". Aim to eat "
+				+ course.getCarbs()
+				+ "g at "
+				+ Util.convertDateToPrettyString(course
+						.getDatetime_consumption());
+		Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+	}
+
+	public void deleteLastCourse() {
+		List<Course> courses = getAllCourses();
+		Course course = courses.get(courses.size() - 1);
+		deleteCourse(course);
 	}
 }

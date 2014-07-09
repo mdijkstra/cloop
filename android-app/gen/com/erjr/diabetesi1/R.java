@@ -25,32 +25,39 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int BGMostRecent=0x7f090002;
-        public static final int action_settings=0x7f09000c;
-        public static final int add=0x7f090007;
-        public static final int button1=0x7f090003;
-        public static final int button2=0x7f090006;
-        public static final int button4=0x7f090005;
+        public static final int BGMostRecent=0x7f090009;
+        public static final int ButtonDeleteLastMeal=0x7f09000e;
+        public static final int action_settings=0x7f090010;
+        public static final int button1=0x7f090004;
+        public static final int button2=0x7f090002;
+        public static final int commentField=0x7f090008;
         public static final int container=0x7f090000;
-        public static final int delete=0x7f090008;
         public static final int graph2=0x7f090001;
-        public static final int group=0x7f090004;
-        public static final int numberPicker100s=0x7f090009;
-        public static final int numberPicker10s=0x7f09000a;
-        public static final int numberPicker1s=0x7f09000b;
+        public static final int group=0x7f09000a;
+        public static final int listCourses=0x7f09000f;
+        public static final int newMealButton=0x7f09000c;
+        public static final int numberPicker100s=0x7f090005;
+        public static final int numberPicker10s=0x7f090006;
+        public static final int numberPicker1s=0x7f090007;
+        public static final int openCGMGraph=0x7f09000d;
+        public static final int openNight=0x7f09000b;
+        public static final int timePicker=0x7f090003;
     }
     public static final class layout {
         public static final int activity_cgmgraph=0x7f030000;
-        public static final int activity_full_screen_bg=0x7f030001;
-        public static final int activity_main=0x7f030002;
-        public static final int fragment_cgmgraph=0x7f030003;
-        public static final int fragment_full_screen_bg=0x7f030004;
-        public static final int fragment_main=0x7f030005;
+        public static final int activity_enter_meal=0x7f030001;
+        public static final int activity_full_screen_bg=0x7f030002;
+        public static final int activity_main=0x7f030003;
+        public static final int fragment_cgmgraph=0x7f030004;
+        public static final int fragment_enter_meal=0x7f030005;
+        public static final int fragment_full_screen_bg=0x7f030006;
+        public static final int fragment_main=0x7f030007;
     }
     public static final class menu {
         public static final int cgmgraph=0x7f080000;
-        public static final int full_screen_bg=0x7f080001;
-        public static final int main=0x7f080002;
+        public static final int enter_meal=0x7f080001;
+        public static final int full_screen_bg=0x7f080002;
+        public static final int main=0x7f080003;
     }
     public static final class raw {
         public static final int alarm=0x7f040000;
@@ -62,9 +69,11 @@ public final class R {
         public static final int cgm_graph_button=0x7f060005;
         public static final int hello=0x7f060003;
         public static final int hello_world=0x7f060001;
+        public static final int newMealButton=0x7f06000b;
         public static final int open_night_button=0x7f060008;
         public static final int sync_button=0x7f060004;
         public static final int title_activity_cgmgraph=0x7f060006;
+        public static final int title_activity_enter_meal=0x7f06000a;
         public static final int title_activity_full_screen_bg=0x7f060007;
     }
     public static final class style {

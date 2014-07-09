@@ -36,11 +36,13 @@ public class FullScreenBG extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_full_screen_bg);
+		setContentView(R.layout.fragment_full_screen_bg);
 
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
+		// TODO: Not sure what this is used for. should find out.
+//		if (savedInstanceState == null) {
+//			getFragmentManager().beginTransaction()
+//					.add(R.id.container, new PlaceholderFragment()).commit();
+//		}
 
 		/*
 		 * This code together with the one in onDestroy() will make the screen

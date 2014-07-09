@@ -3,83 +3,80 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <GridLayout
         android:id="@+id/group"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="122dp"
+        android:columnCount="2"
+        android:rowCount="2" >
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/openNight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="testManageBGL"
-            android:text="MBGL" />
+            android:onClick="showNightActivity"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:text="@string/open_night_button" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/openCGMGraph"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/open_night_button"
-            android:onClick="showNightActivity" />
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
             android:onClick="showCGMActivity"
             android:text="@string/cgm_graph_button" />
 
         <Button
-            android:id="@+id/add"
+            android:id="@+id/newMealButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:onClick="onClick"
-            android:text="Add New" />
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="1"
+            android:onClick="showAddMealActivity"
+            android:text="@string/newMealButton" />
 
         <Button
-            android:id="@+id/delete"
+            android:id="@+id/ButtonDeleteLastMeal"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:onClick="onClick"
-            android:text="Delete First" />
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="1"
+            android:onClick="deleteLastMeal"
+            android:text="Delete Last Meal" />
 
-    </LinearLayout>
+        <!-- <Button -->
+        <!-- android:id="@+id/add" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:onClick="onClick" -->
+        <!-- android:text="Add New" /> -->
 
-    <RelativeLayout
+
+        <!-- <Button -->
+        <!-- android:id="@+id/delete" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:onClick="onClick" -->
+        <!-- android:text="Delete First" /> -->
+
+
+        <!-- <Button -->
+        <!-- android:id="@+id/button4" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:onClick="testManageBGL" -->
+        <!-- android:text="MBGL" /> -->
+    </GridLayout>
+
+    <ListView
+        android:id="@+id/listCourses"
         android:layout_width="match_parent"
-        android:layout_height="388dp"
-        android:layout_weight="0.32" >
-
-        <NumberPicker
-            android:id="@+id/numberPicker100s"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" />
-
-        <NumberPicker
-            android:id="@+id/numberPicker10s"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/numberPicker100s" />
-
-        <NumberPicker
-            android:id="@+id/numberPicker1s"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/numberPicker10s" />
-
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="wrap_content"
-            android:layout_height="158dp"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/numberPicker100s"
-            android:layout_marginTop="19dp"
-            android:text="@string/hello" >
-        </ListView>
-    </RelativeLayout>
+        android:layout_height="match_parent" >
+    </ListView>
 
 </LinearLayout>

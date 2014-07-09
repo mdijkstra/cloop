@@ -1,6 +1,10 @@
 package com.erjr.cloop.entities;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.erjr.diabetesi1.Util;
 
@@ -14,17 +18,18 @@ public class Course {
 	public static final String COL_DATETIME_CONSUMPTION = "datetime_consumption";
 	public static final String COL_DATETIME_IDEAL_INJECTION = "datetime_ideal_injection";
 	public static final String COL_TRANSFERRED = "transferred";
+	public static final String COL_COMMENT = "comment";
 
 	public static final String TABLE_CREATE = "create table " + TABLE_COURSES
 			+ "(" + COL_COURSE_ID + " integer primary key autoincrement, "
 			+ COL_FOOD_ID + " integer, " + COL_SERV_QUANTITY + " real, "
 			+ COL_CARBS + " int not null, " + COL_DATETIME_CONSUMPTION
 			+ " text not null, " + COL_DATETIME_IDEAL_INJECTION + " text, "
-			+ COL_TRANSFERRED + " text not null);";
+			+ COL_COMMENT + " text, " + COL_TRANSFERRED + " text not null);";
 
 	public static String[] allColumns = { COL_COURSE_ID, COL_FOOD_ID,
 			COL_SERV_QUANTITY, COL_CARBS, COL_DATETIME_CONSUMPTION,
-			COL_DATETIME_IDEAL_INJECTION, COL_TRANSFERRED };
+			COL_DATETIME_IDEAL_INJECTION, COL_COMMENT, COL_TRANSFERRED };
 
 	private long courseID;
 	private Integer foodID;
@@ -32,6 +37,7 @@ public class Course {
 	private Integer carbs;
 	private Date datetimeConsumption;
 	private Date datetimeIdealInjection;
+	private String comment;
 	private String transferred;
 
 	public String getUpdateSql() {
@@ -42,31 +48,58 @@ public class Course {
 				+ Util.convertDateToString(datetimeConsumption) + "', "
 				+ COL_DATETIME_CONSUMPTION + " = '"
 				+ Util.convertDateToString(datetimeIdealInjection) + "', "
-				+ COL_TRANSFERRED + " = '" + transferred + "' where "
-				+ COL_COURSE_ID + " = " + courseID + ";";
+				+ COL_TRANSFERRED + " = '" + transferred + "', " + COL_COMMENT
+				+ " = '" + comment + "' where " + COL_COURSE_ID + " = "
+				+ courseID + ";";
 		return sql;
 	}
 
 	public String toString() {
 		return "ID (" + courseID + ") food-" + foodID.toString() + " * "
 				+ servQuantity.toString() + " = " + carbs.toString()
-				+ " eaten at " + Util.convertDateToString(datetimeConsumption)
+				+ " eaten at " + Util.convertDateToPrettyString(datetimeConsumption)
 				+ " thus should inject at "
-				+ Util.convertDateToString(datetimeIdealInjection)
-				+ ". Transferred = " + transferred;
+				+ Util.convertDateToPrettyString(datetimeIdealInjection) + " ("
+				+ comment + "). Transferred = " + transferred;
 	}
 
 	public String toXML() {
 		// TODO: Convert to using column names instead of hard coded strings
-		return "<" + ROW_DESC + "><" + COL_COURSE_ID + ">" + courseID + "</"
-				+ COL_COURSE_ID + "><food_id>" + foodID
-				+ "</food_id><serv_quantity>" + servQuantity
-				+ "</serv_quantity><carbs>" + carbs
-				+ "</carbs><datetime_consumption>"
-				+ Util.convertDateToString(datetimeConsumption)
-				+ "</datetime_consumption><datetime_ideal_injection>"
-				+ Util.convertDateToString(datetimeConsumption)
-				+ "</datetime_ideal_injection></"+ROW_DESC+">";
+//		return "<" + ROW_DESC + "><" + COL_COURSE_ID + ">" + courseID + "</"
+//				+ COL_COURSE_ID + "><" + COL_FOOD_ID + ">" + foodID + "</"
+//				+ COL_FOOD_ID + "><" + COL_SERV_QUANTITY + ">" + servQuantity
+//				+ "</" + COL_SERV_QUANTITY + "><" + COL_CARBS + ">" + carbs
+//				+ "</" + COL_CARBS + "><" + COL_DATETIME_CONSUMPTION + ">"
+//				+ Util.convertDateToString(datetimeConsumption) + "</"
+//				+ COL_DATETIME_CONSUMPTION + "><"
+//				+ COL_DATETIME_IDEAL_INJECTION + ">"
+//				+ Util.convertDateToString(datetimeConsumption) + "</"
+//				+ COL_DATETIME_IDEAL_INJECTION + "><" + COL_COMMENT + ">"
+//				+ comment + "</" + COL_COMMENT + "></" + ROW_DESC + ">";
+		HashMap<String, String> fields = new HashMap<String, String>();
+		fields.put(COL_COURSE_ID, Integer.toString((int) courseID));
+		fields.put(COL_FOOD_ID, foodID.toString());
+		fields.put(COL_SERV_QUANTITY, servQuantity.toString());
+		fields.put(COL_CARBS, carbs.toString());
+		fields.put(COL_DATETIME_CONSUMPTION, Util.convertDateToString(datetimeConsumption));
+		fields.put(COL_DATETIME_IDEAL_INJECTION, Util.convertDateToString(datetimeIdealInjection));
+		fields.put(COL_COMMENT, comment);
+		return rowToXml(ROW_DESC, fields);
+	}
+	
+	public String rowToXml(String rowDescriptor, HashMap<String, String> fields) {
+		if(rowDescriptor == null || fields == null) {
+			return "";
+		}
+		String xml = "<"+rowDescriptor+">";
+		Iterator<Entry<String, String>> it = fields.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Entry<String, String> pairs = it.next();
+	        //System.out.println(pairs.getKey() + " = " + pairs.getValue());
+	        xml += "<"+pairs.getKey()+">"+pairs.getValue()+"</"+pairs.getKey()+">";
+	        it.remove(); // avoids a ConcurrentModificationException
+	    }
+	    return xml + "</"+rowDescriptor+">";
 	}
 
 	public long getId() {

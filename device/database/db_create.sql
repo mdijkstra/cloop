@@ -42,15 +42,6 @@ CREATE TABLE `alerts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `alerts`
---
-
-LOCK TABLES `alerts` WRITE;
-/*!40000 ALTER TABLE `alerts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `alerts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `courses`
 --
 
@@ -64,18 +55,10 @@ CREATE TABLE `courses` (
   `carbs` int(11) NOT NULL,
   `datetime_consumption` datetime NOT NULL,
   `datetime_ideal_injection` datetime DEFAULT NULL,
+  `comment` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store individual items eaten';
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `courses`
---
-
-LOCK TABLES `courses` WRITE;
-/*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-/*!40000 ALTER TABLE `courses` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `courses_to_injections`
@@ -94,15 +77,6 @@ CREATE TABLE `courses_to_injections` (
   CONSTRAINT `FK_injection_id` FOREIGN KEY (`injection_id`) REFERENCES `injections` (`injection_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='A table to link courses to injections';
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `courses_to_injections`
---
-
-LOCK TABLES `courses_to_injections` WRITE;
-/*!40000 ALTER TABLE `courses_to_injections` DISABLE KEYS */;
-/*!40000 ALTER TABLE `courses_to_injections` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `injections`
@@ -131,15 +105,6 @@ CREATE TABLE `injections` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `injections`
---
-
-LOCK TABLES `injections` WRITE;
-/*!40000 ALTER TABLE `injections` DISABLE KEYS */;
-/*!40000 ALTER TABLE `injections` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `logs`
 --
 
@@ -161,15 +126,6 @@ CREATE TABLE `logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `logs`
---
-
-LOCK TABLES `logs` WRITE;
-/*!40000 ALTER TABLE `logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `sgvs`
 --
 
@@ -187,15 +143,6 @@ CREATE TABLE `sgvs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sgvs`
---
-
-LOCK TABLES `sgvs` WRITE;
-/*!40000 ALTER TABLE `sgvs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sgvs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping routines for database 'cloop'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -208,4 +155,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-22 22:22:11
+-- Dump completed on 2014-07-08 21:01:30

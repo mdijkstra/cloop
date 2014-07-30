@@ -9,7 +9,6 @@
 
 import os
 import MySQLdb
-import bluetooth
 import time
 import logging
 import signal
@@ -25,77 +24,6 @@ currentDate = str(now.year) + "-" + str(now.month) + "-" + str(now.day)
 logging.basicConfig(filename='./log/' + currentDate + '.log',level=logging.DEBUG,\
                 format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 
-class DeviceBTPhoneTransData:
-  uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
-  phone_mac = "30:19:66:80:2F:B2"
-  socket = None
-
-  def __init__(self):
-    self.open_con()
-
-  def __del__(self):
-    if not self.socket is None:
-      self.close_con()
-
-  def transfer(self, xml_to_send):
-    logging.info("going to try to sync via BT")
-    if self.socket is None:
-      return None
-    self.write(xml_to_send)
-    time.sleep(2)
-    read_str = self.read()
-    logging.info("**summary of bt**")
-    logging.info("wrote the following to bt  : " + xml_to_send)
-    logging.info("read the following from bt : " + read_str)
-    return read_str
-
-  def read(self):
-    try:
-      while True:
-        data = self.socket.recv(1024)
-        if len(data) == 0: break
-        logging.info("DeviceBTPhoneTransData.read read : [%s]" % data)
-        if "</EOM>" in data: break
-    except IOError:
-      pass
-    return data
-
-  def write(self, data_to_write):
-    logging.info("DeviceBTPhoneTransData.write writing to bt socket : "\
-                    +data_to_write + "</EOM>")
-    self.socket.send(data_to_write + "</EOM>")
-
-  def open_con(self):
-    service = bluetooth.find_service(address = self.phone_mac, uuid = self.uuid)
-    if len(service) == 0:
-      logging.error("DeviceBTPhoneTransData.open_con ERROR: Couldn't find phone BT Service")
-      return None
-    self.socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-    self.socket.connect((service[0]["host"], service[0]["port"]))
-    logging.info("DeviceBTPhoneTransData.open_con connecting to \"%s\" on %s" \
-                    % (service[0]["name"], service[0]["host"]))
-
-  def close_con(self):
-    self.socket.close()
-
-# TODO: move get_value functions to a lib.py file
-def get_value_from_xml (string, tag):
-    start = string.index("<"+tag+">") + len(tag) + 2
-    end = string.index("</"+tag+">", start)
-    if start + 1 == end:
-      return ""
-    return string[start:end]
-
-def get_values_from_xml (full_xml, tag):
-    a = []
-    i = 0
-    while full_xml != "":
-        a.append(get_value_from_xml(full_xml, tag))
-        end_xml_tag = "</"+tag+">"
-        end_tag_loc = full_xml.index(end_xml_tag)
-        full_xml = full_xml[end_tag_loc+len(end_xml_tag):]
-    return a
-
 
 class DeviceDBTransData():
   db_host = "localhost"
@@ -103,6 +31,7 @@ class DeviceDBTransData():
   db_user = "root"
   db_pass = "raspberry"
   db_db = "cloop"
+  cloop_config
 
   def __init__(self):
     self.db_conn = MySQLdb.connect(host=self.db_host, \
@@ -111,17 +40,89 @@ class DeviceDBTransData():
                     passwd=self.db_pass, \
                     db=self.db_db)
     self.db = self.db_conn.cursor()  
+    self.cloop_config = CloopConfig();
 
   def __del__(self):
     self.db.close()
     self.db_conn.close()
 
-  def get_data_to_send(self):
-    return self.export_sgvs()
 
-  def import_data(self, xml):
-    self.import_courses(xml)
-    logging.info("TODO: Import the various data elements from xml (currenlty just imports courses)")
+  def process_injection(self):
+    if self.temp_rate_in_action():
+      exit
+    temp_rate = self.get_injection_amount()
+    attempts = 3
+    successfully_executed = self.set_temp_basal(temp_rate, self.cloop_config.get_temp_duration(), attempts)
+    if not successfully_executed:
+      # log in bd and exit
+    else
+      # successful:
+      self.set_injection_as_success()
+      self.set_meals_as_covered()
+      self.set_iob()
+      self.log_injection_in_db()
+      self.notify_injection()
+      self.notify_time_to_eat()
+      
+
+  # return the amount insulin that should be injected
+  # return null if no injection needed
+  # based on carbs, IOB, current BG (if CGM accurate), carb senstivity, bg sensitivity
+  def get_injection_ammount(self):
+    cur_iob_units = self.get_cur_iob_units()
+    cur_bg_units = self.get_cur_bg_units() #units over or under target bg
+    carbs_to_cover = self.get_carbs_to_cover()
+    units_for_carbs = self.carbs_to_cover_units()
+    target_bg = self.cloop_config.get_target_bg()
+    low_limit_units = self.cloop_config.get_low_limit_units()
+    temp_duration = self.cloop_config.get_temp_duration()
+    cur_basal_units = self.get_cur_basal_units(temp_duration)
+    all_meal_carbs_absorbed = self.get_all_meal_carbs_absorbed()
+    temp_rate = None
+    correction_units = None 
+    injection_units = None
+
+    correction_units = cur_bg_units - cur_iob
+    if all_meal_carbs_abosrbed and cur_bg_units > low_limit_units and cur_bg_units < cur_iob_units)
+       correction_units = 0
+    
+    injection_units = units_for_carbs + correction_units
+    temp_rate = ( cur_basal_units + injection_units ) / temp_duration
+    # log all data into db
+    # insert meals to injection records
+    return temp_rate
+      
+
+  # get the current Insulin On Board
+  def get_cur_iob_units(self):
+    sql_select_iob = "select datetime_iob, iob from iob where datetime_iob = (select max(datetime_iob) from iob where datetime_iob < now() and datetime_iob > now()-10min)"
+    self.db.execute(sql_select_sgvs)
+    iob = 0 
+    for row in self.db.fetchall():
+      iob = row[1]
+    return iob
+
+  def get_cur_bg_units(self):
+
+  def get_target_bg(self):
+
+  def get_carbs_to_cover_units(self):
+
+  def get_carbs_to_cover(self):
+
+  def get_cur_basal_units(self):
+
+  def get_all_meal_carbs_absorbed(self):
+
+  def get_carb_sensitivity(self):
+  
+  def get_bg_sensitivity(self):
+
+  def get_current_bg(self):
+    return None
+
+  def is_active_injection(self):
+
 
   ################### Internal methods below ############################
   #switch from xml to json objects

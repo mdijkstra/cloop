@@ -20,6 +20,7 @@ insert into iob (iob_datetime, iob) values
 	on duplicate key update iob = iob + ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = 5) / 100 from injections where injection_id = 1),0);
 
 insert into iob_dist (iob_dist.interval, iob_dist_pct) values (5, 100);
+insert into iob_dist (iob_dist.interval, iob_dist_pct) values (0, 100);
 select * from iob;
 delete from iob where iob = 1000;
 
@@ -33,4 +34,14 @@ insert into sgvs (device_id, datetime_recorded, sgv) values (123456, now() - int
 insert into courses (course_id, carbs, datetime_consumption) values (1, 30, now() + interval 30 minute);
 select * from sgvs;
 select * from courses;
+select * from injections;
+select * from iob_dist;
+select * from iob;
+select * from alerts;
 
+insert into injections (
+                    units_intended, units_delivered, datetime_intended,
+                     cur_iob_units, cur_bg_units, correction_units,
+                     carbs_to_cover, carbs_units,
+                     cur_basal_units, all_meal_carbs_absorbed,
+                     status, transferred) values ( 4.30769230769,4.30769230769,now(),0,2.0,2.0,30,2.30769230769,0.55,'True','initial','awaiting completion');

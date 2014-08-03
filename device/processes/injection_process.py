@@ -145,8 +145,9 @@ class InjectionProcess():
         for i in range(0, max_interval + 5, 5):
             sql_save_iob = "insert into iob (datetime_iob, iob) values \
             (\
-              (select datetime_delivered from injections \
-                where injection_id = " + str(injection_id) + ")+ interval " + str(i) + " minute, \
+              from_unixtime(round(UNIX_TIMESTAMP( \
+                (select datetime_delivered from injections where injection_id = " + str(injection_id) + ")+ interval " + str(i) + " minute \
+                 )/300)*300),\
               ifnull((select units_delivered * (select iob_dist_pct from iob_dist \
                     where iob_dist.interval = " + str(i) + ") / 100 \
                 from injections where injection_id = " + str(injection_id) + '),0) \
@@ -172,13 +173,15 @@ class InjectionProcess():
                              temp_rate):
         units_delivered = temp_rate / (60 / self.cloop_config.get_temp_duration()) - self.get_cur_basal_units(
             self.cloop_config.get_temp_duration())
+        if cur_bg_units is None:
+            cur_bg_units = "null"
         sql_to_insert = "insert into injections (\
                     units_intended, units_delivered, temp_rate, datetime_intended, \
                     cur_iob_units, cur_bg_units, correction_units, \
                     carbs_to_cover, carbs_units, \
                     cur_basal_units, all_meal_carbs_absorbed, \
                     status, transferred) values ( " \
-                        + str(units_intended) + "," + str(units_delivered) + ","+str(temp_rate)+",now()," \
+                        + str(units_intended) + "," + str(units_delivered) + "," + str(temp_rate) + ",now()," \
                         + str(cur_iob_units) + "," + str(cur_bg_units) + "," + str(correction_units) \
                         + "," + str(carbs_to_cover) + "," + str(carbs_units) + "," \
                         + str(cur_basal_units) + ",'" + str(all_meal_carbs_absorbed) \
@@ -209,6 +212,8 @@ class InjectionProcess():
         cur_bg = None
         for row in self.db.fetchall():
             cur_bg = row[1]
+        if cur_bg is None:
+            return None
         cur_bg_units = (cur_bg - self.cloop_config.get_target_bg()) / self.cloop_config.get_bg_sensitivity()
         return cur_bg_units
 
@@ -312,10 +317,10 @@ class InjectionProcess():
 
 # process = InjectionProcess()
 # process.process_injection()
-
-
-# test 1
+"""
 process = InjectionProcess()
+failed = False
+# test 1 - meal without iob
 process.db.execute("delete from courses_to_injections")
 process.db.execute("delete from injections")
 process.db.execute("delete from iob")
@@ -331,3 +336,211 @@ process.db.execute(
     "insert into automode_switch (automode_switch_id, datetime_recorded, is_on) values (1, now(), 'yes');")
 process.db_conn.commit()
 process.process_injection()
+process.db.execute("select units_intended, units_delivered, temp_rate, status from injections")
+rows = process.db.fetchall()
+if len(rows) > 1:
+    failed = True
+    print "Fail: Test 1: too many injections ("+str(len(rows))+")"
+if rows[0][0] != 4.30769:
+    failed = True
+    print "Fail: Test 1: units_intended wrong ("+str(rows[0][0])+")"
+if rows[0][1] != 4.30769:
+    failed = True
+    print "Fail: Test 1: units_delivered wrong ("+str(rows[0][1])+")"
+if rows[0][2] != 9.71538:
+    failed = True
+    print "Fail: Test 1: temp_rate wrong ("+str(rows[0][2])+")"
+if rows[0][3] != "successful":
+    failed = True
+    print "Fail: Test 1: status wrong ("+str(rows[0][3])+")"
+
+process.db.execute("select iob, datetime_iob from iob")
+rows = process.db.fetchall()
+if len(rows) != 41:
+    failed = True
+    print "Fail: Test 1: wrong number of rows for iob ("+str(len(rows))+")"
+
+process.db.execute("select * from alerts")
+rows = process.db.fetchall()
+if len(rows) != 2:
+    failed = True
+    print "Fail: Test 1: wrong number of rows for alerts ("+str(len(rows))+")"
+if failed:
+    print "Fail: Test 1 (meal without iob) failed thus stopping"
+    sys.exit()
+else:
+    print "Test 1 (meal without iob) passes!"
+
+# Test 2 - meal with iob
+process.db.execute("delete from courses_to_injections")
+process.db.execute("delete from injections")
+process.db.execute("delete from iob")
+process.db.execute("delete from courses")
+process.db.execute("delete from sgvs")
+process.db.execute("delete from automode_switch")
+process.db.execute("delete from alerts")
+process.db.execute(
+    "insert into sgvs (device_id, datetime_recorded, sgv) values (123456, now() - interval 5 minute, 150)")
+process.db.execute(
+    "insert into courses (course_id, carbs, datetime_consumption) values (1, 30, now() + interval 30 minute)")
+process.db.execute(
+    "insert into automode_switch (automode_switch_id, datetime_recorded, is_on) values (1, now(), 'yes')")
+process.db.execute(
+    "insert into iob (datetime_iob, iob) values \
+    (from_unixtime(round(UNIX_TIMESTAMP(now() - interval 5 minute)/300)*300), 2), \
+    (from_unixtime(round(UNIX_TIMESTAMP(now())/300)*300), 2), \
+    (from_unixtime(round(UNIX_TIMESTAMP(now() + interval 5 minute)/300)*300), 10)")
+process.db_conn.commit()
+process.process_injection()
+process.db.execute("select units_intended, units_delivered, temp_rate, status from injections")
+rows = process.db.fetchall()
+if len(rows) > 1:
+    failed = True
+    print "Fail: Test 2: too many injections ("+str(len(rows))+")"
+if rows[0][0] != 2.30769:
+    failed = True
+    print "Fail: Test 2: units_intended wrong ("+str(rows[0][0])+")"
+if rows[0][1] != 2.30769:
+    failed = True
+    print "Fail: Test 2: units_delivered wrong ("+str(rows[0][1])+")"
+if rows[0][2] != 5.71538:
+    failed = True
+    print "Fail: Test 2: temp_rate wrong ("+str(rows[0][2])+")"
+if rows[0][3] != "successful":
+    failed = True
+    print "Fail: Test 2: status wrong ("+str(rows[0][3])+")"
+
+process.db.execute("select iob, datetime_iob from iob")
+rows = process.db.fetchall()
+if len(rows) != 42:
+    failed = True
+    print "Fail: Test 2: wrong number of rows for iob ("+str(len(rows))+")"
+
+process.db.execute("select * from alerts")
+rows = process.db.fetchall()
+if len(rows) != 2:
+    failed = True
+    print "Fail: Test 2: wrong number of rows for alerts ("+str(len(rows))+")"
+
+if failed:
+    print "Fail: Test 2 (meal with iob) failed thus stopping"
+    sys.exit()
+else:
+    print "Test 2 (meal with iob) passes!"
+
+
+
+# Test 3 - negative correction
+process.db.execute("delete from courses_to_injections")
+process.db.execute("delete from injections")
+process.db.execute("delete from iob")
+process.db.execute("delete from courses")
+process.db.execute("delete from sgvs")
+process.db.execute("delete from automode_switch")
+process.db.execute("delete from alerts")
+process.db.execute(
+    "insert into sgvs (device_id, datetime_recorded, sgv) values (123456, now() - interval 5 minute, 90)")
+process.db.execute(
+    "insert into courses (course_id, carbs, datetime_consumption) values (1, 10, now() + interval 5 minute)")
+process.db.execute(
+    "insert into automode_switch (automode_switch_id, datetime_recorded, is_on) values (1, now(), 'yes')")
+process.db.execute(
+    "insert into iob (datetime_iob, iob) values \
+    (from_unixtime(round(UNIX_TIMESTAMP(now() - interval 5 minute)/300)*300), 2), \
+    (from_unixtime(round(UNIX_TIMESTAMP(now())/300)*300), 2), \
+    (from_unixtime(round(UNIX_TIMESTAMP(now() + interval 5 minute)/300)*300), 10)")
+process.db_conn.commit()
+process.process_injection()
+process.db.execute("select units_intended, units_delivered, temp_rate, status from injections")
+rows = process.db.fetchall()
+if len(rows) > 1:
+    failed = True
+    print "Fail: Test 3: too many injections ("+str(len(rows))+")"
+if rows[0][0] != -3.23077:
+    failed = True
+    print "Fail: Test 3: units_intended wrong ("+str(rows[0][0])+")"
+if rows[0][1] != -0.55:
+    failed = True
+    print "Fail: Test 2: units_delivered wrong ("+str(rows[0][1])+")"
+if rows[0][2] != 0.0:
+    failed = True
+    print "Fail: Test 3: temp_rate wrong ("+str(rows[0][2])+")"
+if rows[0][3] != "successful":
+    failed = True
+    print "Fail: Test 3: status wrong ("+str(rows[0][3])+")"
+
+process.db.execute("select iob, datetime_iob from iob")
+rows = process.db.fetchall()
+if len(rows) != 42:
+    failed = True
+    print "Fail: Test 3: wrong number of rows for iob ("+str(len(rows))+")"
+
+process.db.execute("select * from alerts")
+rows = process.db.fetchall()
+if len(rows) != 2:
+    failed = True
+    print "Fail: Test 3: wrong number of rows for alerts ("+str(len(rows))+")"
+
+if failed:
+    print "Fail: Test 3 (negative correction) failed thus stopping"
+    sys.exit()
+else:
+    print "Test 3 (negative correction) passes!"
+
+
+
+# Test 4 - no sgv / high carbs
+process.db.execute("delete from courses_to_injections")
+process.db.execute("delete from injections")
+process.db.execute("delete from iob")
+process.db.execute("delete from courses")
+process.db.execute("delete from sgvs")
+process.db.execute("delete from automode_switch")
+process.db.execute("delete from alerts")
+process.db.execute(
+    "insert into courses (course_id, carbs, datetime_consumption) values (1, 90, now() + interval 5 minute)")
+process.db.execute(
+    "insert into automode_switch (automode_switch_id, datetime_recorded, is_on) values (1, now(), 'yes')")
+process.db.execute(
+    "insert into iob (datetime_iob, iob) values \
+    (from_unixtime(round(UNIX_TIMESTAMP(now() - interval 5 minute)/300)*300), 2), \
+    (from_unixtime(round(UNIX_TIMESTAMP(now())/300)*300), 2), \
+    (from_unixtime(round(UNIX_TIMESTAMP(now() + interval 5 minute)/300)*300), 10)")
+process.db_conn.commit()
+process.process_injection()
+process.db.execute("select units_intended, units_delivered, temp_rate, status from injections")
+rows = process.db.fetchall()
+if len(rows) > 1:
+    failed = True
+    print "Fail: Test 4: too many injections ("+str(len(rows))+")"
+if rows[0][0] != 6.92308:
+    failed = True
+    print "Fail: Test 4: units_intended wrong ("+str(rows[0][0])+")"
+if rows[0][1] != 6.92308:
+    failed = True
+    print "Fail: Test 2: units_delivered wrong ("+str(rows[0][1])+")"
+if rows[0][2] != 14.9462:
+    failed = True
+    print "Fail: Test 4: temp_rate wrong ("+str(rows[0][2])+")"
+if rows[0][3] != "successful":
+    failed = True
+    print "Fail: Test 4: status wrong ("+str(rows[0][3])+")"
+
+process.db.execute("select iob, datetime_iob from iob")
+rows = process.db.fetchall()
+if len(rows) != 42:
+    failed = True
+    print "Fail: Test 4: wrong number of rows for iob ("+str(len(rows))+")"
+
+process.db.execute("select * from alerts")
+rows = process.db.fetchall()
+if len(rows) != 2:
+    failed = True
+    print "Fail: Test 4: wrong number of rows for alerts ("+str(len(rows))+")"
+
+if failed:
+    print "Fail: Test 4 (no sgv / high carbs) failed thus stopping"
+    sys.exit()
+else:
+    print "Test 4 (no sgv / high carbs) passes!"
+"""

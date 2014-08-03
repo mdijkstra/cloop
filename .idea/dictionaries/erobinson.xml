@@ -10,6 +10,7 @@
       <w>levelname</w>
       <w>lineno</w>
       <w>sgvs</w>
+      <w>unixtime</w>
     </words>
   </dictionary>
 </component>

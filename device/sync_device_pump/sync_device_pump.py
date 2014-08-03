@@ -87,7 +87,7 @@ class PumpDeviceDBTrans():
 
   def import_data(self, xml):
     self.import_courses(xml)
-    print "TODO: Import the various data elements from xml (currenlty just imports courses)"
+    print "TODO: Import the various data elements from xml (currently just imports courses)"
 
   ################### Internal methods below ############################
   # TODO: possibly switch from xml to json objects

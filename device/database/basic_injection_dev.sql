@@ -21,11 +21,11 @@ insert into iob (iob_datetime, iob) values
 insert into iob (datetime_iob, iob) values
     ((select datetime_delivered from injections where injection_id = 23)+ interval 0 minute,
 		ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = 0) / 100 from injections where injection_id = 23),0))
-    on duplicate key update iob = iob + ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = 0) / 100 from injections where injection_id = 23),0)
+    on duplicate key update iob = iob + ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = 0) / 100 from injections where injection_id = 23),0);
 insert into iob (datetime_iob, iob) values
 	((select datetime_delivered from injections where injection_id = 24)+ interval 0 minute,
 		ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = 0) / 100 from injections where injection_id = 24),0))
-	on duplicate key update iob = iob + ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = 0) / 100 from injections where injection_id = 24),0)
+	on duplicate key update iob = iob + ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = 0) / 100 from injections where injection_id = 24),0);
 
 insert into iob_dist (iob_dist.interval, iob_dist_pct) values (5, 100);
 insert into iob_dist (iob_dist.interval, iob_dist_pct) values (0, 100);

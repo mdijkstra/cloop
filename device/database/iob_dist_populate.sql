@@ -8,6 +8,7 @@
 ****************************************************************************************/
 
 truncate table iob_dist;
+insert into iob_dist (iob_dist.interval, iob_dist_pct) values (0, 100);
 insert into iob_dist (iob_dist.interval, iob_dist_pct) values (5,100);
 insert into iob_dist (iob_dist.interval, iob_dist_pct) values (10,100);
 insert into iob_dist (iob_dist.interval, iob_dist_pct) values (15,100);

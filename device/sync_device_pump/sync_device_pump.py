@@ -250,7 +250,7 @@ class DownloadPumpData():
         result = self.cli_w_time(command=command, timeout=30)
         if result == 'ERRORTimeout':
             logging.error("WARNING: sticky command timeout.")
-        logging.info("sucessfully ran sticky")
+        logging.info("successfully ran sticky")
 
     def get_cur_cgm_page(self, include_init=True):
         logging.info("going to try to download the current cgm page")

@@ -5,11 +5,16 @@
       <w>automode</w>
       <w>carb</w>
       <w>carbs</w>
+      <w>carelink</w>
       <w>cloop</w>
+      <w>decocare</w>
       <w>ifnull</w>
       <w>levelname</w>
       <w>lineno</w>
       <w>sgvs</w>
+      <w>stderr</w>
+      <w>stdout</w>
+      <w>sudo</w>
       <w>unixtime</w>
     </words>
   </dictionary>

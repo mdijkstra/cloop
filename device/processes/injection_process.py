@@ -17,9 +17,13 @@ import logging
 import datetime
 import sys
 import cloop_config
+import pump_interface
 # from bluetooth import *
 # from time import sleep
 windowsConfig = True
+if "linux" not in sys.platform:
+    windowsConfig = False
+
 # use ISO format
 dateFormat = "%Y-%m-%dT%H:%M:%S"
 mySQLDateFormat = "%Y-%m-%d %H:%M:%S"
@@ -29,11 +33,11 @@ currentDate = str(now.year) + "-" + str(now.month) + "-" + str(now.day)
 
 if windowsConfig:
     # device config
-    logging.basicConfig(filename=currentDate + '.log', level=logging.DEBUG,
+    logging.basicConfig(filename=currentDate + '.injection_process.log', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 else:
     # windows config
-    logging.basicConfig(filename='./log/' + currentDate + '.log', level=logging.DEBUG,
+    logging.basicConfig(filename='./log/' + currentDate + '.injection_process.log', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 
 
@@ -73,8 +77,7 @@ class InjectionProcess():
         if temp_rate == self.get_cur_basal_units(self.cloop_config.get_temp_duration()):
             logging.info("Returning: No injection required temp_rate: "+str(temp_rate))
             return
-        attempts = 3
-        successfully_executed = self.set_temp_basal(temp_rate, self.cloop_config.get_temp_duration(), attempts)
+        successfully_executed = self.set_temp_basal(temp_rate, self.cloop_config.get_temp_duration())
         if not successfully_executed:
             # log in bd and exit
             sql_fail_injection = "update injections set status = 'failed', transferred = 'no' where injection_id = " + str(injection_id)
@@ -138,9 +141,13 @@ class InjectionProcess():
         self.mark_courses_for_injection(courses_to_cover, injection_id)
         return temp_rate, injection_id
 
-    def set_temp_basal(self, temp_rate, duration, attempts):
-        # do nothing
-        return True
+    def set_temp_basal(self, temp_rate, duration):
+        pump = pump_interface.PumpInterface()
+        result = pump.set_temp_basal(temp_rate, duration)
+        if result != "Successful":
+            return True
+        else:
+            return False
 
     def set_iob(self, injection_id):
         # create iob based on iob dist in db (max 6 hrs)

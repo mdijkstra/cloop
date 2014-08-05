@@ -49,6 +49,44 @@ class PumpInterface():
     def __init__(self):
         pass
 
+    def query_temp_basal(self, temp_rate, include_init=None):
+        if include_init is None:
+            include_init = True
+
+        command = "sudo python"
+        command += " " + self.decoding_dir + "/bin/mm-temp-basals.py"
+        if include_init:
+            command += " --init"
+        command += " --serial " + str(self.device_id)
+        command += " --port " + self.port
+        command += " query"
+        timeout = 30
+
+        start = datetime.datetime.now()
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        out, err = process.communicate()
+        while process.poll() is None:
+            time.sleep(0.1)
+            now = datetime.datetime.now()
+            if (now - start).seconds > timeout:
+                os.kill(process.pid, signal.SIGKILL)
+                os.waitpid(-1, os.WNOHANG)
+                logging.info("STDOUT: " + out)
+                logging.info("STDERR: " + err)
+                logging.error("Reached timeout")
+                return 'ERRORTimeout'
+        logging.info("STDOUT: " + out)
+        logging.info("STDERR: " + err)
+        logging.info("RETURN CODE: " + str(process.returncode))
+        logging.info("ran command without timeout")
+        if "response: ReadBasalTemp:size[64]:data:{'duration': " in out:
+            logging.error("ERROR: no temp rate")
+            return "ERRORNoTempRate"
+        if "'rate': "+str(temp_rate) in out:
+            logging.error("ERROR: no temp rate")
+            return "ERRORNoTempRate"
+        return "Successful"
+
     def set_temp_basal(self, temp_rate=None, temp_duration=None, include_init=None):
         if temp_rate is None or temp_duration is None:
             logging.info("Temp rate or duration is null")
@@ -57,10 +95,6 @@ class PumpInterface():
 
         if include_init is None:
             include_init = True
-
-        # clean out previous file
-        data_file = self.download_dir + "/set_temp_basal.txt"
-        self.rm_file(data_file)
 
         # download cgm data
         command = "sudo python"
@@ -78,18 +112,13 @@ class PumpInterface():
                 logging.warning("WARNING: command timeout. Trying to clean \
                          the stick buffer. On (" + str(i) + ") try")
                 self.run_stick()
-            elif not os.path.isfile(data_file):
-                logging.warning("file not created on (" + str(i) + ") try. Running sticky...")
-                self.run_stick()
             else:
                 break
 
-        if not os.path.isfile(data_file):
-            logging.error("ERROR: Could not set temp rate")
-            return "ERRORCouldNotSetTempRate"
+        if self.query_temp_basal(temp_rate) != "Successful":
+            return True
         else:
-            logging.info("INFO: Successfully set temp rate of "+str(temp_rate)+" for "+str(temp_duration)+" minutes.")
-            return data_file
+            return False
 
     def run_stick(self):
         logging.info("in run_stick")

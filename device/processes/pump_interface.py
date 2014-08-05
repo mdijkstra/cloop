@@ -63,15 +63,15 @@ class PumpInterface():
         self.rm_file(data_file)
 
         # download cgm data
-        command = "sudo"
-        command += " " + self.decoding_dir + "/bin/mm-send-comm.py"
+        command = "sudo python"
+        command += " " + self.decoding_dir + "/bin/mm-temp-basals.py"
         if include_init:
             command += " --init"
         command += " --serial " + str(self.device_id)
         command += " --port " + self.port
-        command += " --prefix-path " + self.download_dir
-        command += " tweak ReadGlucoseHistory"
-        command += " --save "
+        command += " --duration " + str(temp_duration)
+        command += " --rate " + str(temp_rate)
+        command += " set"
         for i in range(0, 2):
             result = self.cli_w_time(command=command)
             if result == 'ERRORTimeout':

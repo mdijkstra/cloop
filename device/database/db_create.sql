@@ -26,7 +26,8 @@ DROP TABLE IF EXISTS `alerts`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `alerts` (
   `alert_id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime_recorded` datetime NOT NULL,
+  `datetime_recorded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `datetime_to_alert` datetime NOT NULL,
   `src` varchar(45) NOT NULL,
   `code` varchar(45) NOT NULL,
   `type` varchar(45) NOT NULL,
@@ -38,7 +39,22 @@ CREATE TABLE `alerts` (
   `datetime_dismissed` datetime DEFAULT NULL,
   `src_dismissed` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`alert_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `automode_switch`
+--
+
+DROP TABLE IF EXISTS `automode_switch`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `automode_switch` (
+  `automode_switch_id` int(11) NOT NULL,
+  `datetime_recorded` datetime NOT NULL,
+  `is_on` varchar(45) NOT NULL,
+  PRIMARY KEY (`automode_switch_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to record switching on and off the automatic mode. is_on = yes means the system will deliver insulin; is_on = no the device will take no actions. populated on the app and transferred over to the device';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,21 +103,50 @@ DROP TABLE IF EXISTS `injections`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `injections` (
   `injection_id` int(11) NOT NULL AUTO_INCREMENT,
-  `units_intended` int(11) NOT NULL,
-  `units_delivered` int(11) DEFAULT NULL,
+  `units_intended` float NOT NULL,
+  `units_delivered` float DEFAULT NULL,
+  `temp_rate` float DEFAULT NULL,
   `datetime_intended` datetime NOT NULL,
   `datetime_delivered` datetime DEFAULT NULL,
-  `iob` float NOT NULL,
-  `carbs` int(11) NOT NULL,
-  `carb_sensitivity` float NOT NULL,
-  `units_for_carbs` float NOT NULL,
-  `bg_current` int(11) NOT NULL,
-  `units_for_bg` float NOT NULL,
-  `current_basal` float NOT NULL,
+  `cur_iob_units` float NOT NULL,
+  `cur_bg_units` float DEFAULT NULL,
+  `correction_units` float NOT NULL,
+  `carbs_to_cover` int(11) NOT NULL,
+  `carbs_units` float NOT NULL,
+  `cur_basal_units` float NOT NULL,
+  `all_meal_carbs_absorbed` varchar(45) DEFAULT NULL,
   `status` varchar(45) NOT NULL,
   `transferred` varchar(45) NOT NULL DEFAULT 'NO',
   PRIMARY KEY (`injection_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `iob`
+--
+
+DROP TABLE IF EXISTS `iob`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `iob` (
+  `datetime_iob` datetime NOT NULL,
+  `iob` float NOT NULL,
+  PRIMARY KEY (`datetime_iob`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `iob_dist`
+--
+
+DROP TABLE IF EXISTS `iob_dist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `iob_dist` (
+  `interval` int(11) NOT NULL,
+  `iob_dist_pct` float NOT NULL,
+  PRIMARY KEY (`interval`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,7 +184,7 @@ CREATE TABLE `sgvs` (
   `sgv` int(11) DEFAULT NULL COMMENT 'blood glucose recorded',
   `transfered` varchar(45) NOT NULL DEFAULT 'NO',
   PRIMARY KEY (`sgv_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,4 +200,4 @@ CREATE TABLE `sgvs` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-07-08 21:01:30
+-- Dump completed on 2014-08-04 20:54:42

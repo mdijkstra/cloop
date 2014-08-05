@@ -130,6 +130,7 @@ class InjectionProcess():
             temp_rate = 0
         else:
             temp_rate = (cur_basal_units + injection_units) * (60 / temp_duration)
+        temp_rate = round(temp_rate, 2)
         # temp_rate = temp_rate * (60 / temp_duration) # convert to units per hour
         # log all data into db
         # insert meals to injection records

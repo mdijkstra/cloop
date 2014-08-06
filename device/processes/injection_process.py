@@ -74,22 +74,23 @@ class InjectionProcess():
         if self.should_wait_for_course():
             sys.exit()
         temp_rate, injection_id = self.get_injection_amount()
-        if temp_rate == self.get_cur_basal_units(self.cloop_config.get_temp_duration()):
-            logging.info("Returning: No injection required temp_rate: "+str(temp_rate))
+        if temp_rate is None:
+            logging.info("Returning from injection_process: No injection required")
             return
         successfully_executed = self.set_temp_basal(temp_rate, self.cloop_config.get_temp_duration())
         if not successfully_executed:
             # log in bd and exit
-            sql_fail_injection = "update injections set status = 'failed', transferred = 'no' where injection_id = " + str(injection_id)
+            sql_fail_injection = "update injections set status = 'failed', transferred = 'no' where injection_id = " \
+                                 + str(injection_id)
             self.db.execute(sql_fail_injection)
-            logging.info("SQL: "+sql_fail_injection)
+            logging.info("SQL: " + sql_fail_injection)
             self.db_conn.commit()
         else:
             # successful:
-            sql_success_injection ="update injections set status = 'successful', transferred = 'no', datetime_delivered = now() \
-                where injection_id = " + str(injection_id)
+            sql_success_injection = "update injections set status = 'successful', transferred = 'no', \
+                datetime_delivered = now() where injection_id = " + str(injection_id)
             self.db.execute(sql_success_injection)
-            logging.info("SQL: "+sql_success_injection)
+            logging.info("SQL: " + sql_success_injection)
             self.db_conn.commit()
             self.set_iob(injection_id)
             self.add_alert(now, "process_injection", "info", "Injection " + str(injection_id) + " of a rate of " +
@@ -131,8 +132,14 @@ class InjectionProcess():
         else:
             temp_rate = (cur_basal_units + injection_units) * (60 / temp_duration)
         temp_rate = round(temp_rate, 2)
-        # temp_rate = temp_rate * (60 / temp_duration) # convert to units per hour
+
+        temp_rate_thres = .05
+        if self.get_cur_basal_units() - temp_rate_thres < temp_rate < self.get_cur_basal_units() + temp_rate_thres:
+            logging.info("Temp Rate desired close to current basal => no injection temp_rate: " + str(
+                temp_rate) + " basal: " + str(self.get_cur_basal_units()))
+            return None, None
         # log all data into db
+
         # insert meals to injection records
         injection_id = self.create_injection_rec(cur_iob_units, cur_bg_units,
                                                  carbs_to_cover, carbs_units,
@@ -159,25 +166,26 @@ class InjectionProcess():
             sql_save_iob = "insert into iob (datetime_iob, iob) values \
             (\
               from_unixtime(round(UNIX_TIMESTAMP( \
-                (select datetime_delivered from injections where injection_id = " + str(injection_id) + ")+ interval " + str(i) + " minute \
+                (select datetime_delivered from injections where injection_id = " + str(
+                injection_id) + ")+ interval " + str(i) + " minute \
                  )/300)*300),\
               ifnull((select units_delivered * (select iob_dist_pct from iob_dist \
                     where iob_dist.interval = " + str(i) + ") / 100 \
-                from injections where injection_id = " + str(injection_id) + '),0) \
+                from injections where injection_id = " + str(injection_id) + "),0) \
             ) \
-            on duplicate key update \
+            on duplicate key update transferred = 'no', \
             iob = iob + \
-              ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = ' \
+              ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = " \
                            + str(i) + ") / 100 \
               from injections where injection_id = " + str(injection_id) + "),0)"
-            logging.info("SQL: "+sql_save_iob)
+            logging.info("SQL: " + sql_save_iob)
             self.db.execute(sql_save_iob)
             self.db_conn.commit()
 
     def add_alert(self, datetime_to_alert, code, alert_type, message):
         sql_to_insert = "insert into alerts (datetime_to_alert, src, code, type, message, transferred) values \
                 ('" + str(datetime_to_alert) + "','device','" + code + "','" + alert_type + "','" + message + "','no')"
-        logging.info("SQL: "+sql_to_insert)
+        logging.info("SQL: " + sql_to_insert)
         self.db.execute(sql_to_insert)
         self.db_conn.commit()
 
@@ -201,7 +209,7 @@ class InjectionProcess():
                         + "," + str(carbs_to_cover) + "," + str(carbs_units) + "," \
                         + str(cur_basal_units) + ",'" + str(all_meal_carbs_absorbed) \
                         + "','initial','awaiting completion')"
-        logging.info("SQL: "+sql_to_insert)
+        logging.info("SQL: " + sql_to_insert)
         self.db.execute(sql_to_insert)
         self.db_conn.commit()
         self.db.execute("select max(injection_id) from injections")
@@ -214,7 +222,7 @@ class InjectionProcess():
         sql_select_iob = "select datetime_iob, iob from iob where \
                         datetime_iob = (select max(datetime_iob) from iob \
                         where datetime_iob < now() and datetime_iob > now() - interval 10 minute)"
-        logging.info("SQL: "+sql_select_iob)
+        logging.info("SQL: " + sql_select_iob)
         self.db.execute(sql_select_iob)
         iob = 0
         for row in self.db.fetchall():
@@ -225,7 +233,7 @@ class InjectionProcess():
         sql_select_sgvs = "select datetime_recorded, sgv from sgvs where \
                         datetime_recorded = (select max(datetime_recorded) from sgvs \
                         where datetime_recorded < now() and datetime_recorded > now() - interval 20 minute)"
-        logging.info("SQL: "+sql_select_sgvs)
+        logging.info("SQL: " + sql_select_sgvs)
         self.db.execute(sql_select_sgvs)
         cur_bg = None
         for row in self.db.fetchall():
@@ -253,7 +261,7 @@ class InjectionProcess():
                         and datetime_consumption < now() + interval 50 minute \
                         and course_id not in (select course_id from courses_to_injections where \
                         injection_id in (select injection_id from injections where status = 'successful'))"
-        logging.info("SQL: "+sql_get_courses)
+        logging.info("SQL: " + sql_get_courses)
         self.db.execute(sql_get_courses)
         return self.db.fetchall()
 
@@ -263,7 +271,7 @@ class InjectionProcess():
                         and datetime_consumption < now()+ interval 75 minute \
                         and course_id not in (select course_id from courses_to_injections where \
                         injection_id in (select injection_id from injections where status = 'successful'))"
-        logging.info("SQL: "+sql_to_wait)
+        logging.info("SQL: " + sql_to_wait)
         self.db.execute(sql_to_wait)
         rows = self.db.fetchall()
         if len(rows) > 0:
@@ -278,19 +286,20 @@ class InjectionProcess():
         for course in courses:
             sql_to_mark += "(" + str(course[1]) + ", " + str(injection_id) + "),"
         sql_to_mark = sql_to_mark[:-1]
-        logging.info("SQL: "+sql_to_mark)
+        logging.info("SQL: " + sql_to_mark)
         self.db.execute(sql_to_mark)
         self.db_conn.commit()
 
-    @staticmethod
-    def get_cur_basal_units(duration):
+    def get_cur_basal_units(self, duration=None):
+        if duration is None:
+            duration = self.cloop_config.get_temp_duration()
         return 1.1 * (duration / 60)
 
     def get_all_meal_carbs_absorbed(self):
         sql_get_last_injection = "select datetime_delivered from injections where status = 'successful' and \
                         injection_id in (select distinct injection_id from courses_to_injections) \
                         order by datetime_delivered desc limit 1"
-        logging.info("SQL: "+sql_get_last_injection)
+        logging.info("SQL: " + sql_get_last_injection)
         self.db.execute(sql_get_last_injection)
         last_injection = None
         for row in self.db.fetchall():
@@ -306,7 +315,7 @@ class InjectionProcess():
         sql_select_sgvs = "select datetime_recorded, sgv from sgvs where \
                         datetime_recorded = (select max(datetime_recorded) from sgvs \
                         where datetime_recorded < now() and datetime_iob > now()- interval 20 minute)"
-        logging.info("SQL: "+sql_select_sgvs)
+        logging.info("SQL: " + sql_select_sgvs)
         self.db.execute(sql_select_sgvs)
         cur_bg = None
         for row in self.db.fetchall():
@@ -316,7 +325,7 @@ class InjectionProcess():
     def is_active_injection(self):
         sql_get_active_injections = "select * from injections where \
                         status = 'successful' and datetime_delivered > now() - interval 31 minute"
-        logging.info("SQL: "+sql_get_active_injections)
+        logging.info("SQL: " + sql_get_active_injections)
         self.db.execute(sql_get_active_injections)
         rows = self.db.fetchall()
         if len(rows) > 0:
@@ -327,13 +336,13 @@ class InjectionProcess():
     def get_courses_covered(self, injection_id):
         sql_get_courses = "select carbs, course_id from courses where course_id in \
                 (select course_id from courses_to_injections where injection_id = " + str(injection_id) + ")"
-        logging.info("SQL: "+sql_get_courses)
+        logging.info("SQL: " + sql_get_courses)
         self.db.execute(sql_get_courses)
         return self.db.fetchall()
 
     def is_in_automode(self):
         sql_get_automode = "select is_on from automode_switch order by datetime_recorded desc limit 1"
-        logging.info("SQL: "+sql_get_automode)
+        logging.info("SQL: " + sql_get_automode)
         self.db.execute(sql_get_automode)
         rows = self.db.fetchall()
         row = rows[0]
@@ -342,6 +351,7 @@ class InjectionProcess():
             return True
         else:
             return False  # if __name__ == '__main__':
+
 
 if __name__ == '__main__':
     logging.info("Injection process started")

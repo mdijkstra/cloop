@@ -39,7 +39,7 @@ CREATE TABLE `alerts` (
   `datetime_dismissed` datetime DEFAULT NULL,
   `src_dismissed` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`alert_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ CREATE TABLE `injections` (
   `status` varchar(45) NOT NULL,
   `transferred` varchar(45) NOT NULL DEFAULT 'NO',
   PRIMARY KEY (`injection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,6 +131,7 @@ DROP TABLE IF EXISTS `iob`;
 CREATE TABLE `iob` (
   `datetime_iob` datetime NOT NULL,
   `iob` float NOT NULL,
+  `transferred` varchar(45) DEFAULT 'no',
   PRIMARY KEY (`datetime_iob`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -182,9 +183,9 @@ CREATE TABLE `sgvs` (
   `device_id` int(11) NOT NULL COMMENT 'the id of the pump to differentiate if wearing two cgms',
   `datetime_recorded` datetime NOT NULL,
   `sgv` int(11) DEFAULT NULL COMMENT 'blood glucose recorded',
-  `transfered` varchar(45) NOT NULL DEFAULT 'NO',
+  `transfered` varchar(45) NOT NULL DEFAULT 'no',
   PRIMARY KEY (`sgv_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,4 +201,4 @@ CREATE TABLE `sgvs` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-04 20:54:42
+-- Dump completed on 2014-08-05 22:17:20

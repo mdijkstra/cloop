@@ -39,6 +39,10 @@ delete from injections;
 delete from iob;
 delete from courses;
 delete from sgvs;
+delete from alerts;
+delete from automode_switch;
+delete from logs;
+delete from sgvs;
 insert into sgvs (device_id, datetime_recorded, sgv) values (123456, now() - interval 5 minute, 150);
 insert into courses (course_id, carbs, datetime_consumption) values (1, 30, now() + interval 30 minute);
 select * from sgvs;
@@ -46,6 +50,7 @@ select * from courses;
 select * from injections;
 select * from iob_dist;
 select * from iob;
+select * from logs;
 select * from alerts;
 select * from courses_to_injections;
 

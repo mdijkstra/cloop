@@ -4,7 +4,7 @@ import java.util.Date;
 
 import android.content.Context;
 
-import com.erjr.cloop.dao.IOBDataSource;
+import com.erjr.cloop.dao.InjectionDataSource;
 import com.erjr.diabetesi1.Util;
 
 public class Injection {
@@ -58,14 +58,14 @@ public class Injection {
 	private boolean allMealCarbsAbsorbed;
 	private String status;
 
-	public static void importXml(String iobXml, Context context) {
-		iobXml = Util.getValueFromXml(iobXml, "iobs");
-		String[] iobXmls = Util.getValuesFromXml(iobXml, ROW_DESC);
-		IOBDataSource IOBDS = new IOBDataSource(context);
-		for (String iob : iobXmls) {
-			IOB i = new IOB();
+	public static void importXml(String injXml, Context context) {
+		injXml = Util.getValueFromXml(injXml, "iobs");
+		String[] injXmls = Util.getValuesFromXml(injXml, ROW_DESC);
+		InjectionDataSource InjDS = new InjectionDataSource(context);
+		for (String iob : injXmls) {
+			Injection i = new Injection();
 			i.setFromXml(iob);
-			IOBDS.saveIOB(i);
+			InjDS.saveInjection(i);
 		}
 	}
 
@@ -79,13 +79,13 @@ public class Injection {
 				+ COL_CARBS_UNITS + ", " + COL_CUR_BASAL_UNITS + ", "
 				+ COL_ALL_MEAL_CARBS_ABSORBED + ", " + COL_STATUS
 				+ ") values (" + injectionId + ", " + unitsIntended + ", "
-				+ unitsDelivered + ", " + tempRate + ", "
-				+ Util.convertDateToString(datetimeIntended) + ", "
-				+ Util.convertDateToString(datetimeDelivered) + ", "
+				+ unitsDelivered + ", " + tempRate + ", '"
+				+ Util.convertDateToString(datetimeIntended) + "', '"
+				+ Util.convertDateToString(datetimeDelivered) + "', "
 				+ curIobUnits + ", " + curBgUnits + ", " + correctionUnits
 				+ ", " + carbsToCover + ", " + carbsUnits + ", "
-				+ curBasalUnits + ", " + allMealCarbsAbsorbed + ", " + status
-				+ ")";
+				+ curBasalUnits + ", " + allMealCarbsAbsorbed + ", '" + status
+				+ "')";
 	}
 
 	public void setFromXml(String xml) {

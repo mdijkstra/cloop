@@ -57,10 +57,10 @@ public class LogRecord {
 		return "INSERT OR REPLACE INTO " + TABLE_LOG + " (" + COL_LOG_ID + ", "
 				+ COL_SRC_DEVICE + ", " + COL_DATETIME_LOGGED + ", " + COL_CODE
 				+ ", " + COL_TYPE + ", " + COL_MESSAGE + ", " + COL_OPTION1
-				+ ", " + COL_OPTION2 + ") values (" + logId + ", " + srcDevice
-				+ ", " + Util.convertDateToString(datetimeLogged) + ", " + code
-				+ ", " + type + ", " + message + ", " + option1 + ", "
-				+ option2 + ")";
+				+ ", " + COL_OPTION2 + ") values (" + logId + ", '" + srcDevice
+				+ "', '" + Util.convertDateToString(datetimeLogged) + "', '" + code
+				+ "', '" + type + "', '" + message + "', '" + option1 + "', '"
+				+ option2 + "')";
 	}
 
 	public void setFromXml(String xml) {

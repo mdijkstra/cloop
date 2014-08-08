@@ -35,8 +35,8 @@ public class IOB {
 
 	public String getSQLToSave() {
 		return "INSERT OR REPLACE INTO " + TABLE_IOB + " ("
-				+ COL_DATETIME_IOB + ", " + COL_IOB + ") values ("
-				+ Util.convertDateToString(datetimeIOB) + ", " + iob + ")";
+				+ COL_DATETIME_IOB + ", " + COL_IOB + ") values ('"
+				+ Util.convertDateToString(datetimeIOB) + "', " + iob + ")";
 	}
 
 	public void setFromXml(String xml) {

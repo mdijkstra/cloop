@@ -347,7 +347,7 @@ class InjectionProcess():
         logging.info("SQL: " + sql_get_automode)
         self.db.execute(sql_get_automode)
         rows = self.db.fetchall()
-        if rows is None or len(rows) >= 0:
+        if rows is None:
             return False
         row = rows[0]
         is_on = row[0]

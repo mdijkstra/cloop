@@ -131,8 +131,4 @@ public class SGVDataSource {
 	// course.setTransferred(cursor.getString(6));
 	// return course;
 	// }
-
-	public void saveCourse(Course c) {
-		database.execSQL(c.getUpdateSql());
-	}
 }

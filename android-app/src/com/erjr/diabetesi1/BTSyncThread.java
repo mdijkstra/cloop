@@ -12,10 +12,14 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.util.Log;
 
-import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.dao.CoursesDataSource;
-import com.erjr.cloop.entities.SGV;
+import com.erjr.cloop.dao.SGVDataSource;
+import com.erjr.cloop.entities.Alert;
 import com.erjr.cloop.entities.Course;
+import com.erjr.cloop.entities.IOB;
+import com.erjr.cloop.entities.Injection;
+import com.erjr.cloop.entities.LogRecord;
+import com.erjr.cloop.entities.SGV;
 
 public class BTSyncThread extends Thread {
 	private BluetoothServerSocket mmServerSocket;
@@ -124,6 +128,7 @@ public class BTSyncThread extends Thread {
 	 */
 	private void processDataReceived(String dataReceived) {
 		Log.i(TAG, "Processing Data Recieved");
+		// process sgv data
 		String fullSGVXml = Util.getValueFromXml(dataReceived, SGV.TABLE_SGVS);
 		if (fullSGVXml == null || fullSGVXml.isEmpty()) {
 			return;
@@ -136,6 +141,16 @@ public class BTSyncThread extends Thread {
 			sgv.setFromXML(sgvXml);
 			SGVDS.saveSGV(sgv);
 		}
+		
+		// process iob data
+		String iobXml = Util.getValueFromXml(dataReceived, IOB.TABLE_IOB);
+		IOB.importXml(iobXml, context);
+		String injectionsXml = Util.getValueFromXml(dataReceived, Injection.TABLE_INJECTIONS);
+		Injection.importXml(injectionsXml, context);
+		String logsXml = Util.getValueFromXml(dataReceived, LogRecord.TABLE_LOG);
+		LogRecord.importXml(logsXml, context);
+		String alertsXml = Util.getValueFromXml(dataReceived, Alert.TABLE_ALERT);
+		Alert.importXml(alertsXml, context);
 		Log.i(TAG, "Done processing Received data");
 	}
 

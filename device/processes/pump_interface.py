@@ -49,6 +49,39 @@ class PumpInterface():
     def __init__(self):
         pass
 
+    def do_bolus(self, injection_units, include_init=None):
+        strokes = 10
+        command = "sudo python"
+        command += " " + self.decoding_dir + "/bin/mm-bolus.py"
+        if include_init:
+            command += " --init"
+        command += " --serial " + str(self.device_id)
+        command += " --port " + self.port
+        command += " --strokes "+str(strokes)
+        command += " --units "+str(injection_units)
+        timeout = 45
+        start = datetime.datetime.now()
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        out, err = process.communicate()
+        while process.poll() is None:
+            time.sleep(0.1)
+            now = datetime.datetime.now()
+            if (now - start).seconds > timeout:
+                os.kill(process.pid, signal.SIGKILL)
+                os.waitpid(-1, os.WNOHANG)
+                logging.info("STDOUT: " + out)
+                logging.info("STDERR: " + err)
+                logging.error("Reached timeout")
+                return 'ERRORTimeout'
+        logging.info("STDOUT: " + out)
+        logging.info("STDERR: " + err)
+        logging.info("RETURN CODE: " + str(process.returncode))
+        logging.info("ran command without timeout")
+        if "FAILED TO DOWNLOAD ANYTHING " in out:
+            logging.error("ERROR: could not do injection")
+            return "ERRORNoBolus"
+        return "Successful"
+
     def query_temp_basal(self, temp_rate, include_init=None):
         if include_init is None:
             include_init = True

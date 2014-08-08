@@ -33,11 +33,11 @@ currentDate = str(now.year) + "-" + str(now.month) + "-" + str(now.day)
 
 if windowsConfig:
     # device config
-    logging.basicConfig(filename=currentDate + '.injection_process.log', level=logging.DEBUG,
+    logging.basicConfig(filename='./log/' + currentDate + '.injection_process.log', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 else:
     # windows config
-    logging.basicConfig(filename='./log/' + currentDate + '.injection_process.log', level=logging.DEBUG,
+    logging.basicConfig(filename=currentDate + '.injection_process.log', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 
 
@@ -73,11 +73,16 @@ class InjectionProcess():
         # if there is a course coming wait a little to correct and cover the carbs
         if self.should_wait_for_course():
             sys.exit()
-        temp_rate, injection_id = self.get_injection_amount()
-        if temp_rate is None:
+        temp_rate, injection_units, injection_id = self.get_injection_amount()
+        if injection_id is None:
             logging.info("Returning from injection_process: No injection required")
             return
-        successfully_executed = self.set_temp_basal(temp_rate, self.cloop_config.get_temp_duration())
+        if temp_rate is None:
+            # use a bolus to inject
+            successfully_executed = self.do_bolus(injection_units)
+        else:
+            # use a temp rate to remove insulin
+            successfully_executed = self.set_temp_basal(temp_rate, self.cloop_config.get_temp_duration())
         if not successfully_executed:
             # log in bd and exit
             sql_fail_injection = "update injections set status = 'failed', transferred = 'no' where injection_id = " \
@@ -126,20 +131,24 @@ class InjectionProcess():
                 correction_units = 0
 
         injection_units = carbs_units + correction_units
-        temp_rate_units = cur_basal_units + injection_units
-        if temp_rate_units < 0:
-            temp_rate = 0
+        if injection_units > 0:
+            # do a bolus
+            temp_rate = None
         else:
-            temp_rate = (cur_basal_units + injection_units) * (60 / temp_duration)
-        temp_rate = round(temp_rate, 1)
+            # do a temp rate
+            temp_rate_units = cur_basal_units + injection_units
+            if temp_rate_units < 0:
+                temp_rate = 0
+            else:
+                temp_rate = (cur_basal_units + injection_units) * (60 / temp_duration)
+            temp_rate = round(temp_rate, 2)
 
-        temp_rate_thresh = .05
-        lower_thresh = self.get_cur_basal_units() - temp_rate_thresh
-        upper_thresh = self.get_cur_basal_units() + temp_rate_thresh
-        if self.get_cur_basal_units() - temp_rate_thresh < temp_rate / (60 / temp_duration) < self.get_cur_basal_units() + temp_rate_thresh:
-            logging.info("Temp Rate desired close to current basal => no injection temp_rate: " + str(
-                temp_rate) + " basal: " + str(self.get_cur_basal_units()))
-            return None, None
+            temp_rate_thresh = .05
+            if self.get_cur_basal_units() - temp_rate_thresh < temp_rate / (60 / temp_duration) \
+                    < self.get_cur_basal_units() + temp_rate_thresh:
+                logging.info("Temp Rate desired close to current basal => no injection temp_rate: " + str(
+                    temp_rate) + " basal: " + str(self.get_cur_basal_units()))
+                return None, None, None
         # log all data into db
 
         # insert meals to injection records
@@ -149,15 +158,7 @@ class InjectionProcess():
                                                  correction_units, injection_units,
                                                  temp_rate)
         self.mark_courses_for_injection(courses_to_cover, injection_id)
-        return temp_rate, injection_id
-
-    def set_temp_basal(self, temp_rate, duration):
-        pump = pump_interface.PumpInterface()
-        result = pump.set_temp_basal(temp_rate, duration)
-        if result != "Successful":
-            return True
-        else:
-            return False
+        return temp_rate, injection_units, injection_id
 
     def set_iob(self, injection_id):
         # create iob based on iob dist in db (max 6 hrs)
@@ -186,7 +187,8 @@ class InjectionProcess():
 
     def add_alert(self, datetime_to_alert, code, alert_type, message):
         sql_to_insert = "insert into alerts (datetime_recorded, datetime_to_alert, src, code, type, message, transferred) values \
-                (now(), '" + str(datetime_to_alert) + "','device','" + code + "','" + alert_type + "','" + message + "','no')"
+                (now(), '" + str(
+            datetime_to_alert) + "','device','" + code + "','" + alert_type + "','" + message + "','no')"
         logging.info("SQL: " + sql_to_insert)
         self.db.execute(sql_to_insert)
         self.db_conn.commit()
@@ -355,6 +357,23 @@ class InjectionProcess():
             return True
         else:
             return False
+
+    def do_bolus(self, injection_units):
+        pump = pump_interface.PumpInterface()
+        result = pump.do_bolus(injection_units)
+        if result != "Successful":
+            return True
+        else:
+            return False
+
+    def set_temp_basal(self, temp_rate, duration):
+        pump = pump_interface.PumpInterface()
+        result = pump.set_temp_basal(temp_rate, duration)
+        if result != "Successful":
+            return True
+        else:
+            return False
+
 
 
 if __name__ == '__main__':

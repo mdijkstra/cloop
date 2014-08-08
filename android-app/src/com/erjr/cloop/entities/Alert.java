@@ -65,9 +65,9 @@ public class Alert {
 				+ COL_MESSAGE + "," + COL_VALUE + "," + COL_OPTION1 + ","
 				+ COL_OPTION2 + ") values (" + alertId + ",'"
 				+ Util.convertDateToString(datetimeRecorded) + "','"
-				+ Util.convertDateToString(datetimeToAlert) + "'," + src + ","
-				+ code + "," + type + "," + message + "," + value + ","
-				+ option1 + "," + option2 + ")";
+				+ Util.convertDateToString(datetimeToAlert) + "','" + src + "','"
+				+ code + "','" + type + "','" + message + "','" + value + "','"
+				+ option1 + "','" + option2 + "')";
 	}
 
 	public void setFromXml(String xml) {

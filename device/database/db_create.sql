@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `alerts`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `alerts` (
   `alert_id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime_recorded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `datetime_recorded` datetime NOT NULL,
   `datetime_to_alert` datetime NOT NULL,
   `src` varchar(45) NOT NULL,
   `code` varchar(45) NOT NULL,
@@ -43,6 +43,15 @@ CREATE TABLE `alerts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `alerts`
+--
+
+LOCK TABLES `alerts` WRITE;
+/*!40000 ALTER TABLE `alerts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `alerts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `automode_switch`
 --
 
@@ -56,6 +65,15 @@ CREATE TABLE `automode_switch` (
   PRIMARY KEY (`automode_switch_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to record switching on and off the automatic mode. is_on = yes means the system will deliver insulin; is_on = no the device will take no actions. populated on the app and transferred over to the device';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `automode_switch`
+--
+
+LOCK TABLES `automode_switch` WRITE;
+/*!40000 ALTER TABLE `automode_switch` DISABLE KEYS */;
+/*!40000 ALTER TABLE `automode_switch` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `courses`
@@ -77,6 +95,15 @@ CREATE TABLE `courses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `courses`
+--
+
+LOCK TABLES `courses` WRITE;
+/*!40000 ALTER TABLE `courses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `courses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `courses_to_injections`
 --
 
@@ -93,6 +120,15 @@ CREATE TABLE `courses_to_injections` (
   CONSTRAINT `FK_injection_id` FOREIGN KEY (`injection_id`) REFERENCES `injections` (`injection_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='A table to link courses to injections';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `courses_to_injections`
+--
+
+LOCK TABLES `courses_to_injections` WRITE;
+/*!40000 ALTER TABLE `courses_to_injections` DISABLE KEYS */;
+/*!40000 ALTER TABLE `courses_to_injections` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `injections`
@@ -122,6 +158,15 @@ CREATE TABLE `injections` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `injections`
+--
+
+LOCK TABLES `injections` WRITE;
+/*!40000 ALTER TABLE `injections` DISABLE KEYS */;
+/*!40000 ALTER TABLE `injections` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `iob`
 --
 
@@ -137,6 +182,15 @@ CREATE TABLE `iob` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `iob`
+--
+
+LOCK TABLES `iob` WRITE;
+/*!40000 ALTER TABLE `iob` DISABLE KEYS */;
+/*!40000 ALTER TABLE `iob` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `iob_dist`
 --
 
@@ -149,6 +203,16 @@ CREATE TABLE `iob_dist` (
   PRIMARY KEY (`interval`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `iob_dist`
+--
+
+LOCK TABLES `iob_dist` WRITE;
+/*!40000 ALTER TABLE `iob_dist` DISABLE KEYS */;
+INSERT INTO `iob_dist` VALUES (0,100),(5,100),(10,100),(15,100),(20,100),(25,100),(30,100),(35,99.8566),(40,99.4272),(45,98.7142),(50,97.7218),(55,96.4557),(60,94.923),(65,93.1327),(70,91.0949),(75,88.8214),(80,86.3252),(85,83.6206),(90,80.7232),(95,77.6495),(100,74.4172),(105,71.0448),(110,67.5517),(115,63.9579),(120,60.2841),(125,56.5512),(130,52.7808),(135,48.9944),(140,45.2138),(145,41.4607),(150,37.7565),(155,34.1226),(160,30.5797),(165,27.1483),(170,23.8479),(175,20.6976),(180,17.7153),(185,14.9183),(190,12.3225),(195,9.94282),(200,7.79294),(205,5.88518),(210,4.23048),(215,2.83834),(220,1.71674),(225,0.872119),(230,0.309315),(235,0.0315598);
+/*!40000 ALTER TABLE `iob_dist` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `logs`
@@ -172,6 +236,15 @@ CREATE TABLE `logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `logs`
+--
+
+LOCK TABLES `logs` WRITE;
+/*!40000 ALTER TABLE `logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sgvs`
 --
 
@@ -189,6 +262,15 @@ CREATE TABLE `sgvs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `sgvs`
+--
+
+LOCK TABLES `sgvs` WRITE;
+/*!40000 ALTER TABLE `sgvs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sgvs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping routines for database 'cloop'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -201,4 +283,4 @@ CREATE TABLE `sgvs` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-05 22:17:20
+-- Dump completed on 2014-08-07 21:04:13

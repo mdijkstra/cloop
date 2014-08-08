@@ -131,7 +131,7 @@ class InjectionProcess():
             temp_rate = 0
         else:
             temp_rate = (cur_basal_units + injection_units) * (60 / temp_duration)
-        temp_rate = round(temp_rate, 2)
+        temp_rate = round(temp_rate, 1)
 
         temp_rate_thresh = .05
         lower_thresh = self.get_cur_basal_units() - temp_rate_thresh

@@ -228,7 +228,7 @@ class DeviceDBTransData():
         logging.info('Exporting iob: ' + sql_select)
         self.db.execute(sql_select)
         xml = "<iobs>"
-        outer_tag = "iob"
+        outer_tag = "iob_record"
         inner_tags = ["datetime_iob", "iob"]
         for row in self.db.fetchall():
             values = [row[0], row[1].strftime(dateFormat)]

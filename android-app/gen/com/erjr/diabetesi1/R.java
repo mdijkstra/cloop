@@ -35,11 +35,11 @@ public final class R {
         public static final int graph2=0x7f090001;
         public static final int group=0x7f09000a;
         public static final int listCourses=0x7f09000f;
-        public static final int newMealButton=0x7f09000c;
+        public static final int newMealButton=0x7f09000d;
         public static final int numberPicker100s=0x7f090005;
         public static final int numberPicker10s=0x7f090006;
         public static final int numberPicker1s=0x7f090007;
-        public static final int openCGMGraph=0x7f09000d;
+        public static final int openCGMGraph=0x7f09000c;
         public static final int openNight=0x7f09000b;
         public static final int timePicker=0x7f090003;
     }

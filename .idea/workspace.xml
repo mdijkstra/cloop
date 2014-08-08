@@ -31,8 +31,8 @@
       <file leaf-file-name="injection_process.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6847361" vertical-offset="9448" max-vertical-offset="10149">
-              <caret line="584" column="24" selection-start-line="584" selection-start-column="24" selection-end-line="584" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.6847361" vertical-offset="5453" max-vertical-offset="10149">
+              <caret line="349" column="23" selection-start-line="349" selection-start-column="23" selection-end-line="349" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -839,8 +839,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6847361" vertical-offset="9448" max-vertical-offset="10149">
-          <caret line="584" column="24" selection-start-line="584" selection-start-column="24" selection-end-line="584" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.6847361" vertical-offset="5453" max-vertical-offset="10149">
+          <caret line="349" column="23" selection-start-line="349" selection-start-column="23" selection-end-line="349" selection-end-column="23" />
           <folding />
         </state>
       </provider>

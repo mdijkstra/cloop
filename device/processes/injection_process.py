@@ -20,10 +20,10 @@ import cloop_config
 import pump_interface
 # from bluetooth import *
 # from time import sleep
-windowsConfig = True
-if "linux" not in sys.platform:
+if "linux" in sys.platform:
     windowsConfig = False
-
+else:
+    windowsConfig = True
 # use ISO format
 dateFormat = "%Y-%m-%dT%H:%M:%S"
 mySQLDateFormat = "%Y-%m-%d %H:%M:%S"
@@ -133,8 +133,10 @@ class InjectionProcess():
             temp_rate = (cur_basal_units + injection_units) * (60 / temp_duration)
         temp_rate = round(temp_rate, 2)
 
-        temp_rate_thres = .05
-        if self.get_cur_basal_units() - temp_rate_thres < temp_rate < self.get_cur_basal_units() + temp_rate_thres:
+        temp_rate_thresh = .05
+        lower_thresh = self.get_cur_basal_units() - temp_rate_thresh
+        upper_thresh = self.get_cur_basal_units() + temp_rate_thresh
+        if self.get_cur_basal_units() - temp_rate_thresh < temp_rate / (60 / temp_duration) < self.get_cur_basal_units() + temp_rate_thresh:
             logging.info("Temp Rate desired close to current basal => no injection temp_rate: " + str(
                 temp_rate) + " basal: " + str(self.get_cur_basal_units()))
             return None, None

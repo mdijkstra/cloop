@@ -185,8 +185,8 @@ class InjectionProcess():
             self.db_conn.commit()
 
     def add_alert(self, datetime_to_alert, code, alert_type, message):
-        sql_to_insert = "insert into alerts (datetime_to_alert, src, code, type, message, transferred) values \
-                ('" + str(datetime_to_alert) + "','device','" + code + "','" + alert_type + "','" + message + "','no')"
+        sql_to_insert = "insert into alerts (datetime_recorded, datetime_to_alert, src, code, type, message, transferred) values \
+                (now(), '" + str(datetime_to_alert) + "','device','" + code + "','" + alert_type + "','" + message + "','no')"
         logging.info("SQL: " + sql_to_insert)
         self.db.execute(sql_to_insert)
         self.db_conn.commit()
@@ -347,12 +347,14 @@ class InjectionProcess():
         logging.info("SQL: " + sql_get_automode)
         self.db.execute(sql_get_automode)
         rows = self.db.fetchall()
+        if rows is None or len(rows) >= 0:
+            return False
         row = rows[0]
         is_on = row[0]
         if is_on == "yes":
             return True
         else:
-            return False  # if __name__ == '__main__':
+            return False
 
 
 if __name__ == '__main__':

@@ -50,6 +50,8 @@ class PumpInterface():
         pass
 
     def do_bolus(self, injection_units, include_init=None):
+        if include_init is None:
+            include_init = True
         strokes = 10
         command = "sudo python"
         command += " " + self.decoding_dir + "/bin/mm-bolus.py"
@@ -60,6 +62,8 @@ class PumpInterface():
         command += " --strokes "+str(strokes)
         command += " --units "+str(injection_units)
         timeout = 45
+
+        logging.info("INFO: About to execute command : \n\t" + command)
         start = datetime.datetime.now()
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         out, err = process.communicate()
@@ -95,6 +99,7 @@ class PumpInterface():
         command += " query"
         timeout = 30
 
+        logging.info("INFO: About to execute command : \n\t" + command)
         start = datetime.datetime.now()
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         out, err = process.communicate()

@@ -13,7 +13,12 @@ import time
 import logging
 import signal
 import datetime
-windowsConfig = True
+import sys
+
+if "linux" in sys.platform:
+    windowsConfig = False
+else:
+    windowsConfig = True
 # use ISO format
 dateFormat = "%Y-%m-%dT%H:%M:%S"
 
@@ -51,6 +56,13 @@ class CloopConfig():
     def __del__(self):
         self.db.close()
         self.db_conn.close()
+
+    def db_log(self, message_type, code, message):
+        sql = "insert into logs (src_device, datetime_logged, code, type, message) values " \
+              "('device', now(), '" + code + "','" + message_type + "','" + message + "')"
+        logging.info("SQL: " + sql)
+        self.db.execute(sql)
+        self.db_conn.commit()
 
     def get_temp_duration(self):
         return 30

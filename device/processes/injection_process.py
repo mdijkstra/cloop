@@ -137,13 +137,19 @@ class InjectionProcess():
             correction_units = 0
         else:
             correction_units = cur_bg_units - cur_iob_units
-            if all_meal_carbs_absorbed and low_limit_units < cur_bg_units < cur_iob_units:
+            # if still have carbs to absorb and not low and correction would be negative
+            # then do not correct as the carbs to absorb should cover iob
+            if not all_meal_carbs_absorbed and low_limit_units < cur_bg_units < cur_iob_units:
                 correction_units = 0
 
         injection_units = carbs_units + correction_units
 
         if 1 > injection_units > -.5:
             logging.info("Injections units too little to take action : " + str(injection_units))
+            logging.info("Carbs_absorbed ("+str(all_meal_carbs_absorbed)+") cur_bg ("+str(
+                    cur_bg)+"="+str(cur_bg_units)+") carbs_to_cover ("+str(carbs_to_cover)+"="+str(
+                            carbs_units)+") cur_iob_units ("+str(
+                            cur_iob_units)+") correction_units ("+str(correction_units)+")")
             return "none_needed", None, None, None
 
         if injection_units > 0:

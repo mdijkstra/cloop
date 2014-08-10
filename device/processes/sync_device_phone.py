@@ -30,11 +30,11 @@ if "linux" not in sys.platform:
     windowsConfig = False
 
 if windowsConfig:
-    # device config
+    # windows config
     logging.basicConfig(filename=currentDate + '.sync_device_phone.log', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 else:
-    # windows config
+    # device config
     logging.basicConfig(filename='./log/' + currentDate + '.sync_device_phone.log', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 
@@ -187,12 +187,18 @@ class DeviceDBTransData():
 
     def set_export_success(self, table_name):
         logging.info("setting export successful for : "+table_name)
-        sql_update = "update "+table_name+" set transferred = 'yes' where transferred = 'no'"
+        sql_update = "update "+table_name+" set transferred = 'yes' where transferred = 'transferring'"
         self.db.execute(sql_update)
         self.db_conn.commit()
 
     def export_sgvs(self):
-        sql_select_sgvs = "select sgv_id, device_id, datetime_recorded, sgv from sgvs where transferred = 'no'"
+        sql_set_transferring = "update sgvs set transferred = 'transferring' " \
+                               "where transferred = 'transferring' or transferred = 'no' " \
+                               "order by datetime_recorded desc limit 25"
+        self.db.execute(sql_set_transferring)
+        self.db_conn.commit()
+        sql_select_sgvs = "select sgv_id, device_id, datetime_recorded, sgv from sgvs " \
+                          "where transferred = 'transferring'"
         logging.info('Exporting SGValues: ' + sql_select_sgvs)
         self.db.execute(sql_select_sgvs)
         xml = "<sgvs>"
@@ -225,7 +231,12 @@ class DeviceDBTransData():
         return sql
 
     def export_iob(self):
-        sql_select = "select datetime_iob, iob from iob where transferred = 'no'"
+        sql_set_transferring = "update iob set transferred = 'transferring' " \
+                               "where transferred = 'transferring' or transferred = 'no' " \
+                               "order by datetime_iob limit 100"
+        self.db.execute(sql_set_transferring)
+        self.db_conn.commit()
+        sql_select = "select datetime_iob, iob from iob where transferred = 'transferring'"
         logging.info('Exporting iob: ' + sql_select)
         self.db.execute(sql_select)
         xml = "<iobs>"
@@ -239,11 +250,16 @@ class DeviceDBTransData():
         return xml
 
     def export_injections(self):
+        sql_set_transferring = "update injections set transferred = 'transferring' " \
+                               "where transferred = 'transferring' or transferred = 'no' " \
+                               "order by datetime_intended limit 10"
+        self.db.execute(sql_set_transferring)
+        self.db_conn.commit()
         sql_select = "select injection_id, units_intended, units_delivered, \
             temp_rate, datetime_intended, datetime_delivered, \
             cur_iob_units, cur_bg_units, correction_units, carbs_to_cover, carbs_units, \
             cur_basal_units, all_meal_carbs_absorbed, status \
-            from injections where transferred = 'no'"
+            from injections where transferred = 'transferring'"
         logging.info('Exporting injections: ' + sql_select)
         self.db.execute(sql_select)
         xml = "<injections>"
@@ -263,8 +279,13 @@ class DeviceDBTransData():
         return xml
 
     def export_log(self):
+        sql_set_transferring = "update log set transferred = 'transferring' " \
+                               "where transferred = 'transferring' or transferred = 'no' " \
+                               "order by datetime_logged limit 10"
+        self.db.execute(sql_set_transferring)
+        self.db_conn.commit()
         sql_select = "select log_id, src_device, datetime_logged, code, type, message, option1, option2 \
-            from logs where transferred = 'no'"
+            from logs where transferred = 'transferring'"
         logging.info('Exporting log: ' + sql_select)
         self.db.execute(sql_select)
         xml = "<logs>"
@@ -280,9 +301,14 @@ class DeviceDBTransData():
         return xml
 
     def export_alerts(self):
+        sql_set_transferring = "update alerts set transferred = 'transferring' " \
+                               "where transferred = 'transferring' or transferred = 'no' " \
+                               "order by datetime_recorded limit 10"
+        self.db.execute(sql_set_transferring)
+        self.db_conn.commit()
         sql_select = "select alert_id, datetime_recorded, datetime_to_alert, src, \
             code, type, message, value, option1, option2 \
-            from alerts where transferred = 'no'"
+            from alerts where transferred = 'transferring'"
         logging.info('Exporting alerts: ' + sql_select)
         self.db.execute(sql_select)
         xml = "<alerts>"

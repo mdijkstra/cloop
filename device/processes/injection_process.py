@@ -91,7 +91,7 @@ class InjectionProcess():
             self.db_conn.commit()
             self.cloop_config.db_log("FAIL", "injection_process",
                                      "Unable to execute " + injection_type + " injection #" + str(
-                                         injection_id) + " of " + str(injection_units) + " units")
+                                     injection_id) + " of " + str(injection_units) + "u temp:"+str(temp_rate))
         else:
             # successful: update the injection, create alerts, log in db
             sql_success_injection = "update injections set status = 'successful', transferred = 'no', \
@@ -115,7 +115,7 @@ class InjectionProcess():
                 self.add_alert(now + datetime.timedelta(minutes=35), "process_injection", "alert", "Try to eat " +
                                str(carbs) + "g of carbs for injection " + str(injection_id) + " in 5 minutes")
             self.cloop_config.db_log("SUCCESS", "injection_process", "Successfully able to execute " + injection_type
-                                     + " injection #" + str(injection_id) + " of " + str(injection_units) + " units")
+                            + " injection #" + str(injection_id) + " of " + str(injection_units) + "u temp:"+str(temp_rate))
 
     # return the amount insulin that should be injected
     # return null if no injection needed

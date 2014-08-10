@@ -5,8 +5,10 @@ package com.erjr.cloop.entities;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.diabetesi1.Util;
 
 /**
@@ -23,12 +25,12 @@ public class SGV {
 	public static final String COL_IN_CLOUD = "in_cloud";
 	public static final String TAG = "SGV";
 
-	public static final String TABLE_CREATE = "create table "
-			+ TABLE_SGVS + "(" + COL_SGV_ID
-			+ " integer primary key, " + COL_DEVICE_ID + " integer not null, "
-			+ COL_DATETIME_RECORDED + " text not null, " + COL_SGV
-			+ " int not null, "+COL_IN_CLOUD+" text not null);";
-	
+	public static final String TABLE_CREATE = "create table " + TABLE_SGVS
+			+ "(" + COL_SGV_ID + " integer primary key, " + COL_DEVICE_ID
+			+ " integer not null, " + COL_DATETIME_RECORDED
+			+ " text not null, " + COL_SGV + " int not null, " + COL_IN_CLOUD
+			+ " text not null);";
+
 	public static final String[] allColumns = { COL_SGV_ID, COL_DEVICE_ID,
 			COL_DATETIME_RECORDED, COL_SGV, COL_IN_CLOUD };
 
@@ -39,28 +41,25 @@ public class SGV {
 	private String inCloud = "no";
 
 	public void setFromXML(String xml) {
-		String sgv_id_str = Util.getValueFromXml(xml,
-				COL_SGV_ID);
-		String device_id_str = Util
-				.getValueFromXml(xml, COL_DEVICE_ID);
-		
-		Log.i(TAG, "sgv_id: "+sgv_id_str + " device_id: "+device_id_str);
-		
-		
-		this.sgvID = new Integer(sgv_id_str);
-		this.deviceID = new Integer(device_id_str);
+		String sgv_id_str = Util.getValueFromXml(xml, COL_SGV_ID);
+		String device_id_str = Util.getValueFromXml(xml, COL_DEVICE_ID);
+
+		Log.i(TAG, "sgv_id: " + sgv_id_str + " device_id: " + device_id_str);
+
+		this.sgvID = Util.nullOrInteger(sgv_id_str);
+		this.deviceID = Util.nullOrInteger(device_id_str);
 		this.datetimeRecorded = Util.convertStringToDate(Util.getValueFromXml(
 				xml, COL_DATETIME_RECORDED));
-		this.sgv = new Integer(Util.getValueFromXml(xml, COL_SGV));
+		this.sgv = Util.nullOrInteger(Util.getValueFromXml(xml, COL_SGV));
 		this.inCloud = "no";
 	}
 
 	public String getSQLToSave() {
-		return "INSERT OR REPLACE INTO " + TABLE_SGVS + " ("
-				+ COL_SGV_ID + ", " + COL_DEVICE_ID + ", "
-				+ COL_DATETIME_RECORDED + ", " + COL_SGV + ","+COL_IN_CLOUD+") values ("
-				+ sgvID + ", " + deviceID + ", '" + Util.convertDateToString(datetimeRecorded) + "', "
-				+ sgv + ",'"+inCloud+"')";
+		return "INSERT OR REPLACE INTO " + TABLE_SGVS + " (" + COL_SGV_ID
+				+ ", " + COL_DEVICE_ID + ", " + COL_DATETIME_RECORDED + ", "
+				+ COL_SGV + "," + COL_IN_CLOUD + ") values (" + sgvID + ", "
+				+ deviceID + ", '" + Util.convertDateToString(datetimeRecorded)
+				+ "', " + sgv + ",'" + inCloud + "')";
 	}
 
 	public String getDBUpdateSql() {
@@ -138,5 +137,19 @@ public class SGV {
 
 	public void setInCloud(String inCloud) {
 		this.inCloud = inCloud;
+	}
+
+	public static void importXml(String fullSGVXml, Context context) {
+		if (fullSGVXml == null || fullSGVXml.isEmpty()) {
+			return;
+		}
+		String[] sgvsXmlAsArray = Util.getValuesFromXml(fullSGVXml,
+				SGV.ROW_DESC);
+		SGVDataSource SGVDS = new SGVDataSource(context);
+		for (String sgvXml : sgvsXmlAsArray) {
+			SGV sgv = new SGV();
+			sgv.setFromXML(sgvXml);
+			SGVDS.saveSGV(sgv);
+		}
 	}
 }

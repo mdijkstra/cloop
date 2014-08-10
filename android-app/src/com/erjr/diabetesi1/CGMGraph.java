@@ -33,42 +33,35 @@ public class CGMGraph extends Activity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 
-		// init example series data
-		GraphViewSeries exampleSeries = new GraphViewSeries(
-				new GraphViewData[] { new GraphViewData(1, 2.0d),
-						new GraphViewData(2, 1.5d), new GraphViewData(3, 2.5d),
-						new GraphViewData(4, 1.0d) });
-
+		// get SGV data and add to series
 		SGVDataSource SGVDS = new SGVDataSource(getBaseContext());
 		SGV[] sgvs = SGVDS.getRecentSGVs(24);
 		GraphViewData[] cgmTodayData = new GraphViewData[sgvs.length];
 		for (int i = 0; i < sgvs.length; i++) {
-			cgmTodayData[i] = new GraphViewData(sgvs[i].getDatetimeRecorded().getTime(), sgvs[i].getSg());
+			cgmTodayData[i] = new GraphViewData(sgvs[i].getDatetimeRecorded()
+					.getTime(), sgvs[i].getSg());
 		}
 		GraphViewSeries cgmTodaySeries = new GraphViewSeries(cgmTodayData);
 
-//		GraphView graphView = new LineGraphView(this // context
-//				, "Today's CGM Data" // heading
-//		);
-		
-		final java.text.DateFormat dateTimeFormatter = DateFormat.getTimeFormat(getBaseContext());
+		final java.text.DateFormat dateTimeFormatter = DateFormat
+				.getTimeFormat(getBaseContext());
 		LineGraphView graphView = new LineGraphView(this, "Today's CGM Data") {
 			@Override
 			protected String formatLabel(double value, boolean isValueX) {
 				if (isValueX) {
-		            // transform number to time
-//		            return dateTimeFormatter.format(new Date((long) value*1000));
-//		            return Util.convertDateToPrettyString(new Date((long) value*1000));
-		            return Util.convertDateToPrettyString(new Date((long) value));
-		        } else {
-		            return super.formatLabel(value, isValueX);
-		        }
-		    }
+					// transform number to time for x-axis display
+					return Util
+							.convertDateToPrettyString(new Date((long) value));
+				} else {
+					return super.formatLabel(value, isValueX);
+				}
+			}
 		};
-		
-		
-		// graphView.addSeries(exampleSeries); // data
+
+		// add lines
 		graphView.addSeries(cgmTodaySeries);
+
+		// set other properties
 		graphView.setScrollable(true);
 		graphView.setScalable(true);
 		graphView.setViewPort(10, 1000000000);
@@ -77,7 +70,7 @@ public class CGMGraph extends Activity {
 		graphView.setManualYAxis(true);
 		graphView.getGraphViewStyle().setVerticalLabelsColor(Color.RED);
 		graphView.getGraphViewStyle().setHorizontalLabelsColor(Color.BLUE);
-
+		
 		LinearLayout layout = (LinearLayout) findViewById(R.id.graph2);
 		layout.addView(graphView);
 	}

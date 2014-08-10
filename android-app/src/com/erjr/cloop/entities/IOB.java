@@ -23,7 +23,9 @@ public class IOB {
 	private Float iob;
 
 	public static void importXml(String iobXml, Context context) {
-//		iobXml = Util.getValueFromXml(iobXml, "iobs");
+		if (iobXml == null || iobXml.length() <= 0) {
+			return;
+		}
 		String[] iobXmls = Util.getValuesFromXml(iobXml, ROW_DESC);
 		IOBDataSource IOBDS = new IOBDataSource(context);
 		for (String iob : iobXmls) {
@@ -42,7 +44,7 @@ public class IOB {
 	public void setFromXml(String xml) {
 		datetimeIOB = Util.convertStringToDate(Util.getValueFromXml(xml,
 				COL_DATETIME_IOB));
-		iob = new Float(Util.getValueFromXml(xml, COL_IOB));
+		iob = Util.nullOrFloat(Util.getValueFromXml(xml, COL_IOB));
 	}
 
 	public String toString() {

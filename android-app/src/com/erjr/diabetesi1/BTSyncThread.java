@@ -130,27 +130,17 @@ public class BTSyncThread extends Thread {
 		Log.i(TAG, "Processing Data Recieved");
 		// process sgv data
 		String fullSGVXml = Util.getValueFromXml(dataReceived, SGV.TABLE_SGVS);
-		if (fullSGVXml == null || fullSGVXml.isEmpty()) {
-			return;
-		}
-		String[] sgvsXmlAsArray = Util.getValuesFromXml(fullSGVXml,
-				SGV.ROW_DESC);
-		SGVDataSource SGVDS = new SGVDataSource(context);
-		for (String sgvXml : sgvsXmlAsArray) {
-			SGV sgv = new SGV();
-			sgv.setFromXML(sgvXml);
-			SGVDS.saveSGV(sgv);
-		}
-		
-		// process iob data
-		String iobXml = Util.getValueFromXml(dataReceived, IOB.TABLE_IOB);
-		IOB.importXml(iobXml, context);
+		String iobXml = Util.getValueFromXml(dataReceived, IOB.TABLE_IOB+"s");
 		String injectionsXml = Util.getValueFromXml(dataReceived, Injection.TABLE_INJECTIONS);
-		Injection.importXml(injectionsXml, context);
 		String logsXml = Util.getValueFromXml(dataReceived, LogRecord.TABLE_LOG);
-		LogRecord.importXml(logsXml, context);
 		String alertsXml = Util.getValueFromXml(dataReceived, Alert.TABLE_ALERT);
+		
+		SGV.importXml(fullSGVXml, context);
+		IOB.importXml(iobXml, context);
+		Injection.importXml(injectionsXml, context);
+		LogRecord.importXml(logsXml, context);
 		Alert.importXml(alertsXml, context);
+		
 		Log.i(TAG, "Done processing Received data");
 	}
 

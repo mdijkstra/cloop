@@ -59,7 +59,9 @@ public class Injection {
 	private String status;
 
 	public static void importXml(String injXml, Context context) {
-		injXml = Util.getValueFromXml(injXml, "iobs");
+		if (injXml == null || injXml.length() <= 0) {
+			return;
+		}
 		String[] injXmls = Util.getValuesFromXml(injXml, ROW_DESC);
 		InjectionDataSource InjDS = new InjectionDataSource(context);
 		for (String iob : injXmls) {
@@ -84,26 +86,26 @@ public class Injection {
 				+ Util.convertDateToString(datetimeDelivered) + "', "
 				+ curIobUnits + ", " + curBgUnits + ", " + correctionUnits
 				+ ", " + carbsToCover + ", " + carbsUnits + ", "
-				+ curBasalUnits + ", " + allMealCarbsAbsorbed + ", '" + status
+				+ curBasalUnits + ", " + (allMealCarbsAbsorbed ? 1 : 0) + ", '" + status
 				+ "')";
 	}
 
 	public void setFromXml(String xml) {
-		injectionId = new Integer(Util.getValueFromXml(xml, "injection_id"));
-		unitsIntended = new Float(Util.getValueFromXml(xml, "units_intended"));
-		unitsDelivered = new Float(Util.getValueFromXml(xml, "units_delivered"));
-		tempRate = new Float(Util.getValueFromXml(xml, "temp_rate"));
+		injectionId = Util.nullOrInteger(Util.getValueFromXml(xml, "injection_id"));
+		unitsIntended = Util.nullOrFloat(Util.getValueFromXml(xml, "units_intended"));
+		unitsDelivered = Util.nullOrFloat(Util.getValueFromXml(xml, "units_delivered"));
+		tempRate = Util.nullOrFloat(Util.getValueFromXml(xml, "temp_rate"));
 		datetimeIntended = Util.convertStringToDate(Util.getValueFromXml(xml,
 				"datetime_intended"));
 		datetimeDelivered = Util.convertStringToDate(Util.getValueFromXml(xml,
 				"datetime_delivered"));
-		curIobUnits = new Float(Util.getValueFromXml(xml, "cur_iob_units"));
-		curBgUnits = new Float(Util.getValueFromXml(xml, "cur_bg_units"));
-		correctionUnits = new Float(Util.getValueFromXml(xml,
+		curIobUnits = Util.nullOrFloat(Util.getValueFromXml(xml, "cur_iob_units"));
+		curBgUnits = Util.nullOrFloat(Util.getValueFromXml(xml, "cur_bg_units"));
+		correctionUnits = Util.nullOrFloat(Util.getValueFromXml(xml,
 				"correction_units"));
-		carbsToCover = new Integer(Util.getValueFromXml(xml, "carbs_to_cover"));
-		carbsUnits = new Float(Util.getValueFromXml(xml, "carbs_units"));
-		curBasalUnits = new Float(Util.getValueFromXml(xml, "cur_basal_units"));
+		carbsToCover = Util.nullOrInteger(Util.getValueFromXml(xml, "carbs_to_cover"));
+		carbsUnits = Util.nullOrFloat(Util.getValueFromXml(xml, "carbs_units"));
+		curBasalUnits = Util.nullOrFloat(Util.getValueFromXml(xml, "cur_basal_units"));
 		allMealCarbsAbsorbed = Util.getValueFromXml(xml,
 				"all_meal_carbs_absorbed").equalsIgnoreCase("true") ? true
 				: false;

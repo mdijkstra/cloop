@@ -10,8 +10,8 @@ import com.erjr.diabetesi1.Util;
 
 public class LogRecord {
 
-	public static final String TABLE_LOG = "log";
-	public static final String ROW_DESC = "log_record";
+	public static final String TABLE_LOG = "logs";
+	public static final String ROW_DESC = "log";
 	public static final String COL_LOG_ID = "log_id";
 	public static final String COL_SRC_DEVICE = "src_device";
 	public static final String COL_DATETIME_LOGGED = "datetime_logged";
@@ -45,7 +45,7 @@ public class LogRecord {
 			return;
 		}
 		String[] logXmls = Util.getValuesFromXml(logXml, ROW_DESC);
-		LogDataSource LogDS= new LogDataSource(context);
+		LogDataSource LogDS = new LogDataSource(context);
 		for (String rec : logXmls) {
 			LogRecord l = new LogRecord();
 			l.setFromXml(rec);
@@ -58,13 +58,13 @@ public class LogRecord {
 				+ COL_SRC_DEVICE + ", " + COL_DATETIME_LOGGED + ", " + COL_CODE
 				+ ", " + COL_TYPE + ", " + COL_MESSAGE + ", " + COL_OPTION1
 				+ ", " + COL_OPTION2 + ") values (" + logId + ", '" + srcDevice
-				+ "', '" + Util.convertDateToString(datetimeLogged) + "', '" + code
-				+ "', '" + type + "', '" + message + "', '" + option1 + "', '"
-				+ option2 + "')";
+				+ "', '" + Util.convertDateToString(datetimeLogged) + "', '"
+				+ code + "', '" + type + "', '" + message + "', '" + option1
+				+ "', '" + option2 + "')";
 	}
 
 	public void setFromXml(String xml) {
-		logId = new Integer(Util.getValueFromXml(xml, "log_id"));
+		logId = Util.nullOrInteger(Util.getValueFromXml(xml, "log_id"));
 		srcDevice = Util.getValueFromXml(xml, "src_device");
 		datetimeLogged = Util.convertStringToDate(Util.getValueFromXml(xml,
 				"datetime_logged"));
@@ -77,9 +77,10 @@ public class LogRecord {
 	}
 
 	public String toString() {
-		return "Log #" + logId + " at "
-				+ Util.convertDateToPrettyString(datetimeLogged) + " from "
-				+ srcDevice + ":" + code + " says: " + message;
+		return (!type.equalsIgnoreCase("success") ? "FAIL " : "")
+				+ code.toUpperCase() + " #" + logId + " "
+				+ Util.convertDateToPrettyString(datetimeLogged) + " : "
+				+ message;
 	}
 
 	/**
@@ -90,7 +91,8 @@ public class LogRecord {
 	}
 
 	/**
-	 * @param logId the logId to set
+	 * @param logId
+	 *            the logId to set
 	 */
 	public void setLogId(Integer logId) {
 		this.logId = logId;
@@ -104,7 +106,8 @@ public class LogRecord {
 	}
 
 	/**
-	 * @param srcDevice the srcDevice to set
+	 * @param srcDevice
+	 *            the srcDevice to set
 	 */
 	public void setSrcDevice(String srcDevice) {
 		this.srcDevice = srcDevice;
@@ -118,7 +121,8 @@ public class LogRecord {
 	}
 
 	/**
-	 * @param datetimeLogged the datetimeLogged to set
+	 * @param datetimeLogged
+	 *            the datetimeLogged to set
 	 */
 	public void setDatetimeLogged(Date datetimeLogged) {
 		this.datetimeLogged = datetimeLogged;
@@ -132,7 +136,8 @@ public class LogRecord {
 	}
 
 	/**
-	 * @param code the code to set
+	 * @param code
+	 *            the code to set
 	 */
 	public void setCode(String code) {
 		this.code = code;
@@ -146,7 +151,8 @@ public class LogRecord {
 	}
 
 	/**
-	 * @param type the type to set
+	 * @param type
+	 *            the type to set
 	 */
 	public void setType(String type) {
 		this.type = type;
@@ -160,7 +166,8 @@ public class LogRecord {
 	}
 
 	/**
-	 * @param message the message to set
+	 * @param message
+	 *            the message to set
 	 */
 	public void setMessage(String message) {
 		this.message = message;
@@ -174,7 +181,8 @@ public class LogRecord {
 	}
 
 	/**
-	 * @param option1 the option1 to set
+	 * @param option1
+	 *            the option1 to set
 	 */
 	public void setOption1(String option1) {
 		this.option1 = option1;
@@ -188,7 +196,8 @@ public class LogRecord {
 	}
 
 	/**
-	 * @param option2 the option2 to set
+	 * @param option2
+	 *            the option2 to set
 	 */
 	public void setOption2(String option2) {
 		this.option2 = option2;

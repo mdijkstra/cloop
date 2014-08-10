@@ -71,7 +71,7 @@ public class Alert {
 	}
 
 	public void setFromXml(String xml) {
-		alertId = new Integer(Util.getValueFromXml(xml, "alert_id"));
+		alertId = Util.nullOrInteger(Util.getValueFromXml(xml, "alert_id"));
 		datetimeRecorded = Util.convertStringToDate(Util.getValueFromXml(xml, "datetime_recorded"));
 		datetimeToAlert = Util.convertStringToDate(Util.getValueFromXml(xml, "datetime_to_alert"));
 		src = Util.getValueFromXml(xml, "src");

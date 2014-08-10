@@ -155,7 +155,7 @@ class DeviceDBTransData():
         self.set_export_success("sgvs")
         self.set_export_success("iob")
         self.set_export_success("injections")
-        self.set_export_success("log")
+        self.set_export_success("logs")
         self.set_export_success("alerts")
 
     def import_data(self, xml):
@@ -194,7 +194,7 @@ class DeviceDBTransData():
     def export_sgvs(self):
         sql_set_transferring = "update sgvs set transferred = 'transferring' " \
                                "where transferred = 'transferring' or transferred = 'no' " \
-                               "order by datetime_recorded desc limit 25"
+                               "order by datetime_recorded desc limit 10"
         self.db.execute(sql_set_transferring)
         self.db_conn.commit()
         sql_select_sgvs = "select sgv_id, device_id, datetime_recorded, sgv from sgvs " \
@@ -233,7 +233,7 @@ class DeviceDBTransData():
     def export_iob(self):
         sql_set_transferring = "update iob set transferred = 'transferring' " \
                                "where transferred = 'transferring' or transferred = 'no' " \
-                               "order by datetime_iob limit 100"
+                               "order by datetime_iob limit 10"
         self.db.execute(sql_set_transferring)
         self.db_conn.commit()
         sql_select = "select datetime_iob, iob from iob where transferred = 'transferring'"
@@ -279,7 +279,7 @@ class DeviceDBTransData():
         return xml
 
     def export_log(self):
-        sql_set_transferring = "update log set transferred = 'transferring' " \
+        sql_set_transferring = "update logs set transferred = 'transferring' " \
                                "where transferred = 'transferring' or transferred = 'no' " \
                                "order by datetime_logged limit 10"
         self.db.execute(sql_set_transferring)
@@ -338,7 +338,7 @@ db_trans.import_courses("<courses></courses>")
 
 if __name__ == '__main__':
     cloop_config = CloopConfig()
-    cloop_config.db_log("SUCCESS", "sync_device_phone", "Going to sync phone-device at "+str(now))
+#    cloop_config.db_log("SUCCESS", "sync_device_phone", "Going to sync phone-device at "+str(now))
     logging.info('Going to try to sync device db and phone db...')
     db_trans = DeviceDBTransData()
     data_to_send = db_trans.get_data_to_send()

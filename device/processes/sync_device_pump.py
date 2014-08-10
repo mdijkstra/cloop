@@ -18,7 +18,7 @@ import signal
 import subprocess
 #from bluetooth import *
 #from time import sleep
-#from device.processes.cloop_config import CloopConfig
+from cloop_config import CloopConfig
 
 dateFormat = "%Y-%m-%dT%H:%M:%S"
 mySQLDateFormat = "%Y-%m-%d %H:%M:%S"
@@ -26,7 +26,7 @@ skip_commands = False  # debug tool to skip cli commands
 
 now = datetime.datetime.now()
 currentDate = str(now.year) + "-" + str(now.month) + "-" + str(now.day)
-logging.basicConfig(filename='./log/' + currentDate + '.log', level=logging.DEBUG,
+logging.basicConfig(filename='./log/' + currentDate + '-sync-pump.log', level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s ')
 
 
@@ -378,14 +378,14 @@ class DownloadPumpData():
 if __name__ == '__main__':
     # downlaod the data from the pump
     # parse it to get the latest sgv
-    #cloop_config = CloopConfig()
-    #cloop_config.db_log("SUCCESS", "sync_device_pump", "Going to sync phone-pump at "+str(now))
+    cloop_config = CloopConfig()
+    cloop_config.db_log("SUCCESS", "sync_device_pump", "Going to sync phone-pump at "+str(now))
     logging.info("NEW SYNC...")
     download_pump = DownloadPumpData()
     file_output = download_pump.download_cgm_data()
     cgm_xml = download_pump.cgm_data_file_to_sgv_xml(file_output)
     if cgm_xml == 'ERRORFileDoesNotExist':
-       # cloop_config.db_log("FAIL", "sync_device_pump", "Failed to sync phone-pump at "+str(now))
+        cloop_config.db_log("FAIL", "sync_device_pump", "Failed to sync phone-pump at "+str(now))
         logging.error('Could not complete sync\n\n\n\n')
     else:
         #  last_sgv_xml = download_pump.get_latest_sgv()
@@ -393,7 +393,7 @@ if __name__ == '__main__':
         db_trans = PumpDeviceDBTrans()
         #  db_trans.import_sgv(latest_sgv_xml)
         db_trans.import_sgvs(cgm_xml)
-        #cloop_config.db_log("SUCCESS", "sync_device_pump", "Successfully synced phone-pump sgvs at "+str(now))
+        cloop_config.db_log("SUCCESS", "sync_device_pump", "Successfully synced phone-pump sgvs at "+str(now))
         logging.info("DONE WITH SYNC.\n\n\n\n")
 
 

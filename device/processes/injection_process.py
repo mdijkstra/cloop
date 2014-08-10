@@ -32,12 +32,12 @@ now = datetime.datetime.now()
 currentDate = str(now.year) + "-" + str(now.month) + "-" + str(now.day)
 
 if windowsConfig:
-    # device config
-    logging.basicConfig(filename='./log/' + currentDate + '-injection_process.log', level=logging.DEBUG,
-                        format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
-else:
     # windows config
     logging.basicConfig(filename=currentDate + '-injection_process.log', level=logging.DEBUG,
+                        format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
+else:
+    # device config
+    logging.basicConfig(filename="./log/"+currentDate + '-injection_process.log', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 
 
@@ -382,7 +382,7 @@ class InjectionProcess():
         logging.info("SQL: " + sql_get_automode)
         self.db.execute(sql_get_automode)
         rows = self.db.fetchall()
-        if rows is None or len(rows) <= 0:
+        if rows is None:
             return False
         row = rows[0]
         is_on = row[0]

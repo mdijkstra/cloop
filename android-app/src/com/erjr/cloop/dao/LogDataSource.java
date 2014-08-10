@@ -43,15 +43,18 @@ public class LogDataSource {
 		c.add(Calendar.HOUR, -24);
 		return getLogsByDateRange(c.getTime(), Util.getCurrentDateTime());
 	}
-	
+
 	public List<LogRecord> getLogsByDateRange(Date startTime, Date endTime) {
 		List<LogRecord> logs = new ArrayList<LogRecord>();
 
 		String start = Util.convertDateToString(startTime);
 		String end = Util.convertDateToString(endTime);
-		String restriction = LogRecord.COL_DATETIME_LOGGED +"> '"+start+"' AND "+LogRecord.COL_DATETIME_LOGGED+" < '"+end+"' ";
+		String restriction = LogRecord.COL_DATETIME_LOGGED + "> '" + start
+				+ "' AND " + LogRecord.COL_DATETIME_LOGGED + " < '" + end
+				+ "' ";
 		Cursor cursor = database.query(LogRecord.TABLE_LOG,
-				LogRecord.allColumns, restriction, null, null, LogRecord.COL_DATETIME_LOGGED+" DESC", null);
+				LogRecord.allColumns, restriction, null, null, null,
+				LogRecord.COL_DATETIME_LOGGED + " DESC");
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {

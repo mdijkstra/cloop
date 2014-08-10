@@ -205,7 +205,7 @@ class DeviceDBTransData():
         outer_tag = "sgv_record"
         inner_tags = ["sgv_id", "device_id", "datetime_recorded", "sgv"]
         for row in self.db.fetchall():
-            values = [row[0], row[1], row[2].strftime(dateFormat), row[3]]
+            values = [row[0], row[1], self.date_or_null(row[2]), row[3]]
             xml += build_xml_record(outer_tag, inner_tags, values)
         xml += "</sgvs>"
         logging.info('returning the following xml from export_sgvs:' + xml)
@@ -243,7 +243,7 @@ class DeviceDBTransData():
         outer_tag = "iob_record"
         inner_tags = ["datetime_iob", "iob"]
         for row in self.db.fetchall():
-            values = [row[0].strftime(dateFormat), row[1]]
+            values = [self.date_or_null(row[0]), row[1]]
             xml += build_xml_record(outer_tag, inner_tags, values)
         xml += "</iobs>"
         logging.info('returning the following xml from export_iob:' + xml)
@@ -270,7 +270,7 @@ class DeviceDBTransData():
                       "cur_basal_units", "all_meal_carbs_absorbed", "status"]
         for row in self.db.fetchall():
             values = [row[0], row[1], row[2],
-                      row[3], row[4].strftime(dateFormat), row[5].strftime(dateFormat),
+                      row[3], self.date_or_null(row[4]), self.date_or_null(row[5]),
                       row[6], row[7], row[8], row[9], row[10],
                       row[11], row[12], row[13]]
             xml += build_xml_record(outer_tag, inner_tags, values)
@@ -293,7 +293,7 @@ class DeviceDBTransData():
         inner_tags = ["log_id", "src_device", "datetime_logged", "code",
                       "type", "message", "option1", "option2"]
         for row in self.db.fetchall():
-            values = [row[0], row[1], row[2].strftime(dateFormat), row[3],
+            values = [row[0], row[1], self.date_or_null(row[2]), row[3],
                       row[4], row[5], row[6], row[7]]
             xml += build_xml_record(outer_tag, inner_tags, values)
         xml += "</logs>"
@@ -316,12 +316,18 @@ class DeviceDBTransData():
         inner_tags = ["alert_id", "datetime_recorded", "datetime_to_alert", "src",
                       "code", "type", "message", "value", "option1", "option2"]
         for row in self.db.fetchall():
-            values = [row[0], row[1].strftime(dateFormat), row[2].strftime(dateFormat), row[3],
+            values = [row[0], self.date_or_null(row[1]), self.date_or_null(row[2]), row[3],
                       row[4], row[5], row[6], row[7], row[8], row[9]]
             xml += build_xml_record(outer_tag, inner_tags, values)
         xml += "</alerts>"
         logging.info('returning the following xml from export_alerts:' + xml)
         return xml
+
+    def date_or_null(self, dt):
+        if dt is None:
+            return "null"
+        else:
+            return dt.strftime(dateFormat)
 
 
 '''

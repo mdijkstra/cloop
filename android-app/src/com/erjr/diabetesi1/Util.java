@@ -54,6 +54,9 @@ public class Util {
 	public static String convertDateToString(Date date) {
 		// Create an instance of SimpleDateFormat used for formatting
 		// the string representation of date (month/day/year)
+		if(date == null) {
+			return "null";
+		}
 		DateFormat df = new SimpleDateFormat(dateFormat);
 
 		// Get the date today using Calendar object.

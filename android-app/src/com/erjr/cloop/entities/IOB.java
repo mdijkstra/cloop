@@ -23,7 +23,7 @@ public class IOB {
 	private Float iob;
 
 	public static void importXml(String iobXml, Context context) {
-		iobXml = Util.getValueFromXml(iobXml, "iobs");
+//		iobXml = Util.getValueFromXml(iobXml, "iobs");
 		String[] iobXmls = Util.getValuesFromXml(iobXml, ROW_DESC);
 		IOBDataSource IOBDS = new IOBDataSource(context);
 		for (String iob : iobXmls) {

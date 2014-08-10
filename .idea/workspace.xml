@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="61f87d7f-364d-4e7e-afb6-293e322db31d" name="Default" comment="Add basic graph">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/injection_process.py" afterPath="$PROJECT_DIR$/device/processes/injection_process.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/Closed Loop.apk" afterPath="$PROJECT_DIR$/android-app/bin/Closed Loop.apk" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes.dex" afterPath="$PROJECT_DIR$/android-app/bin/classes.dex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/resources.ap_" afterPath="$PROJECT_DIR$/android-app/bin/resources.ap_" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/LogDataSource.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/LogDataSource.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/sync_device_phone.py" afterPath="$PROJECT_DIR$/device/processes/sync_device_phone.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -33,8 +36,8 @@
       <file leaf-file-name="sync_device_phone.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/device/processes/sync_device_phone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.45898235" vertical-offset="0" max-vertical-offset="5933">
-              <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.47040498" vertical-offset="5072" max-vertical-offset="6035">
+              <caret line="331" column="0" selection-start-line="331" selection-start-column="0" selection-end-line="331" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -1021,8 +1024,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/device/processes/sync_device_phone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.45898235" vertical-offset="0" max-vertical-offset="5933">
-          <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.47040498" vertical-offset="5072" max-vertical-offset="6035">
+          <caret line="331" column="0" selection-start-line="331" selection-start-column="0" selection-end-line="331" selection-end-column="0" />
           <folding />
         </state>
       </provider>

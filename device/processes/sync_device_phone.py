@@ -115,7 +115,7 @@ def get_values_from_xml(full_xml, tag):
 
 def build_xml_record(outer_tag, inner_tags, values):
     xml = "<" + outer_tag + ">"
-    for i in range(0, len(outer_tag), 1):
+    for i in range(0, len(inner_tags), 1):
         xml += "<" + inner_tags[i] + ">" + str(values[i]) + "</" + inner_tags[i] + ">"
     return xml + "</" + outer_tag + ">"
 
@@ -232,7 +232,7 @@ class DeviceDBTransData():
         outer_tag = "iob_record"
         inner_tags = ["datetime_iob", "iob"]
         for row in self.db.fetchall():
-            values = [row[0], row[1].strftime(dateFormat)]
+            values = [row[0].strftime(dateFormat), row[1]]
             xml += build_xml_record(outer_tag, inner_tags, values)
         xml += "</iobs>"
         logging.info('returning the following xml from export_iob:' + xml)
@@ -264,7 +264,7 @@ class DeviceDBTransData():
 
     def export_log(self):
         sql_select = "select log_id, src_device, datetime_logged, code, type, message, option1, option2 \
-            from log where transferred = 'no'"
+            from logs where transferred = 'no'"
         logging.info('Exporting log: ' + sql_select)
         self.db.execute(sql_select)
         xml = "<logs>"

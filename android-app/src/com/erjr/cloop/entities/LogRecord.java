@@ -82,4 +82,116 @@ public class LogRecord {
 				+ srcDevice + ":" + code + " says: " + message;
 	}
 
+	/**
+	 * @return the logId
+	 */
+	public Integer getLogId() {
+		return logId;
+	}
+
+	/**
+	 * @param logId the logId to set
+	 */
+	public void setLogId(Integer logId) {
+		this.logId = logId;
+	}
+
+	/**
+	 * @return the srcDevice
+	 */
+	public String getSrcDevice() {
+		return srcDevice;
+	}
+
+	/**
+	 * @param srcDevice the srcDevice to set
+	 */
+	public void setSrcDevice(String srcDevice) {
+		this.srcDevice = srcDevice;
+	}
+
+	/**
+	 * @return the datetimeLogged
+	 */
+	public Date getDatetimeLogged() {
+		return datetimeLogged;
+	}
+
+	/**
+	 * @param datetimeLogged the datetimeLogged to set
+	 */
+	public void setDatetimeLogged(Date datetimeLogged) {
+		this.datetimeLogged = datetimeLogged;
+	}
+
+	/**
+	 * @return the code
+	 */
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * @return the option1
+	 */
+	public String getOption1() {
+		return option1;
+	}
+
+	/**
+	 * @param option1 the option1 to set
+	 */
+	public void setOption1(String option1) {
+		this.option1 = option1;
+	}
+
+	/**
+	 * @return the option2
+	 */
+	public String getOption2() {
+		return option2;
+	}
+
+	/**
+	 * @param option2 the option2 to set
+	 */
+	public void setOption2(String option2) {
+		this.option2 = option2;
+	}
+
 }

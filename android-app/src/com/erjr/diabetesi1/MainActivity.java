@@ -2,9 +2,6 @@ package com.erjr.diabetesi1;
 
 import java.util.List;
 
-import com.erjr.cloop.dao.CoursesDataSource;
-import com.erjr.cloop.entities.Course;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -19,7 +16,10 @@ import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.erjr.cloop.dao.CoursesDataSource;
+import com.erjr.cloop.dao.LogDataSource;
+import com.erjr.cloop.entities.LogRecord;
 
 public class MainActivity extends Activity {
 	private static final String TAG = "MAINACTIVITY";
@@ -102,10 +102,15 @@ public class MainActivity extends Activity {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1);
 
-		CoursesDataSource coursesDS = new CoursesDataSource(getBaseContext());
-		List<Course> courses = coursesDS.getAllCourses();
-		for (int i = 0; i < courses.size(); i++) {
-			adapter.add(courses.get(i).toString());
+//		CoursesDataSource coursesDS = new CoursesDataSource(getBaseContext());
+//		List<Course> courses = coursesDS.getAllCourses();
+//		for (int i = 0; i < courses.size(); i++) {
+//			adapter.add(courses.get(i).toString());
+//		}
+		LogDataSource logDS = new LogDataSource(getBaseContext());
+		List<LogRecord> logs = logDS.getTodaysLogs();
+		for(LogRecord log : logs) {
+			adapter.add(log.toString());
 		}
 		list.setAdapter(adapter);
 
@@ -142,10 +147,6 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, AddCourseActivity.class);
 		startActivity(intent);
 	}
-
-	// public void testManageBGL(View view) {
-	// return;
-	// }
 
 	@Override
 	protected void onResume() {

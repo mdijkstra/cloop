@@ -33,7 +33,7 @@ select * from iob;
 select count(*) from iob;
 delete from iob where iob = 1000;
 
-
+insert into automode_switch (automode_switch_id, datetime_recorded, is_on) values (1, now(), "yes");
 delete from courses_to_injections;
 delete from injections;
 delete from iob;
@@ -53,13 +53,14 @@ select * from iob;
 select * from logs;
 select * from alerts;
 select * from courses_to_injections;
+select * from automode_switch;
 
-insert into injections (
-                    units_intended, units_delivered, datetime_intended,
-                     cur_iob_units, cur_bg_units, correction_units,
-                     carbs_to_cover, carbs_units,
-                     cur_basal_units, all_meal_carbs_absorbed,
-                     status, transferred) values ( 4.30769230769,4.30769230769,now(),0,2.0,2.0,30,2.30769230769,0.55,'True','initial','awaiting completion');
-
-
-select datetime(round(UNIX_TIMESTAMP(datetime_iob) / 300)*300) as interval5, sum(iob) from iob group by round(UNIX_TIMESTAMP(datetime_iob) / 300)
+insert into injections (injection_type,                     
+units_intended, units_delivered, temp_rate, datetime_intended,                     
+cur_iob_units, cur_bg_units, cur_bg, correction_units,                     
+carbs_to_cover, carbs_units,                     
+cur_basal_units, all_meal_carbs_absorbed,                     
+status, transferred) values 
+( 'bolus',
+6.92,6.92,null,now(),
+2.0,null,None,0,90,6.92307692308,0.55,'True','initial','awaiting completion')

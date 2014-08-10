@@ -39,7 +39,7 @@ CREATE TABLE `alerts` (
   `datetime_dismissed` datetime DEFAULT NULL,
   `src_dismissed` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`alert_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,6 +72,7 @@ CREATE TABLE `automode_switch` (
 
 LOCK TABLES `automode_switch` WRITE;
 /*!40000 ALTER TABLE `automode_switch` DISABLE KEYS */;
+INSERT INTO `automode_switch` VALUES (1,'2014-08-10 10:40:32','yes');
 /*!40000 ALTER TABLE `automode_switch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,6 +140,7 @@ DROP TABLE IF EXISTS `injections`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `injections` (
   `injection_id` int(11) NOT NULL AUTO_INCREMENT,
+  `injection_type` varchar(45) NOT NULL,
   `units_intended` float NOT NULL,
   `units_delivered` float DEFAULT NULL,
   `temp_rate` float DEFAULT NULL,
@@ -146,6 +148,7 @@ CREATE TABLE `injections` (
   `datetime_delivered` datetime DEFAULT NULL,
   `cur_iob_units` float NOT NULL,
   `cur_bg_units` float DEFAULT NULL,
+  `cur_bg` int(11) DEFAULT NULL,
   `correction_units` float NOT NULL,
   `carbs_to_cover` int(11) NOT NULL,
   `carbs_units` float NOT NULL,
@@ -154,7 +157,7 @@ CREATE TABLE `injections` (
   `status` varchar(45) NOT NULL,
   `transferred` varchar(45) NOT NULL DEFAULT 'NO',
   PRIMARY KEY (`injection_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +203,8 @@ DROP TABLE IF EXISTS `iob_dist`;
 CREATE TABLE `iob_dist` (
   `interval` int(11) NOT NULL,
   `iob_dist_pct` float NOT NULL,
-  PRIMARY KEY (`interval`)
+  `injection_type` varchar(45) NOT NULL,
+  PRIMARY KEY (`interval`,`injection_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -210,7 +214,7 @@ CREATE TABLE `iob_dist` (
 
 LOCK TABLES `iob_dist` WRITE;
 /*!40000 ALTER TABLE `iob_dist` DISABLE KEYS */;
-INSERT INTO `iob_dist` VALUES (0,100),(5,100),(10,100),(15,100),(20,100),(25,100),(30,100),(35,99.8566),(40,99.4272),(45,98.7142),(50,97.7218),(55,96.4557),(60,94.923),(65,93.1327),(70,91.0949),(75,88.8214),(80,86.3252),(85,83.6206),(90,80.7232),(95,77.6495),(100,74.4172),(105,71.0448),(110,67.5517),(115,63.9579),(120,60.2841),(125,56.5512),(130,52.7808),(135,48.9944),(140,45.2138),(145,41.4607),(150,37.7565),(155,34.1226),(160,30.5797),(165,27.1483),(170,23.8479),(175,20.6976),(180,17.7153),(185,14.9183),(190,12.3225),(195,9.94282),(200,7.79294),(205,5.88518),(210,4.23048),(215,2.83834),(220,1.71674),(225,0.872119),(230,0.309315),(235,0.0315598);
+INSERT INTO `iob_dist` VALUES (0,100,'bolus'),(0,100,'square'),(5,100,'bolus'),(5,100,'square'),(10,100,'bolus'),(10,100,'square'),(15,100,'bolus'),(15,100,'square'),(20,100,'bolus'),(20,100,'square'),(25,100,'bolus'),(25,100,'square'),(30,100,'bolus'),(30,100,'square'),(35,99.8265,'bolus'),(35,99.8566,'square'),(40,99.3072,'bolus'),(40,99.4272,'square'),(45,98.4456,'bolus'),(45,98.7142,'square'),(50,97.2478,'bolus'),(50,97.7218,'square'),(55,95.7222,'bolus'),(55,96.4557,'square'),(60,93.8791,'bolus'),(60,94.923,'square'),(65,91.7316,'bolus'),(65,93.1327,'square'),(70,89.2944,'bolus'),(70,91.0949,'square'),(75,86.5844,'bolus'),(75,88.8214,'square'),(80,83.6206,'bolus'),(80,86.3252,'square'),(85,80.4234,'bolus'),(85,83.6206,'square'),(90,77.0151,'bolus'),(90,80.7232,'square'),(95,73.4193,'bolus'),(95,77.6495,'square'),(100,69.6609,'bolus'),(100,74.4172,'square'),(105,65.7661,'bolus'),(105,71.0448,'square'),(110,61.7619,'bolus'),(110,67.5517,'square'),(115,57.676,'bolus'),(115,63.9579,'square'),(120,53.5369,'bolus'),(120,60.2841,'square'),(125,49.3732,'bolus'),(125,56.5512,'square'),(130,45.2138,'bolus'),(130,52.7808,'square'),(135,41.0877,'bolus'),(135,48.9944,'square'),(140,37.0234,'bolus'),(140,45.2138,'square'),(145,33.0492,'bolus'),(145,41.4607,'square'),(150,29.1927,'bolus'),(150,37.7565,'square'),(155,25.4805,'bolus'),(155,34.1226,'square'),(160,21.9385,'bolus'),(160,30.5797,'square'),(165,18.5913,'bolus'),(165,27.1483,'square'),(170,15.4621,'bolus'),(170,23.8479,'square'),(175,12.5726,'bolus'),(175,20.6976,'square'),(180,9.94282,'bolus'),(180,17.7153,'square'),(185,7.59108,'bolus'),(185,14.9183,'square'),(190,5.53367,'bolus'),(190,12.3225,'square'),(195,3.78488,'bolus'),(195,9.94282,'square'),(200,2.35684,'bolus'),(200,7.79294,'square'),(205,1.25947,'bolus'),(205,5.88518,'square'),(210,0.500375,'bolus'),(210,4.23048,'square'),(215,0.0848297,'bolus'),(215,2.83834,'square'),(220,0.0157168,'bolus'),(220,1.71674,'square'),(225,0.872119,'square'),(230,0.309315,'square'),(235,0.0315598,'square');
 /*!40000 ALTER TABLE `iob_dist` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,9 +234,9 @@ CREATE TABLE `logs` (
   `message` varchar(500) NOT NULL,
   `option1` varchar(500) DEFAULT NULL,
   `option2` varchar(500) DEFAULT NULL,
-  `transferred` varchar(45) NOT NULL DEFAULT 'NO',
+  `transferred` varchar(45) NOT NULL DEFAULT 'no',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to record logs';
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8 COMMENT='table to record logs';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,9 +260,9 @@ CREATE TABLE `sgvs` (
   `device_id` int(11) NOT NULL COMMENT 'the id of the pump to differentiate if wearing two cgms',
   `datetime_recorded` datetime NOT NULL,
   `sgv` int(11) DEFAULT NULL COMMENT 'blood glucose recorded',
-  `transfered` varchar(45) NOT NULL DEFAULT 'no',
+  `transferred` varchar(45) NOT NULL DEFAULT 'no',
   PRIMARY KEY (`sgv_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -283,4 +287,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-07 21:04:13
+-- Dump completed on 2014-08-10 10:40:46

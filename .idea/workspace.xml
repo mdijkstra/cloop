@@ -4,10 +4,7 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="61f87d7f-364d-4e7e-afb6-293e322db31d" name="Default" comment="Add basic graph">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/injection_process.py" afterPath="$PROJECT_DIR$/device/processes/injection_process.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/pump_interface.py" afterPath="$PROJECT_DIR$/device/processes/pump_interface.py" />
-    </list>
+    <list default="true" id="61f87d7f-364d-4e7e-afb6-293e322db31d" name="Default" comment="Add basic graph" />
     <ignored path="cloop.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />

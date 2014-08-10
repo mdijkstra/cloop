@@ -117,10 +117,10 @@ class PumpInterface():
         logging.info("STDERR: " + err)
         logging.info("RETURN CODE: " + str(process.returncode))
         logging.info("ran command without timeout")
-        if "response: ReadBasalTemp:size[64]:data:{'duration': " in out:
+        if "response: ReadBasalTemp:size[64]:data:{'duration': " not in out:
             logging.error("ERROR: no temp rate")
             return "ERRORNoTempRate"
-        if "'rate': "+str(temp_rate) in out:
+        if "'rate': "+str(temp_rate) not in out:
             logging.error("ERROR: no temp rate")
             return "ERRORNoTempRate"
         return "Successful"
@@ -153,10 +153,7 @@ class PumpInterface():
             else:
                 break
 
-        if self.query_temp_basal(temp_rate) != "Successful":
-            return True
-        else:
-            return False
+        return self.query_temp_basal(temp_rate, False)
 
     def run_stick(self):
         logging.info("in run_stick")

@@ -19,7 +19,7 @@ import datetime
 
 # use ISO format
 import sys
-#from ../processes.cloop_config import CloopConfig
+from cloop_config import CloopConfig
 
 dateFormat = "%Y-%m-%dT%H:%M:%S"
 now = datetime.datetime.now()
@@ -305,8 +305,8 @@ db_trans.import_courses("<courses></courses>")
 '''
 
 if __name__ == '__main__':
-    #cloop_config = CloopConfig()
-    #cloop_config.db_log("SUCCESS", "sync_device_phone", "Going to sync phone-device at "+str(now))
+    cloop_config = CloopConfig()
+    cloop_config.db_log("SUCCESS", "sync_device_phone", "Going to sync phone-device at "+str(now))
     logging.info('Going to try to sync device db and phone db...')
     db_trans = DeviceDBTransData()
     data_to_send = db_trans.get_data_to_send()
@@ -320,4 +320,4 @@ if __name__ == '__main__':
     else:
         logging.warning('no data from phone')
     logging.info('DONE WITH PHONE SYNC\n\n\n\n')
-    #cloop_config.db_log("SUCCESS", "sync_device_phone", "Successfully completed phone-device sync at "+str(now))
+    cloop_config.db_log("SUCCESS", "sync_device_phone", "Successfully completed phone-device sync at "+str(now))

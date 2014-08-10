@@ -219,13 +219,12 @@ class InjectionProcess():
                              temp_rate):
         if injection_type == "bolus":
             units_delivered = units_intended
+            temp_rate = "null"
         else:
             units_delivered = temp_rate / (60 / self.cloop_config.get_temp_duration()) - self.get_cur_basal_units(
                 self.cloop_config.get_temp_duration())
         if cur_bg_units is None:
             cur_bg_units = "null"
-        if temp_rate is None:
-            temp_rate = "null"
         if cur_bg is None:
             cur_bg = "null"
         sql_to_insert = "insert into injections (injection_type, \
@@ -397,7 +396,7 @@ class InjectionProcess():
             return True
         pump = pump_interface.PumpInterface()
         result = pump.do_bolus(injection_units)
-        if result != "Successful":
+        if result == "Successful":
             return True
         else:
             return False
@@ -407,7 +406,7 @@ class InjectionProcess():
             return True
         pump = pump_interface.PumpInterface()
         result = pump.set_temp_basal(temp_rate, duration)
-        if result != "Successful":
+        if result == "Successful":
             return True
         else:
             return False

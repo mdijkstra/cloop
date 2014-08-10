@@ -5,22 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="61f87d7f-364d-4e7e-afb6-293e322db31d" name="Default" comment="Add basic graph">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/device/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/device/processes/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/device/processes/test/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/device/processes/test/test_injection_process.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/MainActivity.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/MainActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/LogDataSource.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/LogDataSource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/LogRecord.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/LogRecord.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/MainActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/database/basic_injection_dev.sql" afterPath="$PROJECT_DIR$/device/database/basic_injection_dev.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/cloop_config.py" afterPath="$PROJECT_DIR$/device/processes/cloop_config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/erobinson.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/erobinson.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/injection_process.py" afterPath="$PROJECT_DIR$/device/processes/injection_process.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/database/iob_dist_populate.sql" afterPath="$PROJECT_DIR$/device/database/iob_dist_populate.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/sync_device_phone/sync_device_phone.py" afterPath="$PROJECT_DIR$/device/sync_device_phone/sync_device_phone.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/sync_device_pump/sync_device_pump.py" afterPath="$PROJECT_DIR$/device/sync_device_pump/sync_device_pump.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/pump_interface.py" afterPath="$PROJECT_DIR$/device/processes/pump_interface.py" />
     </list>
     <ignored path="cloop.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,8 +32,8 @@
       <file leaf-file-name="injection_process.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1275" max-vertical-offset="7259">
-              <caret line="117" column="117" selection-start-line="116" selection-start-column="12" selection-end-line="117" selection-end-column="117" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="6189" max-vertical-offset="7242">
+              <caret line="378" column="0" selection-start-line="378" selection-start-column="0" selection-end-line="378" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -63,21 +49,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pump_interface.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="pump_interface.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/device/processes/pump_interface.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="935" max-vertical-offset="3332">
-              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.7845829" vertical-offset="855" max-vertical-offset="3417">
+              <caret line="101" column="71" selection-start-line="101" selection-start-column="71" selection-end-line="101" selection-end-column="71" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sync_device_pump.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="sync_device_pump.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/device/sync_device_pump/sync_device_pump.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7705088" vertical-offset="5854" max-vertical-offset="7123">
-              <caret line="395" column="96" selection-start-line="395" selection-start-column="96" selection-end-line="395" selection-end-column="96" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="5854" max-vertical-offset="7123">
+              <caret line="389" column="9" selection-start-line="389" selection-start-column="9" selection-end-line="389" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -114,24 +100,23 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/device/processes/2014-8-3.log" />
-        <option value="$PROJECT_DIR$/device/processes/pump_interface.py" />
         <option value="$PROJECT_DIR$/device/processes/tests/injection_process_test.py" />
         <option value="$PROJECT_DIR$/device/processes/test/injection_process_test.py" />
         <option value="$PROJECT_DIR$/device/processes/test_injectionProcess.py" />
         <option value="$PROJECT_DIR$/device/processes/test_injection_process.py" />
         <option value="$PROJECT_DIR$/device/processes/test/test_injection_process.py" />
         <option value="$PROJECT_DIR$/device/processes/cloop_config.py" />
-        <option value="$PROJECT_DIR$/device/processes/injection_process.py" />
         <option value="$PROJECT_DIR$/device/sync_device_phone/sync_device_phone.py" />
         <option value="$PROJECT_DIR$/device/sync_device_pump/sync_device_pump.py" />
+        <option value="$PROJECT_DIR$/device/processes/injection_process.py" />
+        <option value="$PROJECT_DIR$/device/processes/pump_interface.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1096" />
+    <option name="x" value="960" />
+    <option name="width" value="960" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -591,14 +576,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <frame x="960" y="0" width="960" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929292" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1828125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13347457" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26464647" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
@@ -1038,14 +1023,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/device/processes/pump_interface.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="142" max-vertical-offset="3332">
-          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/device/processes/cloop_config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="584" max-vertical-offset="1547">
@@ -1064,18 +1041,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
+    <entry file="file://$PROJECT_DIR$/device/sync_device_pump/sync_device_pump.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1275" max-vertical-offset="7259">
-          <caret line="117" column="117" selection-start-line="116" selection-start-column="12" selection-end-line="117" selection-end-column="117" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="5854" max-vertical-offset="7123">
+          <caret line="389" column="9" selection-start-line="389" selection-start-column="9" selection-end-line="389" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/device/sync_device_pump/sync_device_pump.py">
+    <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7705088" vertical-offset="5854" max-vertical-offset="7123">
-          <caret line="395" column="96" selection-start-line="395" selection-start-column="96" selection-end-line="395" selection-end-column="96" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="6189" max-vertical-offset="7242">
+          <caret line="378" column="0" selection-start-line="378" selection-start-column="0" selection-end-line="378" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/device/processes/pump_interface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7845829" vertical-offset="855" max-vertical-offset="3417">
+          <caret line="101" column="71" selection-start-line="101" selection-start-column="71" selection-end-line="101" selection-end-column="71" />
           <folding />
         </state>
       </provider>

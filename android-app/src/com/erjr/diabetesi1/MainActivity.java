@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -36,8 +37,26 @@ public class MainActivity extends Activity {
 		// startService(intent);
 
 		setContentView(R.layout.fragment_main);
+//		setContentView(R.layout.activity_main);
 		mainNotification();
 		updateList();
+//		setNavDrawer();
+	}
+
+	private void setNavDrawer() {
+		//mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+		String[] mPlanetTitles = new String[1];
+		mPlanetTitles[0] = "Test 1";
+//		mPlanetTitles[1] = "Test 2";
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        // Set the adapter for the list view
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.drawer_list_items, mPlanetTitles);
+//        mDrawerList.setAdapter(adapter);
+        // Set the list's click listener
+//        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 	}
 
 	public void mainNotification() {

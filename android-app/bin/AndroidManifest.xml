@@ -23,11 +23,11 @@
         <activity
             android:name="com.erjr.diabetesi1.MainActivity"
             android:label="@string/app_name" >
-<!--             <intent-filter> -->
-<!--                 <action android:name="android.intent.action.MAIN" /> -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-<!--                 <category android:name="android.intent.category.LAUNCHER" /> -->
-<!--             </intent-filter> -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <receiver android:name="com.erjr.diabetesi1.PersistentNotification" />
@@ -45,13 +45,13 @@
         </service>
 
         <activity
-            android:name="com.erjr.diabetesi1.CGMGraph"
+            android:name="com.erjr.diabetesi1.GraphActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_cgmgraph"
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.erjr.diabetesi1.FullScreenBG"
+            android:name="com.erjr.diabetesi1.NightActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_full_screen_bg"
             android:screenOrientation="landscape" >
@@ -60,15 +60,15 @@
             android:name="com.erjr.diabetesi1.AddCourseActivity"
             android:label="@string/title_activity_enter_meal" >
         </activity>
-        <activity
-            android:name="com.erjr.diabetesi1.HomeActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--         <activity -->
+<!--             android:name="com.erjr.diabetesi1.HomeActivity" -->
+<!--             android:label="@string/app_name" > -->
+<!--             <intent-filter> -->
+<!--                 <action android:name="android.intent.action.MAIN" /> -->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+<!--                 <category android:name="android.intent.category.LAUNCHER" /> -->
+<!--             </intent-filter> -->
+<!--         </activity> -->
     </application>
 
 </manifest>

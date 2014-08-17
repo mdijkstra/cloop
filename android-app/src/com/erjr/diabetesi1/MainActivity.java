@@ -22,42 +22,49 @@ import com.erjr.cloop.dao.CoursesDataSource;
 import com.erjr.cloop.dao.LogDataSource;
 import com.erjr.cloop.entities.LogRecord;
 
-public class MainActivity extends Activity {
+public class MainActivity extends NavDrawerActivity {
 	private static final String TAG = "MAINACTIVITY";
 	private int myNotificationId;
+	public static final int NAV_POSITION = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-				.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+		setContentView(R.layout.activity_main);
+		setDrawer(R.id.navigation_drawer_fragment, R.id.main_activity, NavDrawerActivity.NAV_POSITION_MAIN);
+//		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//				.permitAll().build();
+//		StrictMode.setThreadPolicy(policy);
 		// start the BTSync service (if not already running)
 		// Intent intent = new Intent(this, BTSyncService.class);
 		// startService(intent);
 
-		setContentView(R.layout.fragment_main);
+//		setContentView(R.layout.fragment_main);
 //		setContentView(R.layout.activity_main);
+		
+		
 		mainNotification();
 		updateList();
+		
+		
 //		setNavDrawer();
 	}
 
-	private void setNavDrawer() {
-		//mPlanetTitles = getResources().getStringArray(R.array.planets_array);
-		String[] mPlanetTitles = new String[1];
-		mPlanetTitles[0] = "Test 1";
-//		mPlanetTitles[1] = "Test 2";
-        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        // Set the adapter for the list view
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.drawer_list_items, mPlanetTitles);
-//        mDrawerList.setAdapter(adapter);
-        // Set the list's click listener
-//        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-	}
+//	private void setNavDrawer() {
+//		//mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+//		String[] mPlanetTitles = new String[1];
+//		mPlanetTitles[0] = "Test 1";
+////		mPlanetTitles[1] = "Test 2";
+//        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
+//
+//        // Set the adapter for the list view
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+//                R.layout.drawer_list_items, mPlanetTitles);
+////        mDrawerList.setAdapter(adapter);
+//        // Set the list's click listener
+////        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+//	}
 
 	public void mainNotification() {
 		// create the notification
@@ -153,12 +160,12 @@ public class MainActivity extends Activity {
 	// }
 
 	public void showCGMGraphActivity(View view) {
-		Intent intent = new Intent(this, CGMGraph.class);
+		Intent intent = new Intent(this, GraphActivity.class);
 		startActivity(intent);
 	}
 
 	public void showNightActivity(View view) {
-		Intent intent = new Intent(this, FullScreenBG.class);
+		Intent intent = new Intent(this, NightActivity.class);
 		startActivity(intent);
 	}
 

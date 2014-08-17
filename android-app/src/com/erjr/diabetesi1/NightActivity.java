@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.entities.SGV;
 
-public class FullScreenBG extends Activity {
+public class NightActivity extends Activity {
 
 	private static final Integer highBgLimit = 175;
 	private static final Integer lowBgLimit = 90;

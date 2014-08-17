@@ -14,11 +14,18 @@
     <string name="title_activity_enter_meal">EnterMealActivity</string>
     <string name="newMealButton">Add Meal</string>
     <string name="title_activity_home">HomeActivity</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+<!--     <string name="title_section1">Section 1</string> -->
+<!--     <string name="title_section2">Section 2</string> -->
+<!--     <string name="title_section3">Section 3</string> -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
+    <string name="nav_option1">Home</string>
+    <string name="nav_option2">Add Meal</string>
+    <string name="nav_option3">Graph</string>
+    <string name="nav_option4">Night</string>
+    <string name="nav_option5">Injections</string>
+    <string name="nav_option6">Auto Mode</string>
+    <string name="nav_option7">Alerts</string>
 
 </resources>

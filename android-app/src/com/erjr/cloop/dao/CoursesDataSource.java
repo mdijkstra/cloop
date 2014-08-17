@@ -157,7 +157,7 @@ public class CoursesDataSource {
 				+ "g at "
 				+ Util.convertDateToPrettyString(course
 						.getDatetime_consumption());
-		Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+		Util.toast(context, toastText);
 	}
 
 	public void deleteLastCourse() {

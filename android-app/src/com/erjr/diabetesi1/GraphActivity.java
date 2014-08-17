@@ -21,7 +21,7 @@ import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
 
-public class CGMGraph extends Activity {
+public class GraphActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

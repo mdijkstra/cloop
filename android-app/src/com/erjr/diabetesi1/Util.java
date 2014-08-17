@@ -1,11 +1,13 @@
 package com.erjr.diabetesi1;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+
+import android.content.Context;
+import android.widget.Toast;
 
 public class Util {
 
@@ -126,6 +128,10 @@ public class Util {
 		} else {
 			return new Float(fl);
 		}
+	}
+
+	public static void toast(Context context, String message) {
+		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
 
 }

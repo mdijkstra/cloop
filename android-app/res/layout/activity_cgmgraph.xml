@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.erjr.diabetesi1.CGMGraph"
+    tools:context="com.erjr.diabetesi1.GraphActivity"
     tools:ignore="MergeRootFrame" 
     android:orientation="horizontal"
     android:screenOrientation="landscape"

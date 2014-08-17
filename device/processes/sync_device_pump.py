@@ -34,7 +34,7 @@ logging.basicConfig(filename='./log/' + currentDate + '-sync-pump.log', level=lo
 def get_value_from_xml(string, tag):
     start = string.index("<" + tag + ">") + len(tag) + 2
     end = string.index("</" + tag + ">", start)
-    if start + 1 == end:
+    if start >= end:
         return ""
     return string[start:end]
 

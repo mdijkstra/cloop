@@ -67,7 +67,7 @@ public class Util {
 		}
 		int start = xml.indexOf("<" + tag + ">") + tag.length() + 2;
 		int end = xml.indexOf("</" + tag + ">");
-		if (start == end) {
+		if (start >= end) {
 			return "";
 		}
 		String str = xml.substring(start, end);

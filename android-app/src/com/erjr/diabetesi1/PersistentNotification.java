@@ -69,5 +69,8 @@ public class PersistentNotification extends BroadcastReceiver {
 		// check that BT sync is running:
 		Intent i = new Intent(context, BTSyncService.class);
 		context.startService(i);
+		
+		// show any alerts
+		AlertsManager.showAlerts(context);
 	}
 }

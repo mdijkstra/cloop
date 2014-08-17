@@ -34,13 +34,13 @@ public final class R {
         public static final int button1=0x7f090009;
         public static final int button2=0x7f090007;
         public static final int commentField=0x7f09000d;
-        public static final int container=0x7f090000;
-        public static final int drawer_layout=0x7f090002;
+        public static final int drawer_layout=0x7f090003;
         public static final int graph2=0x7f090001;
-        public static final int listCourses=0x7f090005;
-        public static final int main_activity=0x7f090004;
-        public static final int navigation_drawer=0x7f090003;
-        public static final int navigation_drawer_fragment=0x7f090006;
+        public static final int graph_activity=0x7f090000;
+        public static final int listCourses=0x7f090006;
+        public static final int main_activity=0x7f090005;
+        public static final int navigation_drawer=0x7f090004;
+        public static final int navigation_drawer_fragment=0x7f090002;
         public static final int numberPicker100s=0x7f09000a;
         public static final int numberPicker10s=0x7f09000b;
         public static final int numberPicker1s=0x7f09000c;
@@ -54,11 +54,10 @@ public final class R {
         public static final int activity_home=0x7f030003;
         public static final int activity_main=0x7f030004;
         public static final int drawer_list_items=0x7f030005;
-        public static final int fragment_cgmgraph=0x7f030006;
-        public static final int fragment_enter_meal=0x7f030007;
-        public static final int fragment_full_screen_bg=0x7f030008;
-        public static final int fragment_home=0x7f030009;
-        public static final int fragment_navigation_drawer=0x7f03000a;
+        public static final int fragment_enter_meal=0x7f030006;
+        public static final int fragment_full_screen_bg=0x7f030007;
+        public static final int fragment_home=0x7f030008;
+        public static final int fragment_navigation_drawer=0x7f030009;
     }
     public static final class menu {
         public static final int cgmgraph=0x7f080000;

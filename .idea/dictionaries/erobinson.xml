@@ -13,6 +13,7 @@
       <w>iobs</w>
       <w>levelname</w>
       <w>lineno</w>
+      <w>serv</w>
       <w>sgvs</w>
       <w>stderr</w>
       <w>stdout</w>

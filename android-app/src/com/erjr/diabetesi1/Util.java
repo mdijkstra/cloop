@@ -134,4 +134,13 @@ public class Util {
 		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
 
+	public static String sqlSafeField(String field) {
+		if (field == null || field.isEmpty() || field == "null"
+				|| field == "None") {
+			return "null";
+		} else {
+			return "'" + field + "'";
+		}
+	}
+
 }

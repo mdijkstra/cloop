@@ -26,8 +26,10 @@ now = datetime.datetime.now()
 currentDate = str(now.year) + "-" + str(now.month) + "-" + str(now.day)
 
 windowsConfig = True
-if "linux" not in sys.platform:
+if "linux" in sys.platform:
     windowsConfig = False
+else:
+    windowsConfig = True
 
 if windowsConfig:
     # windows config
@@ -307,17 +309,17 @@ class DeviceDBTransData():
         self.db.execute(sql_set_transferring)
         self.db_conn.commit()
         sql_select = "select alert_id, datetime_recorded, datetime_to_alert, src, \
-            code, type, message, value, option1, option2 \
+            code, type, title, message, value, option1, option2 \
             from alerts where transferred = 'transferring'"
         logging.info('Exporting alerts: ' + sql_select)
         self.db.execute(sql_select)
         xml = "<alerts>"
         outer_tag = "alert"
         inner_tags = ["alert_id", "datetime_recorded", "datetime_to_alert", "src",
-                      "code", "type", "message", "value", "option1", "option2"]
+                      "code", "type", "title", "message", "value", "option1", "option2"]
         for row in self.db.fetchall():
             values = [row[0], self.date_or_null(row[1]), self.date_or_null(row[2]), row[3],
-                      row[4], row[5], row[6], row[7], row[8], row[9]]
+                      row[4], row[5], row[6], row[7], row[8], row[9], row[10]]
             xml += build_xml_record(outer_tag, inner_tags, values)
         xml += "</alerts>"
         logging.info('returning the following xml from export_alerts:' + xml)

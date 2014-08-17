@@ -1,13 +1,23 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/graph_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.erjr.diabetesi1.GraphActivity"
-    tools:ignore="MergeRootFrame" 
     android:orientation="horizontal"
     android:screenOrientation="landscape"
     android:configChanges="orientation|keyboardHidden" >
+    
+<!-- <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" -->
+<!--     xmlns:tools="http://schemas.android.com/tools" -->
+<!--     android:id="@+id/graph_activity" -->
+<!--     android:layout_width="match_parent" -->
+<!--     android:layout_height="match_parent" -->
+<!--     tools:context="com.erjr.diabetesi1.GraphActivity" -->
+<!--     tools:ignore="MergeRootFrame"  -->
+<!--     android:orientation="horizontal" -->
+<!--     android:screenOrientation="landscape" -->
+<!--     android:configChanges="orientation|keyboardHidden" > -->
     
 
     <LinearLayout
@@ -22,4 +32,11 @@
         android:paddingTop="10dip" >
     </LinearLayout>
 
-</FrameLayout>
+    <fragment
+        android:id="@+id/navigation_drawer_fragment"
+        android:name="com.erjr.diabetesi1.NavigationDrawerFragment"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start" />
+<!-- </FrameLayout> -->
+</android.support.v4.widget.DrawerLayout>

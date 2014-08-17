@@ -37,7 +37,7 @@ if windowsConfig:
                         format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 else:
     # device config
-    logging.basicConfig(filename="./log/"+currentDate + '-injection_process.log', level=logging.DEBUG,
+    logging.basicConfig(filename="./log/" + currentDate + '-injection_process.log', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)s at %(lineno)s: %(message)s')
 
 
@@ -91,7 +91,7 @@ class InjectionProcess():
             self.db_conn.commit()
             self.cloop_config.db_log("FAIL", "injection_process",
                                      "Unable to execute " + injection_type + " injection #" + str(
-                                     injection_id) + " of " + str(injection_units) + "u temp:"+str(temp_rate))
+                                         injection_id) + " of " + str(injection_units) + "u temp:" + str(temp_rate))
         else:
             # successful: update the injection, create alerts, log in db
             sql_success_injection = "update injections set status = 'successful', transferred = 'no', \
@@ -101,11 +101,12 @@ class InjectionProcess():
             self.db_conn.commit()
             self.set_iob(injection_id)
             if injection_type == "square":
-                self.add_alert(now, "process_injection", "info",
-                               "Temp rate for injection #" + str(injection_id) + " with a rate of " +
+                self.add_alert(now, "process_injection", "info", "Set Temp " + str(temp_rate),
+                               "Injection #" + str(injection_id) + " with a rate of " +
                                str(temp_rate) + " was given at " + str(now))
             else:
-                self.add_alert(now, "process_injection", "info", "Injection #" + str(injection_id) + " of " +
+                self.add_alert(now, "process_injection", "info", "Injected "+str(injection_units)+"u",
+                               "Injection #" + str(injection_id) + " of " +
                                str(injection_units) + " units was given at " + str(now))
             courses = self.get_courses_covered(injection_id)
             if len(courses) > 0:
@@ -115,7 +116,8 @@ class InjectionProcess():
                 self.add_alert(now + datetime.timedelta(minutes=35), "process_injection", "alert", "Try to eat " +
                                str(carbs) + "g of carbs for injection " + str(injection_id) + " in 5 minutes")
             self.cloop_config.db_log("SUCCESS", "injection_process", "Successfully able to execute " + injection_type
-                            + " injection #" + str(injection_id) + " of " + str(injection_units) + "u temp:"+str(temp_rate))
+                                     + " injection #" + str(injection_id) + " of " + str(
+                injection_units) + "u temp:" + str(temp_rate))
 
     # return the amount insulin that should be injected
     # return null if no injection needed
@@ -146,10 +148,10 @@ class InjectionProcess():
 
         if 1 > injection_units > -.5:
             logging.info("Injections units too little to take action : " + str(injection_units))
-            logging.info("Carbs_absorbed ("+str(all_meal_carbs_absorbed)+") cur_bg ("+str(
-                    cur_bg)+"="+str(cur_bg_units)+") carbs_to_cover ("+str(carbs_to_cover)+"="+str(
-                            carbs_units)+") cur_iob_units ("+str(
-                            cur_iob_units)+") correction_units ("+str(correction_units)+")")
+            logging.info("Carbs_absorbed (" + str(all_meal_carbs_absorbed) + ") cur_bg (" + str(
+                cur_bg) + "=" + str(cur_bg_units) + ") carbs_to_cover (" + str(carbs_to_cover) + "=" + str(
+                carbs_units) + ") cur_iob_units (" + str(
+                cur_iob_units) + ") correction_units (" + str(correction_units) + ")")
             return "none_needed", None, None, None
 
         if injection_units > 0:
@@ -209,11 +211,11 @@ class InjectionProcess():
             self.db.execute(sql_save_iob)
             self.db_conn.commit()
 
-    def add_alert(self, datetime_to_alert, code, alert_type, message):
+    def add_alert(self, datetime_to_alert, code, alert_type, title, message):
         sql_to_insert = "insert into alerts (datetime_recorded, datetime_to_alert, " \
-                        "src, code, type, message, transferred) " \
+                        "src, code, type, title, message, transferred) " \
                         "values (now(), '" + str(datetime_to_alert) + "','device','" \
-                        + code + "','" + alert_type + "','" + message + "','no')"
+                        + code + "','" + alert_type + "','" + title + "','" + message + "','no')"
         logging.info("SQL: " + sql_to_insert)
         self.db.execute(sql_to_insert)
         self.db_conn.commit()

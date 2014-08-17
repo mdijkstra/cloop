@@ -21,21 +21,25 @@ import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
 
-public class GraphActivity extends Activity {
+public class GraphActivity extends NavDrawerActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cgmgraph);
-
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
+		setDrawer(R.id.navigation_drawer_fragment, R.id.graph_activity, NavDrawerActivity.NAV_POSITION_GRAPH);
+		
+//		if (savedInstanceState == null) {
+//			getFragmentManager().beginTransaction()
+//					.add(R.id.container, new PlaceholderFragment()).commit();
+//		}
 
 		// get SGV data and add to series
 		SGVDataSource SGVDS = new SGVDataSource(getBaseContext());
 		SGV[] sgvs = SGVDS.getRecentSGVs(24);
+		if(sgvs == null) {
+			return;
+		}
 		GraphViewData[] cgmTodayData = new GraphViewData[sgvs.length];
 		for (int i = 0; i < sgvs.length; i++) {
 			cgmTodayData[i] = new GraphViewData(sgvs[i].getDatetimeRecorded()
@@ -95,21 +99,21 @@ public class GraphActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_cgmgraph,
-					container, false);
-			return rootView;
-		}
-	}
+//	/**
+//	 * A placeholder fragment containing a simple view.
+//	 */
+//	public static class PlaceholderFragment extends Fragment {
+//
+//		public PlaceholderFragment() {
+//		}
+//
+//		@Override
+//		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//				Bundle savedInstanceState) {
+//			View rootView = inflater.inflate(R.layout.fragment_cgmgraph,
+//					container, false);
+//			return rootView;
+//		}
+//	}
 
 }

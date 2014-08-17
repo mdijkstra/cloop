@@ -31,13 +31,14 @@ public class NightActivity extends Activity {
 	private static Date snoozeAlarmUntil = null;
 	protected PowerManager.WakeLock mWakeLock;
 	private String TAG = "FullScreenBG";
+	private boolean isActive = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_full_screen_bg);
 		setContentView(R.layout.fragment_full_screen_bg);
-
+		isActive = true;
 		// TODO: Not sure what this is used for. should find out.
 //		if (savedInstanceState == null) {
 //			getFragmentManager().beginTransaction()
@@ -85,6 +86,9 @@ public class NightActivity extends Activity {
 	};
 
 	private void updateNumbers() {
+		if(!isActive) {
+			return;
+		}
 		SGVDataSource SGVDS = new SGVDataSource(getBaseContext());
 		SGV[] recentSGVs = SGVDS.getRecentSGVs(1);
 		Date currentDate = Util.getCurrentDateTime();
@@ -197,9 +201,15 @@ public class NightActivity extends Activity {
 			return rootView;
 		}
 	}
+	
+	@Override
+	public void onStop() {
+		isActive = false;
+	}
 
 	@Override
 	public void onDestroy() {
+		isActive = false;
 		this.mWakeLock.release();
 		super.onDestroy();
 	}

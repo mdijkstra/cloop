@@ -87,23 +87,26 @@ public class CoursesDataSource {
 
 	public List<Course> getCoursesToTransfer() {
 		List<Course> courses = new ArrayList<Course>();
-
+		database.execSQL("update courses set transferred = 'transferring' where transferred = 'no'");
+		
 		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns,
-				null, null, null, null, null);
+				" transferred = 'transferring' ", null, null, null, null);
 		if (cursor.getCount() <= 0) {
 			return null;
 		}
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Course course = cursorToCourse(cursor);
-			if (course.getTransferred().equals("no")) {
-				courses.add(course);
-			} // TODO: just add where clause to database.query call above.
+			courses.add(course);
 			cursor.moveToNext();
 		}
 		// make sure to close the cursor
 		cursor.close();
 		return courses;
+	}
+	
+	public void setTransferSuccessful() {
+		database.execSQL("update courses set transferred = 'yes' where transferred = 'transferring'");
 	}
 
 	private Course cursorToCourse(Cursor cursor) {
@@ -116,7 +119,8 @@ public class CoursesDataSource {
 				.getString(4)));
 		course.setDatetimeIdealInjection(Util.convertStringToDate(cursor
 				.getString(5)));
-		course.setTransferred(cursor.getString(6));
+		course.setComment(cursor.getString(6));
+		course.setTransferred(cursor.getString(7));
 		return course;
 	}
 

@@ -195,6 +195,13 @@ public class Course {
 	public void setDatetimeIdealInjection(Date datetime_ideal_injection) {
 		this.datetimeIdealInjection = datetime_ideal_injection;
 	}
+	
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 	/**
 	 * @return the transferred

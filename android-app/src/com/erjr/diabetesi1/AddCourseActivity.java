@@ -106,6 +106,7 @@ public class AddCourseActivity extends Activity {
 		Date timeToConsume = getTimeToConsumeSelected();
 		String comment = getCommentEntered();
 		Course course = coursesDS.createCourse(carbs, timeToConsume, comment);
+		Util.toast(getBaseContext(), "Successfully added course #"+course.getCourseID()+" of "+course.getCarbs()+" carbs.");
 	}
 
 	private String getCommentEntered() {

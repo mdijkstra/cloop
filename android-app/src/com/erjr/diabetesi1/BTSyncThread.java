@@ -75,11 +75,17 @@ public class BTSyncThread extends Thread {
 			}
 			Log.i(TAG, "Outside inner loop. Going to process data..");
 			if (dataReceived != null && !dataReceived.isEmpty()) {
+				setTransfersSuccessful();
 				processDataReceived(dataReceived);
 			}
 			Log.i(TAG, "end of outer loop");
 		}
 		closeSocket();
+	}
+
+	private void setTransfersSuccessful() {
+		CoursesDataSource cDS = new CoursesDataSource(context);
+		cDS.setTransferSuccessful();
 	}
 
 	private void closeSocket() {

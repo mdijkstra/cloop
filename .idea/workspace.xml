@@ -5,9 +5,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="61f87d7f-364d-4e7e-afb6-293e322db31d" name="Default" comment="Add basic graph">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/database/iob_dist_population_calculation.xlsx" afterPath="$PROJECT_DIR$/device/database/iob_dist_population_calculation.xlsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/HomeActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/HomeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/NavigationDrawerFragment.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/NavigationDrawerFragment.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py" />
+      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\android-app\res\layout\fragment_cgmgraph.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/Closed Loop.apk" afterPath="$PROJECT_DIR$/android-app/bin/Closed Loop.apk" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/entities/Course.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/entities/Course.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/CoursesDataSource.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/CoursesDataSource.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/MainActivity.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/MainActivity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/MySQLiteHelper.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/MySQLiteHelper.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$id.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$id.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$layout.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$layout.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$menu.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$menu.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$string.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$string.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$style.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$style.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes.dex" afterPath="$PROJECT_DIR$/android-app/bin/classes.dex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/resources.ap_" afterPath="$PROJECT_DIR$/android-app/bin/resources.ap_" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/AddCourseActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/AddCourseActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Alert.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Alert.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/AlertDataSource.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/AlertDataSource.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/AndroidManifest.xml" afterPath="$PROJECT_DIR$/android-app/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/AndroidManifest.xml" afterPath="$PROJECT_DIR$/android-app/bin/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/BTSyncThread.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/BTSyncThread.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Course.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Course.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/CoursesDataSource.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/CoursesDataSource.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/GraphActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/GraphActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/MySQLiteHelper.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/MySQLiteHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/NavDrawerActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/NavDrawerActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/NightActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/NightActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/PersistentNotification.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/PersistentNotification.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/gen/com/erjr/diabetesi1/R.java" afterPath="$PROJECT_DIR$/android-app/gen/com/erjr/diabetesi1/R.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/Util.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/Util.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/res/layout/activity_cgmgraph.xml" afterPath="$PROJECT_DIR$/android-app/res/layout/activity_cgmgraph.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/res/layout/activity_enter_meal.xml" afterPath="$PROJECT_DIR$/android-app/res/layout/activity_enter_meal.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/res/layout/activity_full_screen_bg.xml" afterPath="$PROJECT_DIR$/android-app/res/layout/activity_full_screen_bg.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/res/layout/activity_home.xml" afterPath="$PROJECT_DIR$/android-app/res/layout/activity_home.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/erobinson.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/erobinson.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/injection_process.py" afterPath="$PROJECT_DIR$/device/processes/injection_process.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/sync_device_phone.py" afterPath="$PROJECT_DIR$/device/processes/sync_device_phone.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cloop.iws" />
@@ -34,8 +67,58 @@
       <file leaf-file-name="sync_device_phone.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/device/processes/sync_device_phone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5236715" vertical-offset="5000" max-vertical-offset="6035">
-              <caret line="332" column="0" selection-start-line="332" selection-start-column="0" selection-end-line="332" selection-end-column="0" />
+            <state vertical-scroll-proportion="1.3025099" vertical-offset="1734" max-vertical-offset="6069">
+              <caret line="166" column="76" selection-start-line="166" selection-start-column="76" selection-end-line="166" selection-end-column="76" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_deviceDBTransData.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+              <caret line="10" column="42" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_injection_process.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/device/processes/test/test_injection_process.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4063">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cloop_config.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/device/processes/cloop_config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1445">
+              <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="injection_process.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="7378">
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="25" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="2014-8-17.log" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/device/processes/test/2014-8-17.log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="15100" max-vertical-offset="15844">
+              <caret line="925" column="15" selection-start-line="925" selection-start-column="15" selection-end-line="925" selection-end-column="15" />
               <folding />
             </state>
           </provider>
@@ -70,6 +153,7 @@
         <option value="$PROJECT_DIR$/device/sync_device_pump/sync_device_pump.py" />
         <option value="$PROJECT_DIR$/device/processes/pump_interface.py" />
         <option value="$PROJECT_DIR$/device/processes/injection_process.py" />
+        <option value="$PROJECT_DIR$/device/processes/test_deviceDBTransData.py" />
         <option value="$PROJECT_DIR$/device/processes/sync_device_phone.py" />
       </list>
     </option>
@@ -193,6 +277,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cloop" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cloop" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="device" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="processes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope">
@@ -291,7 +397,7 @@
       <recent name="C:\Users\erobinson\Documents\GitHub\cloop\device\processes\test" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests in test">
+  <component name="RunManager" selected="Python tests.Unittests in test_deviceDBTransData">
     <configuration default="false" name="Unittests in test_injectionProcess" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -333,6 +439,30 @@
       <RunnerSettings RunnerId="PyDebugRunner" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PyDebugRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittests in test_deviceDBTransData" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/device/processes/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="cloop" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
@@ -507,16 +637,18 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <list size="4">
+    <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests in test" />
       <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in test_injection_process" />
       <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests in test_injectionProcess" />
       <item index="3" class="java.lang.String" itemvalue="Python.injection_process" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests in test_deviceDBTransData" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests in test_injectionProcess" />
-        <item index="1" class="java.lang.String" itemvalue="Python.injection_process" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests in test_deviceDBTransData" />
+        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in test_injectionProcess" />
+        <item index="2" class="java.lang.String" itemvalue="Python.injection_process" />
       </list>
     </recent_temporary>
   </component>
@@ -538,18 +670,18 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="2064" height="1168" extended-state="7" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="2064" height="1168" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929292" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.123535156" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.123535156" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26464647" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26262626" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26177025" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929292" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -601,24 +733,10 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="28" />
+      <option name="time" value="29" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/device/processes/pump_interface.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1054" max-vertical-offset="3451">
-          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/device/sync_device_pump/sync_device_pump.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="391" max-vertical-offset="7157">
-          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/device/processes/cloop_config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1003" max-vertical-offset="1479">
@@ -913,24 +1031,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/device/processes/test/test_injection_process.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1160" max-vertical-offset="4063">
-          <caret line="97" column="38" selection-start-line="97" selection-start-column="38" selection-end-line="97" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/device/sync_device_phone/sync_device_phone.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5233645" vertical-offset="4494" max-vertical-offset="5491">
           <caret line="300" column="3" selection-start-line="300" selection-start-column="3" selection-end-line="300" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4049844" vertical-offset="256" max-vertical-offset="7242">
-          <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -948,17 +1052,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/device/processes/test/2014-8-17.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="15100" max-vertical-offset="15844">
+          <caret line="925" column="15" selection-start-line="925" selection-start-column="15" selection-end-line="925" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/device/processes/cloop_config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.2357217" vertical-offset="584" max-vertical-offset="1547">
-          <caret line="21" column="16" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1445">
+          <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/device/processes/test/test_injection_process.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4063">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="7378">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="25" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+          <caret line="10" column="42" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/device/processes/sync_device_phone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5236715" vertical-offset="5000" max-vertical-offset="6035">
-          <caret line="332" column="0" selection-start-line="332" selection-start-column="0" selection-end-line="332" selection-end-column="0" />
+        <state vertical-scroll-proportion="1.3025099" vertical-offset="1734" max-vertical-offset="6069">
+          <caret line="166" column="76" selection-start-line="166" selection-start-column="76" selection-end-line="166" selection-end-column="76" />
           <folding />
         </state>
       </provider>

@@ -1,26 +1,48 @@
 package com.erjr.cloop.dao;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import com.erjr.cloop.entities.Alert;
+import com.erjr.cloop.entities.Course;
 import com.erjr.cloop.entities.Halt;
 import com.erjr.cloop.entities.IOB;
 import com.erjr.cloop.entities.Injection;
 import com.erjr.cloop.entities.LogRecord;
 import com.erjr.cloop.entities.SGV;
-import com.erjr.cloop.entities.Course;
-
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "cloop.db";
 	private static final int DATABASE_VERSION = 14;
+	private static MySQLiteHelper mInstance = null;
 
-	public MySQLiteHelper(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-	}
+	public static MySQLiteHelper getInstance(Context ctx) {
+
+	    // Use the application context, which will ensure that you 
+	    // don't accidentally leak an Activity's context.
+	    // See this article for more information: http://bit.ly/6LRzfx
+	    if (mInstance == null) {
+	      mInstance = new MySQLiteHelper(ctx.getApplicationContext());
+	    }
+	    return mInstance;
+	  }
+
+	  /**
+	   * Constructor should be private to prevent direct instantiation.
+	   * make call to static factory method "getInstance()" instead.
+	   */
+	  private MySQLiteHelper(Context ctx) {
+	    super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
+	  }
+	
+//	public MySQLiteHelper(Context context) {
+//		
+//		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+//	}
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {

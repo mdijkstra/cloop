@@ -13,7 +13,7 @@ public class IOBDataSource {
 	private MySQLiteHelper dbHelper;
 
 	public IOBDataSource(Context context) {
-		dbHelper = new MySQLiteHelper(context);
+		dbHelper = MySQLiteHelper.getInstance(context);
 		open();
 	}
 

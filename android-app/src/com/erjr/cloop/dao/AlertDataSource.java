@@ -19,7 +19,7 @@ public class AlertDataSource {
 	private MySQLiteHelper dbHelper;
 
 	public AlertDataSource(Context context) {
-		dbHelper = new MySQLiteHelper(context);
+		dbHelper = MySQLiteHelper.getInstance(context);
 		open();
 	}
 

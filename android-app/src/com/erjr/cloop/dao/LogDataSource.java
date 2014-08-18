@@ -20,7 +20,7 @@ public class LogDataSource {
 	private MySQLiteHelper dbHelper;
 
 	public LogDataSource(Context context) {
-		dbHelper = new MySQLiteHelper(context);
+		dbHelper = MySQLiteHelper.getInstance(context);
 		open();
 	}
 

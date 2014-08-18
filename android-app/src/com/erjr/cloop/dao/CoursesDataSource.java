@@ -23,7 +23,7 @@ public class CoursesDataSource {
 
 	public CoursesDataSource(Context context) {
 		this.context = context;
-		dbHelper = new MySQLiteHelper(context);
+		dbHelper = MySQLiteHelper.getInstance(context);
 		open();
 	}
 

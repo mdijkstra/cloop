@@ -88,8 +88,9 @@ public class Alert {
 				+ ") values (" + alertId + ",'"
 				+ Util.convertDateToString(datetimeRecorded) + "','"
 				+ Util.convertDateToString(datetimeToAlert) + "','" + src
-				+ "','" + code + "','" + type + "','" + message + "','" + value
-				+ "','" + option1 + "','" + option2 + dismissValues + ")";
+				+ "','" + code + "','" + type + "','"+title+"','" + message
+				+ "','" + value + "','" + option1 + "','" + option2
+				+ dismissValues + ")";
 	}
 
 	public void setFromXml(String xml) {

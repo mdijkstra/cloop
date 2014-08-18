@@ -9,7 +9,7 @@ select * from courses;
 show tables;
 select * from iob;
 select * from injections;
-insert into injections (units_intended, units_delivered, datetime_intended, datetime_delivered, iob, carbs, carb_sensitivity, units_for_carbs,
+insert into injections (units_intended, units_delivered, datetime_intended, datetime_delivered, iob_unitsalerts, carbs, carb_sensitivity, units_for_carbs,
 	bg_current, units_for_bg, current_basal, status, transferred)
 values (10, 10, now(), now(), 0, 50, 10, 5, 
 	140, 4, 2, 'successful', 'no');
@@ -64,3 +64,13 @@ status, transferred) values
 ( 'bolus',
 6.92,6.92,null,now(),
 2.0,null,None,0,90,6.92307692308,0.55,'True','initial','awaiting completion')
+
+select concat('Injected 6.92u ',(select cast(ifnull(carbs_to_cover,0) as char) from injections where injection_id = 12),'carbs ',(select cast(ifnull(cur_bg,0) as char) from injections where injection_id = 12),'bg')
+insert into alerts (datetime_recorded, datetime_to_alert, src, code, type, title, message, transferred) values (now(), '2014-08-17 12:49:05.039000','device','process_injection','info','Injected 6.92u '+(select concat(carbs_to_cover) from injections where injection_id = 12)+'carbs '+(select concat(ifnull(cur_bg,0)) from injections where injection_id = 12)+'bg','Injection #12 of 6.92 units was given at 2014-08-17 12:49:05.039000','no')
+insert into alerts (datetime_recorded, datetime_to_alert, src, code, type, title, message, transferred) values (now(), '2014-08-17 12:49:05.039000','device','process_injection','info','Injected 6.92u bg','Injection #12 of 6.92 units was given at 2014-08-17 12:49:05.039000','no')
+
+
+08-17 16:19:02.349: E/AndroidRuntime(8812): android.database.sqlite.SQLiteException: 10 values for 11 columns (code 1): , while compiling: 
+INSERT OR REPLACE INTO alerts (alert_id,datetime_recorded,datetime_to_alert,src,code,type,title,message,value,option1,option2) 
+values (163,'2014-08-17T16:18:37','2014-08-17T16:18:08','device','process_injection','info','Injection #98 of 3.31 units was given at 2014-08-17 16:18:08.452801','null','null','null')
+insert into alerts (datetime_recorded,datetime_to_alert,src,code,type,title,message,value) values (now(), now(), 'test', 'mysql','Test','Test Alert','Some nice message','value')

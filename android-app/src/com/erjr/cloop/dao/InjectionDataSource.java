@@ -13,7 +13,7 @@ public class InjectionDataSource {
 	private MySQLiteHelper dbHelper;
 
 	public InjectionDataSource(Context context) {
-		dbHelper = new MySQLiteHelper(context);
+		dbHelper = MySQLiteHelper.getInstance(context);
 		open();
 	}
 

@@ -20,7 +20,7 @@ public class HaltDataSource {
 	private MySQLiteHelper dbHelper;
 
 	public HaltDataSource(Context context) {
-		dbHelper = new MySQLiteHelper(context);
+		dbHelper = MySQLiteHelper.getInstance(context);
 		open();
 	}
 

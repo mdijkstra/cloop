@@ -30,6 +30,9 @@ public class AlertsManager extends BroadcastReceiver {
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		for (Alert alert : alerts) {
+			if(isAlreadyAlerted(context, 1000+alert.getAlertId())) {
+				continue;
+			}
 			// setup dismiss intent so can record when alerts are dismissed
 			Intent dismissIntent = new Intent(context, AlertsManager.class);
 			dismissIntent.setAction("com.erjr.diabetesi1.AlertManager");
@@ -46,9 +49,15 @@ public class AlertsManager extends BroadcastReceiver {
 			mBuilder.setContentIntent(resultPendingIntent);
 			NotificationManager mNotificationManager = (NotificationManager) context
 					.getSystemService(Context.NOTIFICATION_SERVICE);
-			mNotificationManager.notify(notificationId, mBuilder.build());
-
+			
+			mNotificationManager.notify(1000+alert.getAlertId(), mBuilder.build());
 		}
+	}
+	
+	private static boolean isAlreadyAlerted(Context context, int id) {
+		Intent notificationIntent = new Intent(context, MainActivity.class);
+	    PendingIntent test = PendingIntent.getActivity(context, id, notificationIntent, PendingIntent.FLAG_NO_CREATE);
+	    return test != null;
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class SGVDataSource {
 	private MySQLiteHelper dbHelper;
 
 	public SGVDataSource(Context context) {
-		dbHelper = new MySQLiteHelper(context);
+		dbHelper = MySQLiteHelper.getInstance(context);
 		open();
 	}
 

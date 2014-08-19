@@ -21,9 +21,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <receiver android:name="com.erjr.diabetesi1.PersistentNotification" />
-        <receiver android:name="com.erjr.diabetesi1.AlertManager" >
+        <receiver android:name="com.erjr.diabetesi1.AlertsManager" android:exported="false">
             <intent-filter>
-                <action android:name="com.erjr.diabetesi1.AlertManager" />
+                <action android:name="notification_cancelled" />
             </intent-filter>
         </receiver>
         <receiver android:name="com.erjr.diabetesi1.BootStrapServices" >

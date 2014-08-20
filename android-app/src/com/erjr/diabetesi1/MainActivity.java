@@ -237,18 +237,12 @@ public class MainActivity extends NavDrawerActivity implements
 		case 2:
 			return (prevOrNext.equals("next")) ? nextInjections() : prevInjections();
 		case 3:
-			Util.toast(getBaseContext(), "SGVs coming soon");
-			break;
-		case 4:
-			Util.toast(getBaseContext(), "IOBs coming soon");
-			break;
-		case 5:
 			Util.toast(getBaseContext(), "Alerts coming soon");
 			break;
-		case 6:
+		case 4:
 			Util.toast(getBaseContext(), "Automode coming soon");
 			break;
-		case 7:
+		case 5:
 			Util.toast(getBaseContext(), "Shutdown coming soon");
 			break;
 		}

@@ -80,6 +80,6 @@ class CloopConfig():
         return 13
 
     def get_bg_sensitivity(self):
-        return 15
+        return 30
 
 

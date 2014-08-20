@@ -13,52 +13,65 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-<!--         <GridLayout -->
-<!--             android:id="@+id/group" -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="122dp" -->
-<!--             android:columnCount="2" -->
-<!--             android:rowCount="2" > -->
+        <GridLayout
+            android:id="@+id/group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:rowCount="1" >
 
-<!--             <Button -->
-<!--                 android:id="@+id/openNight" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_column="1" -->
-<!--                 android:layout_row="0" -->
-<!--                 android:onClick="showNightActivity" -->
-<!--                 android:text="@string/open_night_button" /> -->
+            <Button
+                android:id="@+id/buttonPrev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:onClick="buttonPrev"
+                android:text="@string/buttonPrev" />
 
-<!--             <Button -->
-<!--                 android:id="@+id/openCGMGraph" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_column="0" -->
-<!--                 android:layout_gravity="left|top" -->
-<!--                 android:layout_row="0" -->
-<!--                 android:onClick="showCGMGraphActivity" -->
-<!--                 android:text="@string/cgm_graph_button" /> -->
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_gravity="left|top"
+                android:layout_row="0" 
+                android:entries="@array/dataOptions"/>
+            
+            <Button
+                android:id="@+id/buttonNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_row="0"
+                android:onClick="buttonNext"
+                android:text="@string/buttonNext" />
+            <!-- android:layout_gravity="left|top" -->
 
-<!--             <Button -->
-<!--                 android:id="@+id/newMealButton" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_column="0" -->
-<!--                 android:layout_gravity="left|top" -->
-<!--                 android:layout_row="1" -->
-<!--                 android:onClick="showAddMealActivity" -->
-<!--                 android:text="@string/newMealButton" /> -->
+            
+        </GridLayout>
 
-<!--             <Button -->
-<!--                 android:id="@+id/ButtonDeleteLastMeal" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_column="1" -->
-<!--                 android:layout_gravity="left|top" -->
-<!--                 android:layout_row="1" -->
-<!--                 android:onClick="deleteLastMeal" -->
-<!--                 android:text="Delete Last Meal" /> -->
-<!--         </GridLayout> -->
+        <!-- <Button -->
+        <!-- android:id="@+id/newMealButton" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_column="0" -->
+        <!-- android:layout_gravity="left|top" -->
+        <!-- android:layout_row="1" -->
+        <!-- android:onClick="showAddMealActivity" -->
+        <!-- android:text="@string/newMealButton" /> -->
+
+
+        <!-- <Button -->
+        <!-- android:id="@+id/ButtonDeleteLastMeal" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_column="1" -->
+        <!-- android:layout_gravity="left|top" -->
+        <!-- android:layout_row="1" -->
+        <!-- android:onClick="deleteLastMeal" -->
+        <!-- android:text="Delete Last Meal" /> -->
+        <!-- </GridLayout> -->
 
         <ListView
             android:id="@+id/listCourses"

@@ -64,6 +64,9 @@ public class LogDataSource {
 		}
 		// make sure to close the cursor
 		cursor.close();
+		if(logs.isEmpty()) {
+			return null;
+		}
 		return logs;
 	}
 
@@ -79,5 +82,4 @@ public class LogDataSource {
 		log.setOption2(cursor.getString(7));
 		return log;
 	}
-
 }

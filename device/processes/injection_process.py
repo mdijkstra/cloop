@@ -146,7 +146,7 @@ class InjectionProcess():
 
         injection_units = carbs_units + correction_units
 
-        if 1 > injection_units > -.5:
+        if .5 > injection_units > -.5:
             logging.info("Injections units too little to take action : " + str(injection_units))
             logging.info("Carbs_absorbed (" + str(all_meal_carbs_absorbed) + ") cur_bg (" + str(
                 cur_bg) + "=" + str(cur_bg_units) + ") carbs_to_cover (" + str(carbs_to_cover) + "=" + str(

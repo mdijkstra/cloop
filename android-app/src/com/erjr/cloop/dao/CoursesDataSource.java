@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.erjr.cloop.entities.Course;
+import com.erjr.cloop.entities.Course;
 import com.erjr.diabetesi1.Util;
 
 import android.content.ContentValues;
@@ -88,7 +89,7 @@ public class CoursesDataSource {
 	public List<Course> getCoursesToTransfer() {
 		List<Course> courses = new ArrayList<Course>();
 		database.execSQL("update courses set transferred = 'transferring' where transferred = 'no'");
-		
+
 		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns,
 				" transferred = 'transferring' ", null, null, null, null);
 		if (cursor.getCount() <= 0) {
@@ -104,7 +105,7 @@ public class CoursesDataSource {
 		cursor.close();
 		return courses;
 	}
-	
+
 	public void setTransferSuccessful() {
 		database.execSQL("update courses set transferred = 'yes' where transferred = 'transferring'");
 	}
@@ -168,5 +169,31 @@ public class CoursesDataSource {
 		List<Course> courses = getAllCourses();
 		Course course = courses.get(courses.size() - 1);
 		deleteCourse(course);
+	}
+
+	public List<Course> getCoursesByDateRange(Date startTime, Date endTime) {
+		List<Course> courses = new ArrayList<Course>();
+
+		String start = Util.convertDateToString(startTime);
+		String end = Util.convertDateToString(endTime);
+		String restriction = Course.COL_DATETIME_CONSUMPTION + "> '" + start
+				+ "' AND " + Course.COL_DATETIME_CONSUMPTION + " < '" + end
+				+ "' ";
+		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns,
+				restriction, null, null, null, Course.COL_DATETIME_CONSUMPTION
+						+ " DESC");
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Course course = cursorToCourse(cursor);
+			courses.add(course);
+			cursor.moveToNext();
+		}
+		// make sure to close the cursor
+		cursor.close();
+		if (courses.isEmpty()) {
+			return null;
+		}
+		return courses;
 	}
 }

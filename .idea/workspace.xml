@@ -5,8 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="61f87d7f-364d-4e7e-afb6-293e322db31d" name="Default" comment="Add basic graph">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/cloop_config.py" afterPath="$PROJECT_DIR$/device/processes/cloop_config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/MainActivity.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/MainActivity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$attr.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$attr.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$dimen.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$dimen.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$drawable.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$drawable.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$id.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$id.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$layout.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$layout.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$menu.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$menu.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$string.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$string.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$style.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$style.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/MainActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/gen/com/erjr/diabetesi1/R.java" afterPath="$PROJECT_DIR$/android-app/gen/com/erjr/diabetesi1/R.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/android-app/res/layout/activity_main.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/injection_process.py" afterPath="$PROJECT_DIR$/device/processes/injection_process.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/res/values/strings.xml" afterPath="$PROJECT_DIR$/android-app/res/values/strings.xml" />
     </list>
     <ignored path="cloop.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,11 +42,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="sync_device_phone.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="sync_device_phone.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/device/processes/sync_device_phone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.2736156" vertical-offset="2584" max-vertical-offset="6069">
-              <caret line="112" column="49" selection-start-line="112" selection-start-column="49" selection-end-line="112" selection-end-column="49" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2584" max-vertical-offset="6069">
+              <caret line="166" column="60" selection-start-line="166" selection-start-column="60" selection-end-line="166" selection-end-column="60" />
               <folding />
             </state>
           </provider>
@@ -82,11 +95,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="injection_process.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="injection_process.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3393" max-vertical-offset="7378">
-              <caret line="213" column="8" selection-start-line="213" selection-start-column="8" selection-end-line="213" selection-end-column="8" />
+            <state vertical-scroll-proportion="0.78664494" vertical-offset="2033" max-vertical-offset="7378">
+              <caret line="148" column="13" selection-start-line="148" selection-start-column="13" selection-end-line="148" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -119,11 +132,11 @@
         <option value="$PROJECT_DIR$/device/sync_device_phone/sync_device_phone.py" />
         <option value="$PROJECT_DIR$/device/sync_device_pump/sync_device_pump.py" />
         <option value="$PROJECT_DIR$/device/processes/pump_interface.py" />
-        <option value="$PROJECT_DIR$/device/processes/injection_process.py" />
         <option value="$PROJECT_DIR$/device/processes/test_deviceDBTransData.py" />
         <option value="$PROJECT_DIR$/device/processes/sync_device_phone.py" />
         <option value="$PROJECT_DIR$/device/processes/sync_device_pump.py" />
         <option value="$PROJECT_DIR$/device/processes/cloop_config.py" />
+        <option value="$PROJECT_DIR$/device/processes/injection_process.py" />
       </list>
     </option>
   </component>
@@ -639,7 +652,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35252526" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1033,22 +1046,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/device/processes/test/test_injection_process.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4063">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3393" max-vertical-offset="7378">
-          <caret line="213" column="8" selection-start-line="213" selection-start-column="8" selection-end-line="213" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/device/processes/sync_device_pump.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1341" max-vertical-offset="7123">
@@ -1067,8 +1064,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/device/processes/sync_device_phone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2736156" vertical-offset="2584" max-vertical-offset="6069">
-          <caret line="112" column="49" selection-start-line="112" selection-start-column="49" selection-end-line="112" selection-end-column="49" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2584" max-vertical-offset="6069">
+          <caret line="166" column="60" selection-start-line="166" selection-start-column="60" selection-end-line="166" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/device/processes/test/test_injection_process.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4063">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/device/processes/injection_process.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.78664494" vertical-offset="2033" max-vertical-offset="7378">
+          <caret line="148" column="13" selection-start-line="148" selection-start-column="13" selection-end-line="148" selection-end-column="13" />
           <folding />
         </state>
       </provider>

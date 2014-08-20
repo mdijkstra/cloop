@@ -86,26 +86,33 @@ public class Injection {
 				+ Util.convertDateToString(datetimeDelivered) + "', "
 				+ curIobUnits + ", " + curBgUnits + ", " + correctionUnits
 				+ ", " + carbsToCover + ", " + carbsUnits + ", "
-				+ curBasalUnits + ", " + (allMealCarbsAbsorbed ? 1 : 0) + ", '" + status
-				+ "')";
+				+ curBasalUnits + ", " + (allMealCarbsAbsorbed ? 1 : 0) + ", '"
+				+ status + "')";
 	}
 
 	public void setFromXml(String xml) {
-		injectionId = Util.nullOrInteger(Util.getValueFromXml(xml, "injection_id"));
-		unitsIntended = Util.nullOrFloat(Util.getValueFromXml(xml, "units_intended"));
-		unitsDelivered = Util.nullOrFloat(Util.getValueFromXml(xml, "units_delivered"));
+		injectionId = Util.nullOrInteger(Util.getValueFromXml(xml,
+				"injection_id"));
+		unitsIntended = Util.nullOrFloat(Util.getValueFromXml(xml,
+				"units_intended"));
+		unitsDelivered = Util.nullOrFloat(Util.getValueFromXml(xml,
+				"units_delivered"));
 		tempRate = Util.nullOrFloat(Util.getValueFromXml(xml, "temp_rate"));
 		datetimeIntended = Util.convertStringToDate(Util.getValueFromXml(xml,
 				"datetime_intended"));
 		datetimeDelivered = Util.convertStringToDate(Util.getValueFromXml(xml,
 				"datetime_delivered"));
-		curIobUnits = Util.nullOrFloat(Util.getValueFromXml(xml, "cur_iob_units"));
-		curBgUnits = Util.nullOrFloat(Util.getValueFromXml(xml, "cur_bg_units"));
+		curIobUnits = Util.nullOrFloat(Util.getValueFromXml(xml,
+				"cur_iob_units"));
+		curBgUnits = Util
+				.nullOrFloat(Util.getValueFromXml(xml, "cur_bg_units"));
 		correctionUnits = Util.nullOrFloat(Util.getValueFromXml(xml,
 				"correction_units"));
-		carbsToCover = Util.nullOrInteger(Util.getValueFromXml(xml, "carbs_to_cover"));
+		carbsToCover = Util.nullOrInteger(Util.getValueFromXml(xml,
+				"carbs_to_cover"));
 		carbsUnits = Util.nullOrFloat(Util.getValueFromXml(xml, "carbs_units"));
-		curBasalUnits = Util.nullOrFloat(Util.getValueFromXml(xml, "cur_basal_units"));
+		curBasalUnits = Util.nullOrFloat(Util.getValueFromXml(xml,
+				"cur_basal_units"));
 		allMealCarbsAbsorbed = Util.getValueFromXml(xml,
 				"all_meal_carbs_absorbed").equalsIgnoreCase("true") ? true
 				: false;
@@ -117,6 +124,216 @@ public class Injection {
 				+ Util.convertDateToPrettyString(datetimeDelivered)
 				+ " to correct from " + curBgUnits + " with " + curIobUnits
 				+ " iob and eating " + carbsToCover + "g of carbs.";
+	}
+
+	/**
+	 * @return the injectionId
+	 */
+	public Integer getInjectionId() {
+		return injectionId;
+	}
+
+	/**
+	 * @param injectionId
+	 *            the injectionId to set
+	 */
+	public void setInjectionId(Integer injectionId) {
+		this.injectionId = injectionId;
+	}
+
+	/**
+	 * @return the unitsIntended
+	 */
+	public Float getUnitsIntended() {
+		return unitsIntended;
+	}
+
+	/**
+	 * @param unitsIntended
+	 *            the unitsIntended to set
+	 */
+	public void setUnitsIntended(Float unitsIntended) {
+		this.unitsIntended = unitsIntended;
+	}
+
+	/**
+	 * @return the unitsDelivered
+	 */
+	public Float getUnitsDelivered() {
+		return unitsDelivered;
+	}
+
+	/**
+	 * @param unitsDelivered
+	 *            the unitsDelivered to set
+	 */
+	public void setUnitsDelivered(Float unitsDelivered) {
+		this.unitsDelivered = unitsDelivered;
+	}
+
+	/**
+	 * @return the tempRate
+	 */
+	public Float getTempRate() {
+		return tempRate;
+	}
+
+	/**
+	 * @param tempRate
+	 *            the tempRate to set
+	 */
+	public void setTempRate(Float tempRate) {
+		this.tempRate = tempRate;
+	}
+
+	/**
+	 * @return the datetimeIntended
+	 */
+	public Date getDatetimeIntended() {
+		return datetimeIntended;
+	}
+
+	/**
+	 * @param datetimeIntended
+	 *            the datetimeIntended to set
+	 */
+	public void setDatetimeIntended(Date datetimeIntended) {
+		this.datetimeIntended = datetimeIntended;
+	}
+
+	/**
+	 * @return the datetimeDelivered
+	 */
+	public Date getDatetimeDelivered() {
+		return datetimeDelivered;
+	}
+
+	/**
+	 * @param datetimeDelivered
+	 *            the datetimeDelivered to set
+	 */
+	public void setDatetimeDelivered(Date datetimeDelivered) {
+		this.datetimeDelivered = datetimeDelivered;
+	}
+
+	/**
+	 * @return the curIobUnits
+	 */
+	public Float getCurIobUnits() {
+		return curIobUnits;
+	}
+
+	/**
+	 * @param curIobUnits
+	 *            the curIobUnits to set
+	 */
+	public void setCurIobUnits(Float curIobUnits) {
+		this.curIobUnits = curIobUnits;
+	}
+
+	/**
+	 * @return the curBgUnits
+	 */
+	public Float getCurBgUnits() {
+		return curBgUnits;
+	}
+
+	/**
+	 * @param curBgUnits
+	 *            the curBgUnits to set
+	 */
+	public void setCurBgUnits(Float curBgUnits) {
+		this.curBgUnits = curBgUnits;
+	}
+
+	/**
+	 * @return the correctionUnits
+	 */
+	public Float getCorrectionUnits() {
+		return correctionUnits;
+	}
+
+	/**
+	 * @param correctionUnits
+	 *            the correctionUnits to set
+	 */
+	public void setCorrectionUnits(Float correctionUnits) {
+		this.correctionUnits = correctionUnits;
+	}
+
+	/**
+	 * @return the carbsToCover
+	 */
+	public Integer getCarbsToCover() {
+		return carbsToCover;
+	}
+
+	/**
+	 * @param carbsToCover
+	 *            the carbsToCover to set
+	 */
+	public void setCarbsToCover(Integer carbsToCover) {
+		this.carbsToCover = carbsToCover;
+	}
+
+	/**
+	 * @return the carbsUnits
+	 */
+	public Float getCarbsUnits() {
+		return carbsUnits;
+	}
+
+	/**
+	 * @param carbsUnits
+	 *            the carbsUnits to set
+	 */
+	public void setCarbsUnits(Float carbsUnits) {
+		this.carbsUnits = carbsUnits;
+	}
+
+	/**
+	 * @return the curBasalUnits
+	 */
+	public Float getCurBasalUnits() {
+		return curBasalUnits;
+	}
+
+	/**
+	 * @param curBasalUnits
+	 *            the curBasalUnits to set
+	 */
+	public void setCurBasalUnits(Float curBasalUnits) {
+		this.curBasalUnits = curBasalUnits;
+	}
+
+	/**
+	 * @return the allMealCarbsAbsorbed
+	 */
+	public boolean isAllMealCarbsAbsorbed() {
+		return allMealCarbsAbsorbed;
+	}
+
+	/**
+	 * @param i
+	 *            the allMealCarbsAbsorbed to set
+	 */
+	public void setAllMealCarbsAbsorbed(int i) {
+		this.allMealCarbsAbsorbed = i == 1 ? true : false;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status
+	 *            the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

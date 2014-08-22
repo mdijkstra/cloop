@@ -54,6 +54,8 @@ select * from logs;
 select * from alerts;
 select * from courses_to_injections;
 select * from automode_switch;
+select * from halts;
+
 
 insert into injections (injection_type,                     
 units_intended, units_delivered, temp_rate, datetime_intended,                     

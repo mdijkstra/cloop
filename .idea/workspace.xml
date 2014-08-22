@@ -5,57 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="61f87d7f-364d-4e7e-afb6-293e322db31d" name="Default" comment="Add basic graph">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/device/processes/shutdown_process.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/device/processes/test/test_shutdown.py" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\connect-bt.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\connect_as_client.2.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\connect_as_client.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\devices.txt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\get_sgv_xml_to_trans.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\inquiry.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\listBTConnectedDevices.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\python BT server with course sync.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\python BT server with uuid.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\test_course_sync_sql_code.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\backup\transmit-latest-sg.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\run.sh" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\sync_device_phone.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_phone\trans_xml.txt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_pump\ReadGlucoseHistory-page-20.data" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_pump\get_last_sg_from_data.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_pump\run.sh" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\erobinson\Documents\GitHub\cloop\device\sync_device_pump\sync_device_pump.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/Closed Loop.apk" afterPath="$PROJECT_DIR$/android-app/bin/Closed Loop.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/entities/Course.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/entities/Course.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/CoursesDataSource.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/CoursesDataSource.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/MainActivity.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/MainActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/MySQLiteHelper.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/MySQLiteHelper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$id.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$layout.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$menu.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$menu.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$string.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$string.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$style.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$style.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes.dex" afterPath="$PROJECT_DIR$/android-app/bin/classes.dex" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/resources.ap_" afterPath="$PROJECT_DIR$/android-app/bin/resources.ap_" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/AndroidManifest.xml" afterPath="$PROJECT_DIR$/android-app/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/AndroidManifest.xml" afterPath="$PROJECT_DIR$/android-app/bin/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/BTSyncThread.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/BTSyncThread.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Course.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Course.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/CoursesDataSource.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/CoursesDataSource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Halt.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Halt.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/HaltDataSource.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/HaltDataSource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/MainActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/MySQLiteHelper.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/MySQLiteHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/NavDrawerActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/NavDrawerActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/gen/com/erjr/diabetesi1/R.java" afterPath="$PROJECT_DIR$/android-app/gen/com/erjr/diabetesi1/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/Util.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/Util.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/erobinson.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/erobinson.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/injection_process.py" afterPath="$PROJECT_DIR$/device/processes/injection_process.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/res/values/strings.xml" afterPath="$PROJECT_DIR$/android-app/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/sync_device_phone.py" afterPath="$PROJECT_DIR$/device/processes/sync_device_phone.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py" afterPath="$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/test/test_injection_process.py" afterPath="$PROJECT_DIR$/device/processes/test/test_injection_process.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/database/basic_injection_dev.sql" afterPath="$PROJECT_DIR$/device/database/basic_injection_dev.sql" />
     </list>
     <ignored path="cloop.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -170,7 +123,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
+    <option name="x" value="1912" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
     <option name="height" value="1096" />
@@ -665,7 +618,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <frame x="1912" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25151515" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -676,7 +629,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26464647" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26161617" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26161617" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929292" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />

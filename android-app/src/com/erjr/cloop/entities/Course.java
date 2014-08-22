@@ -84,22 +84,7 @@ public class Course {
 		fields.put(COL_DATETIME_CONSUMPTION, Util.convertDateToString(datetimeConsumption));
 		fields.put(COL_DATETIME_IDEAL_INJECTION, Util.convertDateToString(datetimeIdealInjection));
 		fields.put(COL_COMMENT, comment);
-		return rowToXml(ROW_DESC, fields);
-	}
-	
-	public String rowToXml(String rowDescriptor, HashMap<String, String> fields) {
-		if(rowDescriptor == null || fields == null) {
-			return "";
-		}
-		String xml = "<"+rowDescriptor+">";
-		Iterator<Entry<String, String>> it = fields.entrySet().iterator();
-	    while (it.hasNext()) {
-	        Entry<String, String> pairs = it.next();
-	        //System.out.println(pairs.getKey() + " = " + pairs.getValue());
-	        xml += "<"+pairs.getKey()+">"+pairs.getValue()+"</"+pairs.getKey()+">";
-	        it.remove(); // avoids a ConcurrentModificationException
-	    }
-	    return xml + "</"+rowDescriptor+">";
+		return Util.rowToXml(ROW_DESC, fields);
 	}
 
 	public long getId() {

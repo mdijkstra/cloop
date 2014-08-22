@@ -187,6 +187,38 @@ class DeviceDBTransData():
                 self.db_conn.rollback()
                 logging.error("******* rolled back insert : " + insert_sql)
 
+    def import_halts(self, halts_xml):
+        if halts_xml.index("<halts>") == 0:
+            halts_xml = get_value_from_xml(halts_xml, "halts")
+        if halts_xml == "":
+            return
+        halts = get_values_from_xml(halts_xml, "halt")
+        for halt_xml in halts:
+            insert_sql = self.halt_xml_to_sql_insert(halt_xml)
+            try:
+                # print "about to run : "+insert_sql
+                self.db.execute(insert_sql)
+                self.db_conn.commit()
+            except:
+                self.db_conn.rollback()
+                logging.error("******* rolled back insert : " + insert_sql)
+
+    def import_automodes(self, automodes_xml):
+        if automodes_xml.index("<automodes>") == 0:
+            automodes_xml = get_value_from_xml(automodes_xml, "automodes")
+        if automodes_xml == "":
+            return
+        automodes = get_values_from_xml(automodes_xml, "automode")
+        for automode_xml in automodes:
+            insert_sql = self.automode_xml_to_sql_insert(automode_xml)
+            try:
+                # print "about to run : "+insert_sql
+                self.db.execute(insert_sql)
+                self.db_conn.commit()
+            except:
+                self.db_conn.rollback()
+                logging.error("******* rolled back insert : " + insert_sql)
+
     def set_export_success(self, table_name):
         logging.info("setting export successful for : "+table_name)
         sql_update = "update "+table_name+" set transferred = 'yes' where transferred = 'transferring'"
@@ -330,6 +362,25 @@ class DeviceDBTransData():
             return "null"
         else:
             return dt.strftime(dateFormat)
+
+    def automode_xml_to_sql_insert(self, automode_xml):
+        automode_id = get_value_from_xml(automode_xml, "automode_switch_id")
+        datetime_recorded = get_value_from_xml(automode_xml, "datetime_recorded")
+        is_on = get_value_from_xml(automode_xml, "is_on")
+        sql = " insert into automode_switch (automode_switch_id, datetime_recorded, is_on)" \
+            + " values ( %d, '%s','%s')" \
+              % (int(automode_id), datetime_recorded, is_on)
+        logging.info(" courses_xml_to_sql_insert : " + sql)
+        return sql
+
+    def halt_xml_to_sql_insert(self, halt_xml):
+        halt_id = get_value_from_xml(halt_xml, "halt_id")
+        datetime_issued = get_value_from_xml(halt_xml, "datetime_issued")
+        sql = " insert into halts (halt_id, datetime_issued)" \
+            + " values ( %d, '%s')" \
+              % (int(halt_id), datetime_issued)
+        logging.info(" courses_xml_to_sql_insert : " + sql)
+        return sql
 
 
 '''

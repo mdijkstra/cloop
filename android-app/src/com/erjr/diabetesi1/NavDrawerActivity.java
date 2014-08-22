@@ -19,6 +19,7 @@ public class NavDrawerActivity extends Activity implements
 	public static final int NAV_POSITION_ADD_COURSE = 1;
 	public static final int NAV_POSITION_GRAPH = 2;
 	public static final int NAV_POSITION_NIGHT = 3;
+	public static final int NAV_POSITION_SETTINGS = 4;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,16 +75,13 @@ public class NavDrawerActivity extends Activity implements
 		case NAV_POSITION_NIGHT:
 			intent = new Intent(this, NightActivity.class);
 			break;
-		case 4:
-			// intent = new Intent(this, MainActivity.class);
+		case NAV_POSITION_SETTINGS:
+			 intent = new Intent(this, SettingsActivity.class);
 			break;
 		case 5:
 			// intent = new Intent(this, MainActivity.class);
 			break;
 		case 6:
-			// intent = new Intent(this, MainActivity.class);
-			break;
-		case 7:
 			// intent = new Intent(this, MainActivity.class);
 			break;
 		}

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.erjr.cloop.entities.Alert;
+import com.erjr.cloop.entities.Automode;
 import com.erjr.cloop.entities.Course;
 import com.erjr.cloop.entities.Halt;
 import com.erjr.cloop.entities.IOB;
@@ -17,7 +18,7 @@ import com.erjr.cloop.entities.SGV;
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "cloop.db";
-	private static final int DATABASE_VERSION = 14;
+	private static final int DATABASE_VERSION = 18;
 	private static MySQLiteHelper mInstance = null;
 
 	public static MySQLiteHelper getInstance(Context ctx) {
@@ -47,6 +48,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(Alert.TABLE_CREATE);
+		database.execSQL(Automode.TABLE_CREATE);
 		database.execSQL(Course.TABLE_CREATE);
 		database.execSQL(Halt.TABLE_CREATE);
 		database.execSQL(Injection.TABLE_CREATE);
@@ -63,6 +65,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		// TODO: Convert to Course.onUpgrade(db, oldVersion, newVersion)
 
 		db.execSQL("DROP TABLE IF EXISTS " + Alert.TABLE_ALERT);
+		db.execSQL("DROP TABLE IF EXISTS " + Automode.TABLE_AUTOMODE);
 		db.execSQL("DROP TABLE IF EXISTS " + Course.TABLE_COURSES);
 		db.execSQL("DROP TABLE IF EXISTS " + Injection.TABLE_INJECTIONS);
 		db.execSQL("DROP TABLE IF EXISTS " + IOB.TABLE_IOB);

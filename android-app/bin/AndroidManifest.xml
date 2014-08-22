@@ -21,7 +21,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <receiver android:name="com.erjr.diabetesi1.PersistentNotification" />
-        <receiver android:name="com.erjr.diabetesi1.AlertsManager" android:exported="false">
+        <receiver
+            android:name="com.erjr.diabetesi1.AlertsManager"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="notification_cancelled" />
             </intent-filter>
@@ -67,6 +69,10 @@
             android:name="com.erjr.diabetesi1.AddCourseActivity"
             android:label="@string/title_activity_enter_meal"
             android:launchMode="singleInstance" >
+        </activity>
+        <activity
+            android:name="com.erjr.diabetesi1.SettingsActivity"
+            android:label="@string/title_activity_settings" >
         </activity>
     </application>
 

@@ -30,10 +30,10 @@ class TestInjectionProcess(TestCase):
         if len(rows) > 1:
             failed = True
             print "Fail: Test 1: too many injections (" + str(len(rows)) + ")"
-        if rows[0][0] != 4.31:
+        if rows[0][0] != 3.31:
             failed = True
             print "Fail: Test 1: units_intended wrong (" + str(rows[0][0]) + ")"
-        if rows[0][1] != 4.31:
+        if rows[0][1] != 3.31:
             failed = True
             print "Fail: Test 1: units_delivered wrong (" + str(rows[0][1]) + ")"
         if rows[0][3] != "successful":
@@ -86,10 +86,10 @@ class TestInjectionProcess(TestCase):
         if len(rows) > 1:
             failed = True
             print "Fail: Test 2: too many injections (" + str(len(rows)) + ")"
-        if rows[0][0] != 2.31:
+        if rows[0][0] != 1.31:
             failed = True
             print "Fail: Test 2: units_intended wrong (" + str(rows[0][0]) + ")"
-        if rows[0][1] != 2.31:
+        if rows[0][1] != 1.31:
             failed = True
             print "Fail: Test 2: units_delivered wrong (" + str(rows[0][1]) + ")"
         if rows[0][2] is not None:
@@ -145,7 +145,7 @@ class TestInjectionProcess(TestCase):
         if len(rows) > 1:
             failed = True
             print "Fail: Test 3: too many injections (" + str(len(rows)) + ")"
-        if rows[0][0] != -3.23077:
+        if rows[0][0] != -2.23077:
             failed = True
             print "Fail: Test 3: units_intended wrong (" + str(rows[0][0]) + ")"
         if rows[0][1] != -.55:

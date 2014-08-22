@@ -31,7 +31,6 @@ public class MainActivity extends NavDrawerActivity implements
 		OnItemSelectedListener {
 	private static final String TAG = "MAINACTIVITY";
 	private int myNotificationId;
-	public static final int NAV_POSITION = 0;
 	private Spinner dataOptionsSpinner;
 	private Date spinnerLogsDatetimeStart;
 	private Date spinnerCoursesDatetimeStart;

@@ -4,6 +4,7 @@
 package com.erjr.cloop.entities;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import com.erjr.diabetesi1.Util;
 
@@ -18,10 +19,10 @@ public class Halt {
 	public static final String COL_DATETIME_ISSUED = "datetime_issued";
 	public static final String COL_TRANSFERRED = "transferred";
 
-	public static final String TABLE_CREATE = "create table "
-			+ TABLE_HALTS + "(" + COL_HALT_ID
-			+ " integer primary key autoincrement, " + COL_DATETIME_ISSUED
-			+ " text not null, " + COL_TRANSFERRED + " text not null);";
+	public static final String TABLE_CREATE = "create table " + TABLE_HALTS
+			+ "(" + COL_HALT_ID + " integer primary key autoincrement, "
+			+ COL_DATETIME_ISSUED + " text not null, " + COL_TRANSFERRED
+			+ " text not null);";
 
 	public static String[] allColumns = { COL_HALT_ID, COL_DATETIME_ISSUED,
 			COL_TRANSFERRED };
@@ -39,17 +40,17 @@ public class Halt {
 	}
 
 	public String toString() {
-		return "ID (" + haltID + ") issued at : "
-				+ Util.convertDateToString(datetimeIssued) + ". Transferred = "
-				+ transferred;
+		return "#" + haltID + " issued at : "
+				+ Util.convertDateToPrettyString(datetimeIssued);
 	}
 
 	public String toXML() {
-		// TODO: Convert to using column names instead of hard coded strings
-		return "<" + ROW_DESC + "><" + COL_HALT_ID + ">" + haltID + "</"
-				+ COL_HALT_ID + "><"+COL_DATETIME_ISSUED+">"
-				+ Util.convertDateToString(datetimeIssued)
-				+ "</"+COL_DATETIME_ISSUED+"></" + ROW_DESC + ">";
+		HashMap<String, String> fields = new HashMap<String, String>();
+		fields.put(COL_HALT_ID, Integer.toString((int) haltID));
+		fields.put(COL_DATETIME_ISSUED,
+				Util.convertDateToString(datetimeIssued));
+		fields.put(COL_TRANSFERRED, transferred);
+		return Util.rowToXml(ROW_DESC, fields);
 	}
 
 	/**
@@ -60,7 +61,8 @@ public class Halt {
 	}
 
 	/**
-	 * @param haltID the haltID to set
+	 * @param haltID
+	 *            the haltID to set
 	 */
 	public void setHaltID(long haltID) {
 		this.haltID = haltID;
@@ -74,7 +76,8 @@ public class Halt {
 	}
 
 	/**
-	 * @param datetimeIssued the datetimeIssued to set
+	 * @param datetimeIssued
+	 *            the datetimeIssued to set
 	 */
 	public void setDatetimeIssued(Date datetimeIssued) {
 		this.datetimeIssued = datetimeIssued;
@@ -88,7 +91,8 @@ public class Halt {
 	}
 
 	/**
-	 * @param transferred the transferred to set
+	 * @param transferred
+	 *            the transferred to set
 	 */
 	public void setTransferred(String transferred) {
 		this.transferred = transferred;

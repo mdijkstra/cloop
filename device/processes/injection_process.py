@@ -105,7 +105,7 @@ class InjectionProcess():
                                "Injection #" + str(injection_id) + " with a rate of " +
                                str(temp_rate) + " was given at " + str(now))
             else:
-                self.add_alert(now, "process_injection", "info", "Injected "+str(injection_units)+"u",
+                self.add_alert(now, "process_injection", "info", "Injected " + str(injection_units) + "u",
                                "Injection #" + str(injection_id) + " of " +
                                str(injection_units) + " units was given at " + str(now))
             courses = self.get_courses_covered(injection_id)
@@ -113,8 +113,9 @@ class InjectionProcess():
                 carbs = 0
                 for course in courses:
                     carbs += course[0]
-                self.add_alert(now + datetime.timedelta(minutes=35), "process_injection", "alert", "Try to eat " +
-                               str(carbs) + "g of carbs for injection " + str(injection_id) + " in 5 minutes")
+                self.add_alert(now + datetime.timedelta(minutes=35), "process_injection", "alert", "Time to eat",
+                               "Try to eat " + str(carbs) + "g of carbs for injection " + str(
+                                   injection_id) + " in 5 minutes")
             self.cloop_config.db_log("SUCCESS", "injection_process", "Successfully able to execute " + injection_type
                                      + " injection #" + str(injection_id) + " of " + str(
                 injection_units) + "u temp:" + str(temp_rate))

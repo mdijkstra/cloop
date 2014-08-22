@@ -4,7 +4,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -143,4 +146,19 @@ public class Util {
 		}
 	}
 
+	public static String rowToXml(String rowDescriptor, HashMap<String, String> fields) {
+		if (rowDescriptor == null || fields == null) {
+			return "";
+		}
+		String xml = "<" + rowDescriptor + ">";
+		Iterator<Entry<String, String>> it = fields.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<String, String> pairs = it.next();
+			// System.out.println(pairs.getKey() + " = " + pairs.getValue());
+			xml += "<" + pairs.getKey() + ">" + pairs.getValue() + "</"
+					+ pairs.getKey() + ">";
+			it.remove(); // avoids a ConcurrentModificationException
+		}
+		return xml + "</" + rowDescriptor + ">";
+	}
 }

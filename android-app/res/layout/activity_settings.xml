@@ -1,0 +1,63 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.erjr.diabetesi1.SettingsActivity" >
+
+    <GridLayout
+        android:id="@+id/group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:columnCount="2"
+        android:rowCount="2" >
+
+        <Button
+            android:id="@+id/automodeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:onClick="automodeSwitch"
+            android:text="@string/buttonAutomode" />
+
+        <TextView
+            android:id="@+id/currentAutomode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:text="Current Automode"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/powerSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:onClick="powerSwitch"
+            android:text="@string/buttonPowerSwitch" />
+
+        <TextView
+            android:id="@+id/currentSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="1"
+            android:text="Current Switch"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20sp" />
+    </GridLayout>
+
+    <fragment
+        android:id="@+id/navigation_drawer_fragment"
+        android:name="com.erjr.diabetesi1.NavigationDrawerFragment"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start" />
+
+</android.support.v4.widget.DrawerLayout>

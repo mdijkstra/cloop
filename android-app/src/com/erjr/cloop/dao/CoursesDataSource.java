@@ -88,7 +88,8 @@ public class CoursesDataSource {
 
 	public List<Course> getCoursesToTransfer() {
 		List<Course> courses = new ArrayList<Course>();
-		database.execSQL("update courses set transferred = 'transferring' where transferred = 'no'");
+		database.execSQL("update " + Course.TABLE_COURSES
+				+ " set transferred = 'transferring' where transferred = 'no'");
 
 		Cursor cursor = database.query(Course.TABLE_COURSES, Course.allColumns,
 				" transferred = 'transferring' ", null, null, null, null);
@@ -107,7 +108,8 @@ public class CoursesDataSource {
 	}
 
 	public void setTransferSuccessful() {
-		database.execSQL("update courses set transferred = 'yes' where transferred = 'transferring'");
+		database.execSQL("update " + Course.TABLE_COURSES
+				+ " set transferred = 'yes' where transferred = 'transferring'");
 	}
 
 	private Course cursorToCourse(Cursor cursor) {

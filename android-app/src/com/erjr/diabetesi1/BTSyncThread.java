@@ -12,10 +12,13 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.util.Log;
 
+import com.erjr.cloop.dao.AutomodeDataSource;
 import com.erjr.cloop.dao.CoursesDataSource;
-import com.erjr.cloop.dao.SGVDataSource;
+import com.erjr.cloop.dao.HaltDataSource;
 import com.erjr.cloop.entities.Alert;
+import com.erjr.cloop.entities.Automode;
 import com.erjr.cloop.entities.Course;
+import com.erjr.cloop.entities.Halt;
 import com.erjr.cloop.entities.IOB;
 import com.erjr.cloop.entities.Injection;
 import com.erjr.cloop.entities.LogRecord;
@@ -152,6 +155,34 @@ public class BTSyncThread extends Thread {
 
 	private String getDataToSend() {
 		String xml = getCourseDataToSend();
+		xml += getHaltDataToSend();
+		xml += getAutomodeDataToSend();
+		return xml;
+	}
+
+	private String getAutomodeDataToSend() {
+		AutomodeDataSource aDS = new AutomodeDataSource(context);
+		List<Automode> automodes = aDS.getAutomodesToTransfer();
+		String xml = "<automodes>";
+		if(automodes != null) {
+			for(Automode a : automodes) {
+				xml += a.toXML();
+			}
+		}
+		xml += "</automodes>";
+		return xml;
+	}
+
+	private String getHaltDataToSend() {
+		HaltDataSource hDS = new HaltDataSource(context);
+		List<Halt> halts = hDS.getHaltsToTransfer();
+		String xml = "<halts>";
+		if(halts != null) {
+			for(Halt h : halts) {
+				xml += h.toXML();
+			}
+		}
+		xml += "</halts>";
 		return xml;
 	}
 

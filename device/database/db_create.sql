@@ -31,6 +31,7 @@ CREATE TABLE `alerts` (
   `src` varchar(45) NOT NULL,
   `code` varchar(45) NOT NULL,
   `type` varchar(45) NOT NULL,
+  `title` varchar(45) DEFAULT NULL,
   `message` varchar(500) NOT NULL,
   `value` varchar(45) DEFAULT NULL,
   `option1` varchar(500) DEFAULT NULL,
@@ -39,7 +40,7 @@ CREATE TABLE `alerts` (
   `datetime_dismissed` datetime DEFAULT NULL,
   `src_dismissed` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`alert_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +73,6 @@ CREATE TABLE `automode_switch` (
 
 LOCK TABLES `automode_switch` WRITE;
 /*!40000 ALTER TABLE `automode_switch` DISABLE KEYS */;
-INSERT INTO `automode_switch` VALUES (1,'2014-08-10 10:40:32','yes');
 /*!40000 ALTER TABLE `automode_switch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -132,6 +132,30 @@ LOCK TABLES `courses_to_injections` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `halts`
+--
+
+DROP TABLE IF EXISTS `halts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `halts` (
+  `halt_id` int(11) NOT NULL,
+  `datetime_issued` datetime NOT NULL,
+  `status` varchar(45) DEFAULT 'no',
+  PRIMARY KEY (`halt_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `halts`
+--
+
+LOCK TABLES `halts` WRITE;
+/*!40000 ALTER TABLE `halts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `halts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `injections`
 --
 
@@ -157,7 +181,7 @@ CREATE TABLE `injections` (
   `status` varchar(45) NOT NULL,
   `transferred` varchar(45) NOT NULL DEFAULT 'NO',
   PRIMARY KEY (`injection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,7 +260,7 @@ CREATE TABLE `logs` (
   `option2` varchar(500) DEFAULT NULL,
   `transferred` varchar(45) NOT NULL DEFAULT 'no',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8 COMMENT='table to record logs';
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COMMENT='table to record logs';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -262,7 +286,7 @@ CREATE TABLE `sgvs` (
   `sgv` int(11) DEFAULT NULL COMMENT 'blood glucose recorded',
   `transferred` varchar(45) NOT NULL DEFAULT 'no',
   PRIMARY KEY (`sgv_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -287,4 +311,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-10 10:40:46
+-- Dump completed on 2014-08-22 17:49:27

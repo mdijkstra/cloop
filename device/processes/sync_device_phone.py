@@ -66,13 +66,15 @@ class DeviceBTPhoneTransData:
         return read_str
 
     def read(self):
-        data = None
+        data = ""
         try:
             while True:
-                data = self.socket.recv(1024)
-                if len(data) == 0: break
-                logging.info("DeviceBTPhoneTransData.read read : [%s]" % data)
-                if "</EOM>" in data: break
+                data += self.socket.recv(1024)
+                if len(data) == 0:
+                    break
+                if "</EOM>" in data:
+                    break
+            logging.info("DeviceBTPhoneTransData.read read : [%s]" % data)
         except IOError:
             pass
         return data
@@ -162,6 +164,8 @@ class DeviceDBTransData():
 
     def import_data(self, xml):
         self.import_courses(xml)
+        self.import_halts(xml)
+        self.import_automodes(xml)
         logging.info("TODO: Import the various data elements from xml (currently just imports courses)")
 
     # ################## Internal methods below ############################
@@ -172,8 +176,7 @@ class DeviceDBTransData():
         print "      The API for importing data from the pump should probably be in a diff file"
 
     def import_courses(self, courses_xml):
-        if courses_xml.index("<courses>") == 0:
-            courses_xml = get_value_from_xml(courses_xml, "courses")
+        courses_xml = get_value_from_xml(courses_xml, "courses")
         if courses_xml == "":
             return
         courses = get_values_from_xml(courses_xml, "course")
@@ -188,8 +191,7 @@ class DeviceDBTransData():
                 logging.error("******* rolled back insert : " + insert_sql)
 
     def import_halts(self, halts_xml):
-        if halts_xml.index("<halts>") == 0:
-            halts_xml = get_value_from_xml(halts_xml, "halts")
+        halts_xml = get_value_from_xml(halts_xml, "halts")
         if halts_xml == "":
             return
         halts = get_values_from_xml(halts_xml, "halt")
@@ -204,8 +206,7 @@ class DeviceDBTransData():
                 logging.error("******* rolled back insert : " + insert_sql)
 
     def import_automodes(self, automodes_xml):
-        if automodes_xml.index("<automodes>") == 0:
-            automodes_xml = get_value_from_xml(automodes_xml, "automodes")
+        automodes_xml = get_value_from_xml(automodes_xml, "automodes")
         if automodes_xml == "":
             return
         automodes = get_values_from_xml(automodes_xml, "automode")
@@ -220,8 +221,8 @@ class DeviceDBTransData():
                 logging.error("******* rolled back insert : " + insert_sql)
 
     def set_export_success(self, table_name):
-        logging.info("setting export successful for : "+table_name)
-        sql_update = "update "+table_name+" set transferred = 'yes' where transferred = 'transferring'"
+        logging.info("setting export successful for : " + table_name)
+        sql_update = "update " + table_name + " set transferred = 'yes' where transferred = 'transferring'"
         self.db.execute(sql_update)
         self.db_conn.commit()
 
@@ -254,7 +255,7 @@ class DeviceDBTransData():
         datetime_ideal_injection = get_value_from_xml(course_xml, "datetime_ideal_injection")
         comment = get_value_from_xml(course_xml, "comment")
         # not needed on device, only needed on original location (app)
-        #    transferred = get_value_from_xml(xml, "transferred")
+        # transferred = get_value_from_xml(xml, "transferred")
         sql = " insert into courses (course_id, food_id, serv_quantity, carbs, \
             datetime_consumption, datetime_ideal_injection, comment) \
             values ( %d, %d, %f, %d, '%s','%s', '%s')" \
@@ -368,8 +369,8 @@ class DeviceDBTransData():
         datetime_recorded = get_value_from_xml(automode_xml, "datetime_recorded")
         is_on = get_value_from_xml(automode_xml, "is_on")
         sql = " insert into automode_switch (automode_switch_id, datetime_recorded, is_on)" \
-            + " values ( %d, '%s','%s')" \
-              % (int(automode_id), datetime_recorded, is_on)
+              + " values ( %d, '%s','%s')" \
+                % (int(automode_id), datetime_recorded, is_on)
         logging.info(" courses_xml_to_sql_insert : " + sql)
         return sql
 
@@ -377,8 +378,8 @@ class DeviceDBTransData():
         halt_id = get_value_from_xml(halt_xml, "halt_id")
         datetime_issued = get_value_from_xml(halt_xml, "datetime_issued")
         sql = " insert into halts (halt_id, datetime_issued)" \
-            + " values ( %d, '%s')" \
-              % (int(halt_id), datetime_issued)
+              + " values ( %d, '%s')" \
+                % (int(halt_id), datetime_issued)
         logging.info(" courses_xml_to_sql_insert : " + sql)
         return sql
 
@@ -391,7 +392,7 @@ db_trans.import_courses("<courses></courses>")
 
 if __name__ == '__main__':
     cloop_config = CloopConfig()
-#    cloop_config.db_log("SUCCESS", "sync_device_phone", "Going to sync phone-device at "+str(now))
+    # cloop_config.db_log("SUCCESS", "sync_device_phone", "Going to sync phone-device at "+str(now))
     logging.info('Going to try to sync device db and phone db...')
     db_trans = DeviceDBTransData()
     data_to_send = db_trans.get_data_to_send()
@@ -405,4 +406,4 @@ if __name__ == '__main__':
     else:
         logging.warning('no data from phone')
     logging.info('DONE WITH PHONE SYNC\n\n\n\n')
-    cloop_config.db_log("SUCCESS", "sync_device_phone", "Successfully completed phone-device sync at "+str(now))
+    cloop_config.db_log("SUCCESS", "sync_device_phone", "Successfully completed phone-device sync at " + str(now))

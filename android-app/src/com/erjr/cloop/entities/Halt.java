@@ -14,7 +14,7 @@ import com.erjr.diabetesi1.Util;
  */
 public class Halt {
 	public static final String TABLE_HALTS = "halts";
-	public static final String ROW_DESC = "halt_record";
+	public static final String ROW_DESC = "halt";
 	public static final String COL_HALT_ID = "halt_id";
 	public static final String COL_DATETIME_ISSUED = "datetime_issued";
 	public static final String COL_TRANSFERRED = "transferred";
@@ -49,7 +49,6 @@ public class Halt {
 		fields.put(COL_HALT_ID, Integer.toString((int) haltID));
 		fields.put(COL_DATETIME_ISSUED,
 				Util.convertDateToString(datetimeIssued));
-		fields.put(COL_TRANSFERRED, transferred);
 		return Util.rowToXml(ROW_DESC, fields);
 	}
 

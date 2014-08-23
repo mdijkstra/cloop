@@ -9,11 +9,18 @@ else
 	sudo reboot
 fi
 
+if diff hosts.allow /etc/hosts.allow >/dev/null; then
+	echo "########### SSH hosts already allowed"
+else
+	echo "########### Setting up SSH hosts"
+	sudo cp hosts.allow /etc/hosts.allow
+fi
+
 sudo apt-get update
 sudo apt-get -y upgrade
 
 sudo apt-get -y autoremove
-sudo apt-get -y install vim bluetooth bluez-utils blueman wicd-curses wtop bluetooth python-bluez python-gobject python-dbus
+sudo apt-get -y install vim bluetooth bluez-utils blueman wicd-curses bluetooth python-bluez python-gobject python-dbus screen
 
 sudo easy_install pudb
 
@@ -30,6 +37,10 @@ else
 	echo "############ setting timezone..."
 	sudo cp timezone /etc/timezone
 fi
+
+cd /home/pi/diabetes
+git clone https://github.com/bewest/decoding-carelink
+cd /home/pi/diabetes/cloop/device/setup/pi
 
 echo ""
 echo "############## RUN ##########"

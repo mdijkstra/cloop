@@ -1,0 +1,14 @@
+startup_message off
+vbell off
+escape /
+defscrollback 5000
+#backtick 1 60 60 $HOME/.screenrc.acpi  # .screenrc.acpi contains 1 line: acpi | awk -F ', ' '{print $2}'
+hardstatus alwayslastline
+hardstatus string '%{= kG}%-Lw%{= kW}%50> %n*%f %t%{= kG}%+Lw%< %{= kG}%-=%D %m/%d/%y | %C:%s %A | %1`%{-}'
+screen -t shell 0 bash
+screen -t shell2 2 bash
+screen -t vim 3 bash
+screen -t vim 4 bash
+screen -t mysql 5 bash
+select 0
+

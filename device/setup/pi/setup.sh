@@ -15,6 +15,12 @@ else
 	echo "########### Setting up SSH hosts"
 	sudo cp hosts.allow /etc/hosts.allow
 fi
+if diff screenrc /home/pi/.screenrc >/dev/null; then
+	echo "########### Screenrc already setup"
+else
+	echo "########### Setting up screenrc"
+	sudo cp screenrc /home/pi/.screenrc
+fi
 
 sudo apt-get update
 sudo apt-get -y upgrade
@@ -38,9 +44,16 @@ else
 	sudo cp timezone /etc/timezone
 fi
 
-cd /home/pi/diabetes
-git clone https://github.com/bewest/decoding-carelink
-cd /home/pi/diabetes/cloop/device/setup/pi
+if [ -d "/home/pi/diabetes/decoding-carelink" ]; then
+	echo "########### Decoding dir already setup"
+else
+	cd /home/pi/diabetes
+	git clone https://github.com/erobinson/decoding-carelink
+	cd decoding-carelink
+	sudo python ez_setup.py
+	sudo python setup.py develop
+	cd /home/pi/diabetes/cloop/device/setup/pi
+fi
 
 echo ""
 echo "############## RUN ##########"

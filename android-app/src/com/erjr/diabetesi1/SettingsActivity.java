@@ -1,5 +1,7 @@
 package com.erjr.diabetesi1;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -8,6 +10,7 @@ import com.erjr.cloop.dao.AutomodeDataSource;
 import com.erjr.cloop.dao.HaltDataSource;
 import com.erjr.cloop.entities.Automode;
 import com.erjr.cloop.entities.Halt;
+import com.erjr.cloop.test.CloopTests;
 
 public class SettingsActivity extends NavDrawerActivity {
 
@@ -65,5 +68,23 @@ public class SettingsActivity extends NavDrawerActivity {
 		Halt h = hDS.createHalt();
 		Util.toast(getBaseContext(), h.toString());
 		updateTexts();
+	}
+
+	public void runAllTests(View view) {
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle("Confirm Run Tests")
+				.setMessage(
+						"Are you sure you want to run the app tests? They will clear the database and this cannot be undone!")
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								CloopTests test = new CloopTests(
+										getBaseContext());
+								test.runAllTests();
+							}
+						}).setNegativeButton("No", null).show();
 	}
 }

@@ -43,6 +43,7 @@ delete from alerts;
 delete from automode_switch;
 delete from logs;
 delete from sgvs;
+delete from halts;
 insert into sgvs (device_id, datetime_recorded, sgv) values (123456, now() - interval 5 minute, 150);
 insert into courses (course_id, carbs, datetime_consumption) values (1, 30, now() + interval 30 minute);
 select * from sgvs;

@@ -97,4 +97,9 @@ public class HaltDataSource {
 	public void saveCourse(Course c) {
 		database.execSQL(c.getUpdateSql());
 	}
+	
+	public void setTransferSuccessful() {
+		database.execSQL("update " + Halt.TABLE_HALTS
+				+ " set transferred = 'yes' where transferred = 'transferring'");
+	}
 }

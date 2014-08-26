@@ -99,6 +99,12 @@ public class SGVDataSource {
 		return cgm;
 	}
 
+	public Integer getCount() {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
+
 	// public List<Course> getCoursesToTransfer() {
 	// List<Course> courses = new ArrayList<Course>();
 	//

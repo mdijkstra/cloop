@@ -46,15 +46,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 //	}
 
 	@Override
-	public void onCreate(SQLiteDatabase database) {
-		database.execSQL(Alert.TABLE_CREATE);
-		database.execSQL(Automode.TABLE_CREATE);
-		database.execSQL(Course.TABLE_CREATE);
-		database.execSQL(Halt.TABLE_CREATE);
-		database.execSQL(Injection.TABLE_CREATE);
-		database.execSQL(IOB.TABLE_CREATE);
-		database.execSQL(LogRecord.TABLE_CREATE);
-		database.execSQL(SGV.TABLE_CREATE);
+	public void onCreate(SQLiteDatabase db) {
+		createTables(db);
 	}
 
 	@Override
@@ -63,7 +56,22 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
 		// TODO: Convert to Course.onUpgrade(db, oldVersion, newVersion)
-
+		dropTables(db);
+		onCreate(db);
+	}
+	
+	public void createTables(SQLiteDatabase db) {
+		db.execSQL(Alert.TABLE_CREATE);
+		db.execSQL(Automode.TABLE_CREATE);
+		db.execSQL(Course.TABLE_CREATE);
+		db.execSQL(Halt.TABLE_CREATE);
+		db.execSQL(Injection.TABLE_CREATE);
+		db.execSQL(IOB.TABLE_CREATE);
+		db.execSQL(LogRecord.TABLE_CREATE);
+		db.execSQL(SGV.TABLE_CREATE);
+	}
+	
+	public void dropTables(SQLiteDatabase db) {
 		db.execSQL("DROP TABLE IF EXISTS " + Alert.TABLE_ALERT);
 		db.execSQL("DROP TABLE IF EXISTS " + Automode.TABLE_AUTOMODE);
 		db.execSQL("DROP TABLE IF EXISTS " + Course.TABLE_COURSES);
@@ -72,7 +80,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + Halt.TABLE_HALTS);
 		db.execSQL("DROP TABLE IF EXISTS " + LogRecord.TABLE_LOG);
 		db.execSQL("DROP TABLE IF EXISTS " + SGV.TABLE_SGVS);
-		onCreate(db);
 	}
 
 }

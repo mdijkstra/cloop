@@ -32,16 +32,16 @@ public class BTSyncThread extends Thread {
 	public static final UUID MY_UUID = UUID
 			.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
 
-//	private SGVDataSource SGVDS = null;
-//	private CoursesDataSource CoursesDS = null;
+	// private SGVDataSource SGVDS = null;
+	// private CoursesDataSource CoursesDS = null;
 	private boolean stopThread = false;
 	private boolean breakInnerLoop;
 	private Context context;
 
 	public BTSyncThread(Context context) {
 		this.context = context;
-		//SGVDS = new SGVDataSource(context);
-		//CoursesDS = new CoursesDataSource(context);
+		// SGVDS = new SGVDataSource(context);
+		// CoursesDS = new CoursesDataSource(context);
 		// Use a temporary object that is later assigned to mmServerSocket,
 		// because mmServerSocket is final
 	}
@@ -54,7 +54,7 @@ public class BTSyncThread extends Thread {
 		while (!stopThread) {
 			Log.i(TAG, "start of outer loop");
 			setBTAdapter();
-			if(mmServerSocket == null) {
+			if (mmServerSocket == null) {
 				Log.e(TAG, "mmServerSocket is null");
 				continue;
 			}
@@ -86,9 +86,13 @@ public class BTSyncThread extends Thread {
 		closeSocket();
 	}
 
-	private void setTransfersSuccessful() {
+	public void setTransfersSuccessful() {
 		CoursesDataSource cDS = new CoursesDataSource(context);
 		cDS.setTransferSuccessful();
+		HaltDataSource hDS = new HaltDataSource(context);
+		hDS.setTransferSuccessful();
+		AutomodeDataSource aDS = new AutomodeDataSource(context);
+		aDS.setTransferSuccessful();
 	}
 
 	private void closeSocket() {
@@ -121,10 +125,11 @@ public class BTSyncThread extends Thread {
 			// tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME ,
 			// BTSync.MY_UUID);
 			// TODO: possibly change to secure connection
-//			tmp = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(
-//					NAME, MY_UUID);
-			tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(
-					NAME, MY_UUID);
+			// tmp =
+			// mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(
+			// NAME, MY_UUID);
+			tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME,
+					MY_UUID);
 		} catch (IOException e) {
 		}
 		mmServerSocket = tmp;
@@ -135,21 +140,32 @@ public class BTSyncThread extends Thread {
 	 * 
 	 * @param dataReceived
 	 */
-	private void processDataReceived(String dataReceived) {
-		Log.i(TAG, "Processing Data Recieved");
+	public void processDataReceived(String dataReceived) {
+		if(dataReceived == null || dataReceived.isEmpty()) {
+			return;
+		}
+		// remoing </EOM> from end of string
+		if (dataReceived.substring(0, dataReceived.length() - 6).equals(
+				"</EOM>")) {
+			dataReceived = dataReceived.substring(0, dataReceived.length() - 6);
+		}
+		Log.i(TAG, "Processing Data Recieved : " + dataReceived);
 		// process sgv data
 		String fullSGVXml = Util.getValueFromXml(dataReceived, SGV.TABLE_SGVS);
-		String iobXml = Util.getValueFromXml(dataReceived, IOB.TABLE_IOB+"s");
-		String injectionsXml = Util.getValueFromXml(dataReceived, Injection.TABLE_INJECTIONS);
-		String logsXml = Util.getValueFromXml(dataReceived, LogRecord.TABLE_LOG);
-		String alertsXml = Util.getValueFromXml(dataReceived, Alert.TABLE_ALERT);
-		
+		String iobXml = Util.getValueFromXml(dataReceived, IOB.TABLE_IOB + "s");
+		String injectionsXml = Util.getValueFromXml(dataReceived,
+				Injection.TABLE_INJECTIONS);
+		String logsXml = Util
+				.getValueFromXml(dataReceived, LogRecord.TABLE_LOG);
+		String alertsXml = Util
+				.getValueFromXml(dataReceived, Alert.TABLE_ALERT);
+
 		SGV.importXml(fullSGVXml, context);
 		IOB.importXml(iobXml, context);
 		Injection.importXml(injectionsXml, context);
 		LogRecord.importXml(logsXml, context);
 		Alert.importXml(alertsXml, context);
-		
+
 		Log.i(TAG, "Done processing Received data");
 	}
 
@@ -164,8 +180,8 @@ public class BTSyncThread extends Thread {
 		AutomodeDataSource aDS = new AutomodeDataSource(context);
 		List<Automode> automodes = aDS.getAutomodesToTransfer();
 		String xml = "<automodes>";
-		if(automodes != null) {
-			for(Automode a : automodes) {
+		if (automodes != null) {
+			for (Automode a : automodes) {
 				xml += a.toXML();
 			}
 		}
@@ -177,8 +193,8 @@ public class BTSyncThread extends Thread {
 		HaltDataSource hDS = new HaltDataSource(context);
 		List<Halt> halts = hDS.getHaltsToTransfer();
 		String xml = "<halts>";
-		if(halts != null) {
-			for(Halt h : halts) {
+		if (halts != null) {
+			for (Halt h : halts) {
 				xml += h.toXML();
 			}
 		}
@@ -231,8 +247,7 @@ public class BTSyncThread extends Thread {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		String dataReceived = new String(baos.toByteArray());
-		Log.i(TAG, "done reading. read: " + dataReceived);
+		Log.i(TAG, "done reading.");
 
 		Log.i(TAG, "Going to write...");
 		OutputStream outStream = null;
@@ -259,8 +274,7 @@ public class BTSyncThread extends Thread {
 			Log.i(TAG, msg);
 		}
 
-		// substring to remove </EOM>
-		return dataReceived.substring(0, dataReceived.length() - 6);
+		return new String(baos.toByteArray());
 	}
 
 	/** Will cancel the listening socket, and cause the thread to finish */

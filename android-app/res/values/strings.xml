@@ -42,5 +42,5 @@
     <string name="title_activity_settings">Settings Activity</string>
     <string name="buttonAutomode">Automode Switch</string>
     <string name="buttonPowerSwitch">Power Switch</string>
-
+	<string name="buttonRunAllTests">Run All Tests</string>
 </resources>

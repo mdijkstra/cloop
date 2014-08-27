@@ -66,20 +66,25 @@ class InjectionProcess():
         self.db_conn.close()
 
     def process_injection(self):
-        if not self.is_in_automode():
-            sys.exit()
+        automode = self.get_automode()
+        if automode == "off":
+            return
         # if there is a course coming wait a little to correct and cover the carbs
         # if self.should_wait_for_course(): # not needed since able to give boluses
         # sys.exit()
         injection_type, temp_rate, injection_units, injection_id = self.get_injection_amount()
-        if injection_type == "bolus":
+        if automode == "simulate":
+            successfully_executed = True
+        elif injection_type == "bolus" and automode == "fullOn":
             # use a bolus to inject
             successfully_executed = self.do_bolus(injection_units)
-        elif injection_type == "square":
+        elif injection_type == "square" and (automode == "fullOn" or automode == "lowsOnly"):
             # use a temp rate to remove insulin
             successfully_executed = self.set_temp_basal(temp_rate, self.cloop_config.get_temp_duration())
         else:
-            logging.info("Returning from injection_process: No injection required")
+            logging.info(
+                "Returning from injection_process: No injection required. Automode is "
+                + automode + " and injection type is " + injection_type)
             return
 
         if not successfully_executed:
@@ -364,9 +369,15 @@ class InjectionProcess():
 
     def is_recent_injection(self, bolus_type):
         if bolus_type == "bolus":
+            # if simulating bolus don't want quite as many alerts
+            if self.get_automode() == "simulate":
+                time_interval = "45"
+            else:
+                time_interval = "15"
             sql_get_active_injections = "select * from injections where \
-                        status = 'successful' and datetime_delivered > now() - interval 15 minute \
+                        status = 'successful' and datetime_delivered > now() - interval "+time_interval+" minute \
                             and injection_type = 'square'"
+
         else:
             sql_get_active_injections = "select * from injections where \
                         status = 'successful' and datetime_delivered > now() - interval 31 minute \
@@ -386,19 +397,16 @@ class InjectionProcess():
         self.db.execute(sql_get_courses)
         return self.db.fetchall()
 
-    def is_in_automode(self):
+    def get_automode(self):
         sql_get_automode = "select is_on from automode_switch order by datetime_recorded desc limit 1"
         logging.info("SQL: " + sql_get_automode)
         self.db.execute(sql_get_automode)
         rows = self.db.fetchall()
         if rows is None:
-            return False
+            return "off"
         row = rows[0]
         is_on = row[0]
-        if is_on == "yes":
-            return True
-        else:
-            return False
+        return is_on
 
     def do_bolus(self, injection_units):
         if windowsConfig:

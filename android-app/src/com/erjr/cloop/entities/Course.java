@@ -154,7 +154,7 @@ public class Course {
 	/**
 	 * @return the datetime_consumption
 	 */
-	public Date getDatetime_consumption() {
+	public Date getDatetimeConsumption() {
 		return datetimeConsumption;
 	}
 

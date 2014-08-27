@@ -53,7 +53,9 @@ public class BTSyncThread extends Thread {
 		Log.i(TAG, "In Run");
 		while (!stopThread) {
 			Log.i(TAG, "start of outer loop");
-			setBTAdapter();
+			if (!setBTAdapter()) {
+				break;
+			}
 			if (mmServerSocket == null) {
 				Log.e(TAG, "mmServerSocket is null");
 				continue;
@@ -116,7 +118,7 @@ public class BTSyncThread extends Thread {
 		return socket;
 	}
 
-	private void setBTAdapter() {
+	private boolean setBTAdapter() {
 		BluetoothServerSocket tmp = null;
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -130,9 +132,11 @@ public class BTSyncThread extends Thread {
 			// NAME, MY_UUID);
 			tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME,
 					MY_UUID);
-		} catch (IOException e) {
+		} catch (Exception e) {
+			return false;
 		}
 		mmServerSocket = tmp;
+		return true;
 	}
 
 	/**
@@ -141,7 +145,7 @@ public class BTSyncThread extends Thread {
 	 * @param dataReceived
 	 */
 	public void processDataReceived(String dataReceived) {
-		if(dataReceived == null || dataReceived.isEmpty()) {
+		if (dataReceived == null || dataReceived.isEmpty()) {
 			return;
 		}
 		// remoing </EOM> from end of string
@@ -169,11 +173,15 @@ public class BTSyncThread extends Thread {
 		Log.i(TAG, "Done processing Received data");
 	}
 
-	private String getDataToSend() {
-		String xml = getCourseDataToSend();
-		xml += getHaltDataToSend();
-		xml += getAutomodeDataToSend();
-		return xml;
+	public String getDataToSend() {
+		try {
+			String xml = getCourseDataToSend();
+			xml += getHaltDataToSend();
+			xml += getAutomodeDataToSend();
+			return xml + "</EOM>";
+		} catch (Exception e) {
+			return "</EOM>";
+		}
 	}
 
 	private String getAutomodeDataToSend() {
@@ -259,7 +267,6 @@ public class BTSyncThread extends Thread {
 							+ e.getMessage() + ".");
 		}
 
-		dataToSend += "</EOM>";
 		byte[] msgBuffer = dataToSend.getBytes();
 		try {
 			Log.i(TAG, "writing : " + dataToSend);

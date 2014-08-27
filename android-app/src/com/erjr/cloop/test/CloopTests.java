@@ -4,6 +4,7 @@
 package com.erjr.cloop.test;
 
 import com.erjr.cloop.dao.MySQLiteHelper;
+import com.erjr.diabetesi1.Util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,12 +30,15 @@ public class CloopTests {
 		sql.createTables(db);
 	}
 
-	public void runAllTests() {
+	public boolean runAllTests() {
 		BTSyncTest btTest = new BTSyncTest(ctx);
 		boolean successful = btTest.runTests();
-		if (!successful) {
-			return;
+		if(successful) {
+			Util.toast(ctx, "Unit Tests were successful! YAY!!");
+		} else {
+			Util.toast(ctx, "Unit Tests NOT were successful :(");
 		}
+		return successful;
 	}
 
 }

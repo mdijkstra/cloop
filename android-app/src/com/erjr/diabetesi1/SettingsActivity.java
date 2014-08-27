@@ -53,10 +53,14 @@ public class SettingsActivity extends NavDrawerActivity {
 		AutomodeDataSource aDS = new AutomodeDataSource(getBaseContext());
 		Automode a = aDS.getLatestAutomode();
 		String isOn;
-		if (a == null || a.getIsOn().equals("yes")) {
-			isOn = "no";
+		if (a == null || a.getIsOn().equals("fullOn")) {
+			isOn = "off";
+		} else if (a.getIsOn().equals("off")) {
+			isOn = "simulate";
+		} else if (a.getIsOn().equals("simulate")) {
+			isOn = "lowsOnly";
 		} else {
-			isOn = "yes";
+			isOn = "fullOn";
 		}
 		Automode newA = aDS.createAutomode(isOn);
 		Util.toast(getBaseContext(), newA.toString());
@@ -83,7 +87,9 @@ public class SettingsActivity extends NavDrawerActivity {
 									int which) {
 								CloopTests test = new CloopTests(
 										getBaseContext());
-								test.runAllTests();
+								boolean success = test.runAllTests();
+								((TextView) findViewById(R.id.testResults))
+										.setText("Test was " + success);
 							}
 						}).setNegativeButton("No", null).show();
 	}

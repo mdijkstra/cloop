@@ -7,13 +7,13 @@ import android.os.IBinder;
 public class BTSyncService extends Service {
 
 	private BTSyncThread syncThread;
-//	public BTSyncService(String name) {
-//		super(name);
-//		// TODO Auto-generated constructor stub
-//	}
+	// public BTSyncService(String name) {
+	// super(name);
+	// // TODO Auto-generated constructor stub
+	// }
 
 	public static final String TAG = "BTSyncService";
-	
+
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return null;
@@ -23,28 +23,32 @@ public class BTSyncService extends Service {
 		start();
 		return 0;
 	}
-	
+
 	public void onStart(Intent intent, int startId) {
 		start();
 	}
-	
+
 	private void start() {
-		if(syncThread == null) {
-			syncThread = new BTSyncThread(getBaseContext());
-		}
-		if(!syncThread.isAlive()) {
-			syncThread.start();
+		try {
+			if (syncThread == null) {
+				syncThread = new BTSyncThread(getBaseContext());
+			}
+			if (!syncThread.isAlive()) {
+				syncThread.start();
+			}
+		} catch (Exception e) {
+
 		}
 	}
-	
+
 	public void onDestroy() {
 		syncThread.cancel();
 	}
 
-//	@Override
-//	protected void onHandleIntent(Intent intent) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-	
+	// @Override
+	// protected void onHandleIntent(Intent intent) {
+	// // TODO Auto-generated method stub
+	//
+	// }
+
 }

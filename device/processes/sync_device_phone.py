@@ -76,7 +76,7 @@ class DeviceBTPhoneTransData:
                     break
             logging.info("DeviceBTPhoneTransData.read read : [%s]" % data)
         except IOError:
-            pass
+            return ""
         return data
 
     def write(self, data_to_write):
@@ -88,7 +88,8 @@ class DeviceBTPhoneTransData:
         service = bluetooth.find_service(address=self.phone_mac, uuid=self.uuid)
         if len(service) == 0:
             logging.error("DeviceBTPhoneTransData.open_con ERROR: Couldn't find phone BT Service")
-            return None
+            self.socket = None
+            return
         self.socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         self.socket.connect((service[0]["host"], service[0]["port"]))
         logging.info("DeviceBTPhoneTransData.open_con connecting to \"%s\" on %s"
@@ -398,12 +399,13 @@ if __name__ == '__main__':
     data_to_send = db_trans.get_data_to_send()
     bt_trans = DeviceBTPhoneTransData()
     data_from_phone = bt_trans.transfer(data_to_send)
-    if not data_from_phone is None:
+    if data_from_phone is not None:
         logging.info('successfully transferred data from device to phone.')
         db_trans.set_exports_successful()
         logging.info('main: going to import data from phone')
         db_trans.import_data(data_from_phone)
     else:
         logging.warning('no data from phone')
+        cloop_config.db_log("FAIL", "sync_device_phone", "Failed to sync phone-device at " + str(now))
     logging.info('DONE WITH PHONE SYNC\n\n\n\n')
     cloop_config.db_log("SUCCESS", "sync_device_phone", "Successfully completed phone-device sync at " + str(now))

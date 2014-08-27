@@ -42,17 +42,16 @@ class TestDeviceDBTransData(TestCase):
         self.transData.import_automodes(xml_test)
 
     def test_import_data(self):
-        xml = "<courses></courses>" \
-              "<halts>" \
-              "<halt><datetime_issued>2014-08-20T22:15:49</datetime_issued><halt_id>1</halt_id></halt>" \
-              "<halt><datetime_issued>2014-08-20T22:31:26</datetime_issued><halt_id>2</halt_id></halt>" \
-              "<halt><datetime_issued>2014-08-20T22:31:27</datetime_issued><halt_id>3</halt_id></halt>" \
-              "<halt><datetime_issued>2014-08-20T22:31:28</datetime_issued><halt_id>4</halt_id></halt>" \
-              "</halts>" \
-              "<automodes>" \
-              "<automode><is_on>no</is_on><datetime_recorded>2014-08-20T22:17:57</datetime_recorded><automode_switch_id>1</automode_switch_id></automode>" \
-              "<automode><is_on>yes</is_on><datetime_recorded>2014-08-20T22:31:20</datetime_recorded><automode_switch_id>2</automode_switch_id></automode>" \
-              "<automode><is_on>no</is_on><datetime_recorded>2014-08-20T22:31:24</datetime_recorded><automode_switch_id>3</automode_switch_id></automode>" \
-              "<automode><is_on>yes</is_on><datetime_recorded>2014-08-20T22:31:25</datetime_recorded><automode_switch_id>4</automode_switch_id></automode>" \
+        xml = "<courses>" \
+              "<course><serv_quantity>0.0</serv_quantity><food_id>0</food_id><course_id>1</course_id><comment>comment 1</comment><carbs>30</carbs><datetime_ideal_injection>2014-08-27T17:22:00</datetime_ideal_injection><datetime_consumption>2014-08-27T17:22:00</datetime_consumption></course>" \
+              "<course><serv_quantity>0.0</serv_quantity><food_id>0</food_id><course_id>2</course_id><comment>null</comment><carbs>25</carbs><datetime_ideal_injection>2014-08-27T17:22:00</datetime_ideal_injection><datetime_consumption>2014-08-27T17:22:00</datetime_consumption></course>" \
+              "</courses><halts>" \
+              "<halt><datetime_issued>2014-08-27T17:22:01</datetime_issued><halt_id>1</halt_id></halt>" \
+              "<halt><datetime_issued>2014-08-27T17:22:01</datetime_issued><halt_id>2</halt_id></halt>" \
+              "</halts><automodes>" \
+              "<automode><is_on>lowsOnly</is_on><datetime_recorded>2014-08-27T17:30:49</datetime_recorded><automode_switch_id>1</automode_switch_id></automode>" \
+              "<automode><is_on>fullOn</is_on><datetime_recorded>2014-08-27T17:30:49</datetime_recorded><automode_switch_id>2</automode_switch_id></automode>" \
+              "<automode><is_on>simulate</is_on><datetime_recorded>2014-08-27T17:30:49</datetime_recorded><automode_switch_id>3</automode_switch_id></automode>" \
+              "<automode><is_on>off</is_on><datetime_recorded>2014-08-27T17:30:49</datetime_recorded><automode_switch_id>4</automode_switch_id></automode>" \
               "</automodes>"
         self.transData.import_data(xml)

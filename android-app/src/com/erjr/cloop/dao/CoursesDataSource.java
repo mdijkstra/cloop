@@ -163,7 +163,7 @@ public class CoursesDataSource {
 				+ course.getCarbs()
 				+ "g at "
 				+ Util.convertDateToPrettyString(course
-						.getDatetime_consumption());
+						.getDatetimeConsumption());
 		Util.toast(context, toastText);
 	}
 

@@ -73,7 +73,6 @@ public class LogRecord {
 		message = Util.getValueFromXml(xml, "message");
 		option1 = Util.getValueFromXml(xml, "option1");
 		option2 = Util.getValueFromXml(xml, "option2");
-
 	}
 
 	public String toString() {

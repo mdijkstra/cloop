@@ -6,28 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="61f87d7f-364d-4e7e-afb6-293e322db31d" name="Default" comment="Add basic graph">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/Closed Loop.apk" afterPath="$PROJECT_DIR$/android-app/bin/Closed Loop.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/entities/Course.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/entities/Course.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/CoursesDataSource.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/cloop/dao/CoursesDataSource.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$id.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$layout.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$menu.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$menu.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$string.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$string.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$style.class" afterPath="$PROJECT_DIR$/android-app/bin/classes/com/erjr/diabetesi1/R$style.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/classes.dex" afterPath="$PROJECT_DIR$/android-app/bin/classes.dex" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/bin/resources.ap_" afterPath="$PROJECT_DIR$/android-app/bin/resources.ap_" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/BTSyncService.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/BTSyncService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/test/BTSyncTest.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/test/BTSyncTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/BTSyncThread.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/BTSyncThread.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/test/CloopTests.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/test/CloopTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Course.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Course.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/CoursesDataSource.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/dao/CoursesDataSource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/gen/com/erjr/diabetesi1/R.java" afterPath="$PROJECT_DIR$/android-app/gen/com/erjr/diabetesi1/R.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Automode.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/cloop/entities/Automode.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/SettingsActivity.java" afterPath="$PROJECT_DIR$/android-app/src/com/erjr/diabetesi1/SettingsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android-app/res/layout/activity_settings.xml" afterPath="$PROJECT_DIR$/android-app/res/layout/activity_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/injection_process.py" afterPath="$PROJECT_DIR$/device/processes/injection_process.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/sync_device_phone.py" afterPath="$PROJECT_DIR$/device/processes/sync_device_phone.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py" afterPath="$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/device/processes/test/test_injection_process.py" afterPath="$PROJECT_DIR$/device/processes/test/test_injection_process.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cloop.iws" />
@@ -74,8 +55,8 @@
       <file leaf-file-name="test_deviceDBTransData.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.82175624" vertical-offset="291" max-vertical-offset="1054">
-              <caret line="54" column="137" selection-start-line="54" selection-start-column="137" selection-end-line="54" selection-end-column="137" />
+            <state vertical-scroll-proportion="0.86631715" vertical-offset="291" max-vertical-offset="1054">
+              <caret line="56" column="39" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -661,7 +642,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="2064" height="1168" extended-state="6" />
+    <frame x="-8" y="-8" width="2064" height="1168" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25151515" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1098,8 +1079,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/device/processes/test/test_deviceDBTransData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.82175624" vertical-offset="291" max-vertical-offset="1054">
-          <caret line="54" column="137" selection-start-line="54" selection-start-column="137" selection-end-line="54" selection-end-column="137" />
+        <state vertical-scroll-proportion="0.86631715" vertical-offset="291" max-vertical-offset="1054">
+          <caret line="56" column="39" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
           <folding />
         </state>
       </provider>

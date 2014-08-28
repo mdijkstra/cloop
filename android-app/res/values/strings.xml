@@ -42,5 +42,8 @@
     <string name="title_activity_settings">Settings Activity</string>
     <string name="buttonAutomode">Automode Switch</string>
     <string name="buttonPowerSwitch">Power Switch</string>
-	<string name="buttonRunAllTests">Run All Tests</string>
+    <string name="buttonRunAllTests">Run All Tests</string>
+    <string name="buttonAddSampleData">Add Sample Data</string>
+    <string name="buttonClearDB">Clear DB</string>
+
 </resources>

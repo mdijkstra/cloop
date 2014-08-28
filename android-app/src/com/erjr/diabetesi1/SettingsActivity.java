@@ -11,6 +11,7 @@ import com.erjr.cloop.dao.HaltDataSource;
 import com.erjr.cloop.entities.Automode;
 import com.erjr.cloop.entities.Halt;
 import com.erjr.cloop.test.CloopTests;
+import com.erjr.cloop.test.SampleDataTest;
 
 public class SettingsActivity extends NavDrawerActivity {
 
@@ -85,12 +86,63 @@ public class SettingsActivity extends NavDrawerActivity {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
+								// key component
 								CloopTests test = new CloopTests(
 										getBaseContext());
 								boolean success = test.runAllTests();
 								((TextView) findViewById(R.id.testResults))
 										.setText("Test was " + success);
+								updateTexts();
+								// end key component
 							}
 						}).setNegativeButton("No", null).show();
 	}
+
+	public void addSampleData(View view) {
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle("Confirm Add Sample Data")
+				.setMessage(
+						"Are you sure you want to add the sample data? This will clear the database and this cannot be undone!")
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// key component
+								SampleDataTest sdt = new SampleDataTest(
+										getBaseContext());
+								boolean success = sdt.createSampleData();
+								((TextView) findViewById(R.id.sampleDataResults))
+										.setText("Sample data was " + success
+												+ " loaded");
+								updateTexts();
+								// end key component
+							}
+						}).setNegativeButton("No", null).show();
+	}
+
+	public void clearDB(View view) {
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle("Confirm Clear DB")
+				.setMessage(
+						"Are you sure you want to clear the database? This will clear the database and this cannot be undone!")
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// key component
+								CloopTests test = new CloopTests(getBaseContext());
+								boolean success = test.clearDB();
+								((TextView) findViewById(R.id.clearDBResults))
+										.setText("Database was " + success
+												+ " cleared.");
+								updateTexts();
+								// end key component
+							}
+						}).setNegativeButton("No", null).show();
+	}
+
 }

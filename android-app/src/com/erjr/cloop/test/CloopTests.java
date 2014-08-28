@@ -25,9 +25,10 @@ public class CloopTests {
 		db = sql.getWritableDatabase();
 	}
 
-	public void clearDB() {
+	public boolean clearDB() {
 		sql.dropTables(db);
 		sql.createTables(db);
+		return true;
 	}
 
 	public boolean runAllTests() {

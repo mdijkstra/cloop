@@ -42,11 +42,7 @@ public class Automode {
 
 	public String toString() {
 		String str = "";
-		if (isOn.equals("yes")) {
-			str = "Automode turned on ";
-		} else {
-			str = "Automode turned off ";
-		}
+		str = "Automode is " + getIsOn();
 		str += " at " + Util.convertDateToPrettyString(datetimeRecorded)
 				+ " id(" + automodeSwitchId + ").";
 		return str;

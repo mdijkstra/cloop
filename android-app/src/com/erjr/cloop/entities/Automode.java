@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import android.database.Cursor;
 
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class Automode {
 

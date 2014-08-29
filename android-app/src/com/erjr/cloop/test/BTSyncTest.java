@@ -7,8 +7,8 @@ import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.entities.Automode;
 import com.erjr.cloop.entities.Course;
 import com.erjr.cloop.entities.Halt;
-import com.erjr.diabetesi1.BTSyncThread;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.BTSyncThread;
+import com.erjr.cloop.main.Util;
 
 import android.content.Context;
 

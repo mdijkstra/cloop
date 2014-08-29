@@ -1,4 +1,4 @@
-package com.erjr.diabetesi1;
+package com.erjr.cloop.main;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.entities.SGV;
+import com.erjr.diabetesi1.R;
 
 public class PersistentNotification extends BroadcastReceiver {
 

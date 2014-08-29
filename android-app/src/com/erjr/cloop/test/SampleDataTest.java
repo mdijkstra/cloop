@@ -17,7 +17,7 @@ import com.erjr.cloop.entities.IOB;
 import com.erjr.cloop.entities.Injection;
 import com.erjr.cloop.entities.LogRecord;
 import com.erjr.cloop.entities.SGV;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class SampleDataTest extends CloopTests {
 

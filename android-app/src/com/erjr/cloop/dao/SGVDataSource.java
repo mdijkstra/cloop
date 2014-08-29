@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.erjr.cloop.entities.SGV;
 import com.erjr.cloop.entities.Course;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 import android.content.ContentValues;
 import android.content.Context;

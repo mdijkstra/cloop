@@ -1,19 +1,20 @@
 package com.erjr.cloop.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import com.erjr.cloop.entities.Automode;
-import com.erjr.cloop.entities.Halt;
-import com.erjr.cloop.entities.SGV;
-import com.erjr.cloop.entities.Course;
-import com.erjr.diabetesi1.Util;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.erjr.cloop.entities.Automode;
+import com.erjr.cloop.entities.Course;
+import com.erjr.cloop.entities.Halt;
+import com.erjr.cloop.entities.SGV;
+import com.erjr.cloop.main.Util;
 
 public class HaltDataSource {
 
@@ -101,5 +102,32 @@ public class HaltDataSource {
 	public void setTransferSuccessful() {
 		database.execSQL("update " + Halt.TABLE_HALTS
 				+ " set transferred = 'yes' where transferred = 'transferring'");
+	}
+
+	public List<Halt> getHaltsByDateRange(Date startTime,
+			Date endTime) {
+		List<Halt> halts = new ArrayList<Halt>();
+
+		String start = Util.convertDateToString(startTime);
+		String end = Util.convertDateToString(endTime);
+		String restriction = Halt.COL_DATETIME_ISSUED+ "> '" + start
+				+ "' AND " + Halt.COL_DATETIME_ISSUED + " < '" + end
+				+ "' ";
+		Cursor cursor = database.query(Halt.TABLE_HALTS, Halt.allColumns,
+				restriction, null, null, null, Halt.COL_DATETIME_ISSUED
+						+ " DESC");
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Halt course = cursorToHalt(cursor);
+			halts.add(course);
+			cursor.moveToNext();
+		}
+		// make sure to close the cursor
+		cursor.close();
+		if (halts.isEmpty()) {
+			return null;
+		}
+		return halts;
 	}
 }

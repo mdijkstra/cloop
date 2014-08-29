@@ -1,4 +1,4 @@
-package com.erjr.diabetesi1;
+package com.erjr.cloop.main;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

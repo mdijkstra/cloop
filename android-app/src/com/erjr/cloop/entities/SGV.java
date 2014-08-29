@@ -9,7 +9,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.erjr.cloop.dao.SGVDataSource;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 /**
  * @author erobinson

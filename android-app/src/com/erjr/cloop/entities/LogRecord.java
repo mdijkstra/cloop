@@ -6,7 +6,7 @@ import android.content.Context;
 
 import com.erjr.cloop.dao.IOBDataSource;
 import com.erjr.cloop.dao.LogDataSource;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class LogRecord {
 

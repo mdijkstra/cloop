@@ -1,4 +1,6 @@
-package com.erjr.diabetesi1;
+package com.erjr.cloop.main;
+
+import com.erjr.diabetesi1.R;
 
 import android.app.Activity;
 import android.app.ActionBar;

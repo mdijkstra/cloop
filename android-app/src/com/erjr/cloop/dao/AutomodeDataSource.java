@@ -1,6 +1,7 @@
 package com.erjr.cloop.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -10,8 +11,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.erjr.cloop.entities.Automode;
-import com.erjr.cloop.entities.Course;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class AutomodeDataSource {
 
@@ -96,5 +96,31 @@ public class AutomodeDataSource {
 	public void setTransferSuccessful() {
 		database.execSQL("update " + Automode.TABLE_AUTOMODE
 				+ " set transferred = 'yes' where transferred = 'transferring'");
+	}
+
+	public List<Automode> getAutosByDateRange(Date startTime, Date endTime) {
+		List<Automode> Automodes = new ArrayList<Automode>();
+
+		String start = Util.convertDateToString(startTime);
+		String end = Util.convertDateToString(endTime);
+		String restriction = Automode.COL_DATETIME_RECORDED+ "> '" + start
+				+ "' AND " + Automode.COL_DATETIME_RECORDED + " < '" + end
+				+ "' ";
+		Cursor cursor = database.query(Automode.TABLE_AUTOMODE, Automode.allColumns,
+				restriction, null, null, null, Automode.COL_DATETIME_RECORDED
+						+ " DESC");
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Automode course = cursorToAutomode(cursor);
+			Automodes.add(course);
+			cursor.moveToNext();
+		}
+		// make sure to close the cursor
+		cursor.close();
+		if (Automodes.isEmpty()) {
+			return null;
+		}
+		return Automodes;
 	}
 }

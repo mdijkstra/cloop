@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class Course {
 	public static final String TABLE_COURSES = "courses";

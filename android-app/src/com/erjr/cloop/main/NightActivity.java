@@ -1,4 +1,4 @@
-package com.erjr.diabetesi1;
+package com.erjr.cloop.main;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.entities.SGV;
+import com.erjr.diabetesi1.R;
 
 public class NightActivity extends Activity {
 

@@ -1,4 +1,4 @@
-package com.erjr.diabetesi1;
+package com.erjr.cloop.main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,6 +12,7 @@ import com.erjr.cloop.entities.Automode;
 import com.erjr.cloop.entities.Halt;
 import com.erjr.cloop.test.CloopTests;
 import com.erjr.cloop.test.SampleDataTest;
+import com.erjr.diabetesi1.R;
 
 public class SettingsActivity extends NavDrawerActivity {
 

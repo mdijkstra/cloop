@@ -1,4 +1,4 @@
-package com.erjr.diabetesi1;
+package com.erjr.cloop.main;
 
 import java.util.Date;
 import java.util.List;
@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.erjr.cloop.dao.CoursesDataSource;
 import com.erjr.cloop.entities.Course;
+import com.erjr.diabetesi1.R;
 
 public class AddCourseActivity extends Activity {
 

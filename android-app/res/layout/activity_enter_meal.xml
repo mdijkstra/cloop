@@ -3,6 +3,6 @@
     android:id="@+id/graph_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.erjr.diabetesi1.AddCourseActivity"
+    tools:context="com.erjr.cloop.main.AddCourseActivity"
     tools:ignore="MergeRootFrame" />
 

@@ -1,4 +1,4 @@
-package com.erjr.diabetesi1;
+package com.erjr.cloop.main;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.erjr.cloop.dao.AlertDataSource;
 import com.erjr.cloop.entities.Alert;
+import com.erjr.diabetesi1.R;
 
 public class AlertsManager extends BroadcastReceiver {
 

@@ -3,7 +3,7 @@
     android:id="@+id/main_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.erjr.diabetesi1.MainActivity" >
+    tools:context="com.erjr.cloop.main.MainActivity" >
 
     <!-- The main content view -->
 
@@ -82,7 +82,7 @@
 
     <fragment
         android:id="@+id/navigation_drawer_fragment"
-        android:name="com.erjr.diabetesi1.NavigationDrawerFragment"
+        android:name="com.erjr.cloop.main.NavigationDrawerFragment"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start" />

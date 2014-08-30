@@ -60,8 +60,7 @@ public class Util {
 	}
 
 	public static Date getCurrentDateTime() {
-		Date d = Calendar.getInstance().getTime();
-		return d;
+		return Calendar.getInstance().getTime();
 	}
 
 	public static String getValueFromXml(String xml, String tag) {
@@ -146,7 +145,8 @@ public class Util {
 		}
 	}
 
-	public static String rowToXml(String rowDescriptor, HashMap<String, String> fields) {
+	public static String rowToXml(String rowDescriptor,
+			HashMap<String, String> fields) {
 		if (rowDescriptor == null || fields == null) {
 			return "";
 		}

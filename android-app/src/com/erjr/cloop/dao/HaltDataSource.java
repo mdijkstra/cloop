@@ -104,7 +104,7 @@ public class HaltDataSource {
 				+ " set transferred = 'yes' where transferred = 'transferring'");
 	}
 
-	public List<Halt> getHaltsByDateRange(Date startTime,
+	public List<Halt> getByDateRange(Date startTime,
 			Date endTime) {
 		List<Halt> halts = new ArrayList<Halt>();
 

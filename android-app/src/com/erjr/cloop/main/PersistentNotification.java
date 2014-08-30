@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.entities.SGV;
-import com.erjr.diabetesi1.R;
+import com.erjr.main.R;
 
 public class PersistentNotification extends BroadcastReceiver {
 

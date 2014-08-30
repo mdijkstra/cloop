@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.erjr.diabetesi1.SettingsActivity" >
+    tools:context="com.erjr.main.SettingsActivity" >
 
     <item
         android:id="@+id/action_settings"

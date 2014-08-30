@@ -19,6 +19,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.erjr.cloop.dao.AlertDataSource;
 import com.erjr.cloop.dao.AutomodeDataSource;
@@ -32,7 +33,7 @@ import com.erjr.cloop.entities.Course;
 import com.erjr.cloop.entities.Halt;
 import com.erjr.cloop.entities.Injection;
 import com.erjr.cloop.entities.LogRecord;
-import com.erjr.diabetesi1.R;
+import com.erjr.main.R;
 
 public class MainActivity extends NavDrawerActivity implements
 		OnItemSelectedListener {
@@ -123,9 +124,7 @@ public class MainActivity extends NavDrawerActivity implements
 			clearList();
 			return;
 		}
-
 		ListView list = (ListView) findViewById(R.id.listCourses);
-
 		// defining Adapter for List content
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1);
@@ -221,8 +220,7 @@ public class MainActivity extends NavDrawerActivity implements
 	private void updateCourses(boolean isNext) {
 		Date[] dates = getDateRange(spinnerCoursesDatetimeStart, 1440, isNext);
 		CoursesDataSource coursesDS = new CoursesDataSource(getBaseContext());
-		List<Course> courses = coursesDS.getCoursesByDateRange(dates[0],
-				dates[1]);
+		List<Course> courses = coursesDS.getByDateRange(dates[0], dates[1]);
 		toastListUpdate((List<Object>) (List<?>) courses, "Courses", dates[0]);
 		updateList((List<Object>) (List<?>) courses);
 	}
@@ -250,7 +248,7 @@ public class MainActivity extends NavDrawerActivity implements
 	private void updateHalts(boolean isNext) {
 		Date[] dates = getDateRange(spinnerHaltsDatetimeStart, 1440, isNext);
 		HaltDataSource hDS = new HaltDataSource(getBaseContext());
-		List<Halt> halts = hDS.getHaltsByDateRange(dates[0], dates[1]);
+		List<Halt> halts = hDS.getByDateRange(dates[0], dates[1]);
 		toastListUpdate((List<Object>) (List<?>) halts, "Halts", dates[0]);
 		updateList((List<Object>) (List<?>) halts);
 	}

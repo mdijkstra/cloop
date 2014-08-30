@@ -12,7 +12,7 @@ import com.erjr.cloop.entities.Automode;
 import com.erjr.cloop.entities.Halt;
 import com.erjr.cloop.test.CloopTests;
 import com.erjr.cloop.test.SampleDataTest;
-import com.erjr.diabetesi1.R;
+import com.erjr.main.R;
 
 public class SettingsActivity extends NavDrawerActivity {
 

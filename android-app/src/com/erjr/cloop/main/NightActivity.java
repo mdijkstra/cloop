@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.entities.SGV;
-import com.erjr.diabetesi1.R;
+import com.erjr.main.R;
 
 public class NightActivity extends Activity {
 
@@ -206,6 +206,7 @@ public class NightActivity extends Activity {
 	@Override
 	public void onStop() {
 		isActive = false;
+		super.onStop();
 	}
 
 	@Override

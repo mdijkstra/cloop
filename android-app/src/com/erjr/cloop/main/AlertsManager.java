@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.erjr.cloop.dao.AlertDataSource;
 import com.erjr.cloop.entities.Alert;
-import com.erjr.diabetesi1.R;
+import com.erjr.main.R;
 
 public class AlertsManager extends BroadcastReceiver {
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.erjr.diabetesi1"
+    package="com.erjr.main"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -52,11 +52,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.erjr.cloop.main.GraphActivity"
+            android:name="com.erjr.cloop.main.CgmGraphActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_cgmgraph"
-            android:launchMode="singleInstance"
-            android:screenOrientation="landscape" >
+            android:launchMode="singleInstance" >
         </activity>
         <activity
             android:name="com.erjr.cloop.main.NightActivity"
@@ -72,7 +71,13 @@
         </activity>
         <activity
             android:name="com.erjr.cloop.main.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:launchMode="singleInstance" >
+        </activity>
+        <activity
+            android:name="com.erjr.cloop.main.DayGraphActivity"
+            android:label="@string/title_activity_day_graph"
+            android:launchMode="singleInstance" >
         </activity>
     </application>
 

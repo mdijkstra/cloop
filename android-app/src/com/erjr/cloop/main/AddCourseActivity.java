@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.erjr.cloop.dao.CoursesDataSource;
 import com.erjr.cloop.entities.Course;
-import com.erjr.diabetesi1.R;
+import com.erjr.main.R;
 
 public class AddCourseActivity extends Activity {
 

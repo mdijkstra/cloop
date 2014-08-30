@@ -98,11 +98,32 @@ public class SGVDataSource {
 		cgm.setSg(cursor.getInt(3));
 		return cgm;
 	}
+	
+	public List<SGV> getByDateRange(Date startTime,
+			Date endTime) {
+		List<SGV> halts = new ArrayList<SGV>();
 
-	public Integer getCount() {
-		// TODO Auto-generated method stub
-		
-		return null;
+		String start = Util.convertDateToString(startTime);
+		String end = Util.convertDateToString(endTime);
+		String restriction = SGV.COL_DATETIME_RECORDED+ "> '" + start
+				+ "' AND " + SGV.COL_DATETIME_RECORDED + " < '" + end
+				+ "' ";
+		Cursor cursor = database.query(SGV.TABLE_SGVS, SGV.allColumns,
+				restriction, null, null, null, SGV.COL_DATETIME_RECORDED
+						+ " DESC");
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			SGV course = cursorToSGV(cursor);
+			halts.add(course);
+			cursor.moveToNext();
+		}
+		// make sure to close the cursor
+		cursor.close();
+		if (halts.isEmpty()) {
+			return null;
+		}
+		return halts;
 	}
 
 	// public List<Course> getCoursesToTransfer() {

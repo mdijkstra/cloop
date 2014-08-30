@@ -14,9 +14,6 @@
     <string name="title_activity_enter_meal">EnterMealActivity</string>
     <string name="newMealButton">Add Meal</string>
     <string name="title_activity_home">HomeActivity</string>
-    <!-- <string name="title_section1">Section 1</string> -->
-    <!-- <string name="title_section2">Section 2</string> -->
-    <!-- <string name="title_section3">Section 3</string> -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -25,7 +22,7 @@
     <string name="nav_option3">Graph</string>
     <string name="nav_option4">Night</string>
     <string name="nav_option5">Settings</string>
-    <string name="nav_option6">Other</string>
+    <string name="nav_option6">Day Graph</string>
     <string name="nav_option7">Other</string>
     <string name="buttonPrev">Prev</string>
     <string name="buttonNext">Next</string>
@@ -38,6 +35,11 @@
         <item>Automode Switch</item>
         <item>Shutdown</item>
     </string-array>
+    <string-array name="dayGraphTimeOptions">
+        <item>Day</item>
+        <item>Night</item>
+        <item>Full Day</item>
+    </string-array>
 
     <string name="title_activity_settings">Settings Activity</string>
     <string name="buttonAutomode">Automode Switch</string>
@@ -45,5 +47,6 @@
     <string name="buttonRunAllTests">Run All Tests</string>
     <string name="buttonAddSampleData">Add Sample Data</string>
     <string name="buttonClearDB">Clear DB</string>
+    <string name="title_activity_day_graph">DayGraphActivity</string>
 
 </resources>

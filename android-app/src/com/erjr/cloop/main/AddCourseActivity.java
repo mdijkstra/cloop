@@ -13,11 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.erjr.cloop.dao.CoursesDataSource;
 import com.erjr.cloop.entities.Course;
@@ -41,7 +39,7 @@ public class AddCourseActivity extends Activity {
 		coursesDS = new CoursesDataSource(this);
 		coursesDS.open();
 
-		List<Course> courses = coursesDS.getAllCourses();
+//		List<Course> courses = coursesDS.getAllCourses();
 
 		// use the SimpleCursorAdapter to show the
 		// elements in a ListView

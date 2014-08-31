@@ -5,15 +5,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.erjr.cloop.entities.SGV;
-import com.erjr.cloop.entities.Course;
-import com.erjr.cloop.main.Util;
-
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.erjr.cloop.entities.SGV;
+import com.erjr.cloop.main.Util;
 
 public class SGVDataSource {
 
@@ -101,7 +99,7 @@ public class SGVDataSource {
 	
 	public List<SGV> getByDateRange(Date startTime,
 			Date endTime) {
-		List<SGV> halts = new ArrayList<SGV>();
+		List<SGV> sgvs = new ArrayList<SGV>();
 
 		String start = Util.convertDateToString(startTime);
 		String end = Util.convertDateToString(endTime);
@@ -115,15 +113,15 @@ public class SGVDataSource {
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			SGV course = cursorToSGV(cursor);
-			halts.add(course);
+			sgvs.add(course);
 			cursor.moveToNext();
 		}
 		// make sure to close the cursor
 		cursor.close();
-		if (halts.isEmpty()) {
+		if (sgvs.isEmpty()) {
 			return null;
 		}
-		return halts;
+		return sgvs;
 	}
 
 	// public List<Course> getCoursesToTransfer() {

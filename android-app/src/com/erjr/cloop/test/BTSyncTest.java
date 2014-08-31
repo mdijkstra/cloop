@@ -1,16 +1,15 @@
 package com.erjr.cloop.test;
 
+import android.content.Context;
+
 import com.erjr.cloop.dao.AutomodeDataSource;
 import com.erjr.cloop.dao.CoursesDataSource;
 import com.erjr.cloop.dao.HaltDataSource;
-import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.entities.Automode;
 import com.erjr.cloop.entities.Course;
 import com.erjr.cloop.entities.Halt;
 import com.erjr.cloop.main.BTSyncThread;
 import com.erjr.cloop.main.Util;
-
-import android.content.Context;
 
 public class BTSyncTest extends CloopTests {
 
@@ -21,9 +20,9 @@ public class BTSyncTest extends CloopTests {
 	String[] testXmlSgvs = { "", testSgv1, testSgv2, testSgv3,
 			testSgv1 + testSgv2, testSgv1 + testSgv2 + testSgv3 };
 
-	String testIob1 = "<iob_record><datetime_iob>2014-08-24T19:35:00</datetime_iob><iob>2.0</iob></iob_record>";
-	String testIob2 = "<iob_record><datetime_iob>2014-08-24T19:40:00</datetime_iob><iob>2.0</iob></iob_record>";
-	String testIob3 = "<iob_record><datetime_iob>2014-08-24T19:45:00</datetime_iob><iob>2.0</iob></iob_record>";
+	String testIob1 = "<iob_record><datetime_iob>2014-08-24T19:35:00</datetime_iob><iob>2.0</iob><iob_bg>180</iob_bg></iob_record>";
+	String testIob2 = "<iob_record><datetime_iob>2014-08-24T19:40:00</datetime_iob><iob>1.5</iob><iob_bg>165</iob_bg></iob_record>";
+	String testIob3 = "<iob_record><datetime_iob>2014-08-24T19:45:00</datetime_iob><iob>1.0</iob><iob_bg>150</iob_bg></iob_record>";
 	String[] testXmlIobs = { "", testIob1, testIob2, testIob3,
 			testIob1 + testIob2, testIob1 + testIob2 + testIob3 };
 

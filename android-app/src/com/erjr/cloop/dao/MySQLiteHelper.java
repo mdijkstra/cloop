@@ -18,7 +18,7 @@ import com.erjr.cloop.entities.SGV;
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "cloop.db";
-	private static final int DATABASE_VERSION = 18;
+	private static final int DATABASE_VERSION = 19;
 	private static MySQLiteHelper mInstance = null;
 
 	public static MySQLiteHelper getInstance(Context ctx) {

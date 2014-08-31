@@ -1,22 +1,10 @@
 package com.erjr.cloop.main;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
-import com.erjr.cloop.dao.SGVDataSource;
-import com.erjr.cloop.entities.SGV;
 import com.erjr.main.R;
-import com.jjoe64.graphview.GraphView.GraphViewData;
-import com.jjoe64.graphview.GraphViewSeries;
-import com.jjoe64.graphview.LineGraphView;
 
 public class CgmGraphActivity extends NavDrawerActivity {
 

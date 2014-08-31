@@ -49,10 +49,10 @@ class TestInjectionProcess(TestCase):
         self.process.db.execute(
             "insert into automode_switch (automode_switch_id, datetime_recorded, is_on) values (1, now(), 'fullOn')")
         self.process.db.execute(
-            "insert into iob (datetime_iob, iob) values \
-            (from_unixtime(round(UNIX_TIMESTAMP(now() - interval 5 minute)/300)*300), 2), \
-            (from_unixtime(round(UNIX_TIMESTAMP(now())/300)*300), 2), \
-            (from_unixtime(round(UNIX_TIMESTAMP(now() + interval 5 minute)/300)*300), 10)")
+            "insert into iob (datetime_iob, iob, iob_bg) values \
+            (from_unixtime(round(UNIX_TIMESTAMP(now() - interval 5 minute)/300)*300), 2, 180), \
+            (from_unixtime(round(UNIX_TIMESTAMP(now())/300)*300), 2, 180), \
+            (from_unixtime(round(UNIX_TIMESTAMP(now() + interval 5 minute)/300)*300), 10, 420)")
         self.process.db_conn.commit()
         self.process.process_injection()
         self.process.db.execute("select units_intended, units_delivered, temp_rate, status from injections")
@@ -88,10 +88,10 @@ class TestInjectionProcess(TestCase):
         self.process.db.execute(
             "insert into automode_switch (automode_switch_id, datetime_recorded, is_on) values (1, now(), 'fullOn')")
         self.process.db.execute(
-            "insert into iob (datetime_iob, iob) values \
-            (from_unixtime(round(UNIX_TIMESTAMP(now() - interval 5 minute)/300)*300), 2), \
-            (from_unixtime(round(UNIX_TIMESTAMP(now())/300)*300), 2), \
-            (from_unixtime(round(UNIX_TIMESTAMP(now() + interval 5 minute)/300)*300), 10)")
+            "insert into iob (datetime_iob, iob, iob_bg) values \
+            (from_unixtime(round(UNIX_TIMESTAMP(now() - interval 5 minute)/300)*300), 2, 180), \
+            (from_unixtime(round(UNIX_TIMESTAMP(now())/300)*300), 2, 180), \
+            (from_unixtime(round(UNIX_TIMESTAMP(now() + interval 5 minute)/300)*300), 10, 420)")
         self.process.db_conn.commit()
         self.process.process_injection()
         self.process.db.execute("select units_intended, units_delivered, temp_rate, status from injections")
@@ -125,10 +125,10 @@ class TestInjectionProcess(TestCase):
         self.process.db.execute(
             "insert into automode_switch (automode_switch_id, datetime_recorded, is_on) values (1, now(), 'fullOn')")
         self.process.db.execute(
-            "insert into iob (datetime_iob, iob) values \
-            (from_unixtime(round(UNIX_TIMESTAMP(now() - interval 5 minute)/300)*300), 2), \
-            (from_unixtime(round(UNIX_TIMESTAMP(now())/300)*300), 2), \
-            (from_unixtime(round(UNIX_TIMESTAMP(now() + interval 5 minute)/300)*300), 10)")
+            "insert into iob (datetime_iob, iob, iob_bg) values \
+            (from_unixtime(round(UNIX_TIMESTAMP(now() - interval 5 minute)/300)*300), 2, 180), \
+            (from_unixtime(round(UNIX_TIMESTAMP(now())/300)*300), 2, 180), \
+            (from_unixtime(round(UNIX_TIMESTAMP(now() + interval 5 minute)/300)*300), 10, 420)")
         self.process.db_conn.commit()
         self.process.process_injection()
         self.process.db.execute("select units_intended, units_delivered, temp_rate, status from injections")

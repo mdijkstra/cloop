@@ -6,11 +6,12 @@ import java.util.List;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
+import org.achartengine.model.TimeSeries;
 import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,10 +22,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.erjr.cloop.dao.CoursesDataSource;
+import com.erjr.cloop.dao.IOBDataSource;
 import com.erjr.cloop.dao.InjectionDataSource;
 import com.erjr.cloop.dao.SGVDataSource;
 import com.erjr.cloop.entities.Course;
+import com.erjr.cloop.entities.IOB;
 import com.erjr.cloop.entities.Injection;
+import com.erjr.cloop.entities.SGV;
 import com.erjr.main.R;
 
 public class DayGraphActivity extends NavDrawerActivity implements
@@ -33,12 +37,13 @@ public class DayGraphActivity extends NavDrawerActivity implements
 	private GraphicalView mChart;
 	private XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
 	private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
-	private XYSeries mIobSeries;
-	private XYSeriesRenderer mCurrentRenderer;
+	private TimeSeries mIobSeries;
+	// private XYSeriesRenderer mCurrentRenderer;
 	private Date graphStartTime;
 	private Date graphEndTime;
 	private Spinner dataOptionsSpinner;
-	private XYSeries mSgvSeries;
+	private TimeSeries mSgvSeries;
+	private boolean showGraphNums = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +52,18 @@ public class DayGraphActivity extends NavDrawerActivity implements
 		setDrawer(R.id.navigation_drawer_fragment, R.id.day_graph_activity,
 				NavDrawerActivity.NAV_POSITION_DAY_GRAPH);
 		addSpinnerListener();
-		initDates();
-		updateGraph();
-		updateList();
 	}
 
 	private void addSpinnerListener() {
 		dataOptionsSpinner = (Spinner) findViewById(R.id.spinnerDayGraph);
 		dataOptionsSpinner.setOnItemSelectedListener(this);
+	}
+
+	private void updateDisplay() {
+		initDates();
+		updateGraph();
+		updateList();
+		setTitle();
 	}
 
 	private void initDates() {
@@ -70,45 +79,76 @@ public class DayGraphActivity extends NavDrawerActivity implements
 		}
 	}
 
+	private void setTitle() {
+		if (graphStartTime != null) {
+			CharSequence title = "DayGraphActivity - "
+					+ (graphStartTime.getMonth() + 1) + "/"
+					+ graphStartTime.getDate() + "/" + graphStartTime.getYear();
+			getActionBar().setTitle(title);
+		}
+	}
+
 	private void initChart() {
 		if (mIobSeries != null) {
 			return;
 		}
-		mIobSeries = new XYSeries("IOB");
-		mSgvSeries = new XYSeries("SGV");
+		mIobSeries = new TimeSeries("IOB");
+		mSgvSeries = new TimeSeries("SGV");
 		mDataset.addSeries(mIobSeries);
 		mDataset.addSeries(mSgvSeries);
-		mCurrentRenderer = new XYSeriesRenderer();
-		mRenderer.addSeriesRenderer(mCurrentRenderer);
-		mRenderer.addSeriesRenderer(mCurrentRenderer);
+		XYSeriesRenderer mIobRenderer = new XYSeriesRenderer();
+		mIobRenderer.setColor(Color.RED);
+		mIobRenderer.setDisplayChartValues(showGraphNums);
+		XYSeriesRenderer mSgvRenderer = new XYSeriesRenderer();
+		mSgvRenderer.setColor(Color.BLUE);
+		mSgvRenderer.setDisplayChartValues(showGraphNums);
+		mRenderer.addSeriesRenderer(0, mIobRenderer);
+		mRenderer.addSeriesRenderer(1, mSgvRenderer);
+		mRenderer.setShowGridX(true);
 	}
 
-	private void updateData() {
-		mIobSeries.add(1, 2);
-		mIobSeries.add(2, 3);
-		mIobSeries.add(3, 2);
-		mIobSeries.add(4, 5);
-		mIobSeries.add(5, 4);
-		mSgvSeries.add(1, 1);
-		mSgvSeries.add(2, 2);
-		mSgvSeries.add(3, 3);
-		mSgvSeries.add(4, 4);
-		mSgvSeries.add(5, 5);
+	private void updateGraphData() {
+		if (mIobSeries == null || mSgvSeries == null) {
+			initChart();
+		}
+		IOBDataSource iDS = new IOBDataSource(getBaseContext());
+		SGVDataSource sDS = new SGVDataSource(getBaseContext());
+		List<SGV> sgvs = sDS.getByDateRange(graphStartTime, graphEndTime);
+		List<IOB> iobs = iDS.getByDateRange(graphStartTime, graphEndTime);
+		mIobSeries.clear();
+		mSgvSeries.clear();
+		if (iobs == null) {
+			mIobSeries.add(graphStartTime, 0);
+		} else {
+			for (int i = iobs.size() - 1; i > -1; i--) {
+				mIobSeries.add(iobs.get(i).getDatetimeIOB(), iobs.get(i)
+						.getIobBg());
+			}
+		}
+		if (sgvs == null) {
+			mSgvSeries.add(graphStartTime, 0);
+		} else {
+			for (int i = sgvs.size() - 1; i > -1; i--) {
+				mSgvSeries.add(sgvs.get(i).getDatetimeRecorded(), sgvs.get(i)
+						.getSg());
+			}
+		}
 	}
 
 	protected void onResume() {
 		super.onResume();
-		updateGraph();
-		updateList();
+		updateDisplay();
 	}
 
 	private void updateGraph() {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.graph);
 		initChart();
-		updateData();
+		updateGraphData();
 		if (mChart == null) {
-			mChart = ChartFactory.getCubeLineChartView(this, mDataset,
-					mRenderer, 0.3f);
+			mChart = ChartFactory.getTimeChartView(this, mDataset, mRenderer,
+					"HH:mm");
+			// mChart = ChartFactory.getCubeLineChartView(this, mDataset,
+			// mRenderer, 0.3f);
 			layout.addView(mChart);
 		} else {
 			mChart.repaint();
@@ -191,8 +231,7 @@ public class DayGraphActivity extends NavDrawerActivity implements
 			c.add(Calendar.DATE, 1);
 			graphEndTime = c.getTime();
 		}
-		updateGraph();
-		updateList();
+		updateDisplay();
 	}
 
 	public void buttonPrev(View view) {
@@ -203,8 +242,7 @@ public class DayGraphActivity extends NavDrawerActivity implements
 		c.setTime(graphEndTime);
 		c.add(Calendar.DATE, -1);
 		graphEndTime = c.getTime();
-		updateGraph();
-		updateList();
+		updateDisplay();
 	}
 
 	@Override
@@ -233,8 +271,7 @@ public class DayGraphActivity extends NavDrawerActivity implements
 			graphEndTime = c.getTime();
 			break;
 		}
-		updateGraph();
-		updateList();
+		updateDisplay();
 	}
 
 	@Override

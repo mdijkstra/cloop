@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Vector;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;

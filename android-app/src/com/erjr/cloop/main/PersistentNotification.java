@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat.Style;
 import android.util.Log;
 
 import com.erjr.cloop.dao.SGVDataSource;

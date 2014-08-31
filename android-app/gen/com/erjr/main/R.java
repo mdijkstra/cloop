@@ -119,10 +119,6 @@ public final class R {
         public static final int nav_option6=0x7f060015;
         public static final int nav_option7=0x7f060016;
         public static final int navigation_drawer_close=0x7f06000e;
-        /**  <string name="title_section1">Section 1</string> 
- <string name="title_section2">Section 2</string> 
- <string name="title_section3">Section 3</string> 
-         */
         public static final int navigation_drawer_open=0x7f06000d;
         public static final int newMealButton=0x7f06000b;
         public static final int open_night_button=0x7f060008;

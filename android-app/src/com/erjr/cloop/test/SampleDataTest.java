@@ -103,15 +103,18 @@ public class SampleDataTest extends CloopTests {
 		Calendar c = Calendar.getInstance();
 		c.setTime(Util.getCurrentDateTime());
 		c.add(Calendar.MINUTE, -5);
-		String testSgv1 = "<sgv_record><sgv_id>1</sgv_id><device_id>584923</device_id><datetime_recorded>"
+		String testSgv1 = "<sgv_record><sgv_id>1</sgv_id>"
+				+ "<device_id>584923</device_id><datetime_recorded>"
 				+ Util.convertDateToString(c.getTime())
 				+ "</datetime_recorded><sgv>150</sgv></sgv_record>";
 		c.add(Calendar.MINUTE, -5);
-		String testSgv2 = "<sgv_record><sgv_id>2</sgv_id><device_id>584923</device_id><datetime_recorded>"
+		String testSgv2 = "<sgv_record><sgv_id>2</sgv_id>"
+				+ "<device_id>584923</device_id><datetime_recorded>"
 				+ Util.convertDateToString(c.getTime())
 				+ "</datetime_recorded><sgv>140</sgv></sgv_record>";
 		c.add(Calendar.MINUTE, -5);
-		String testSgv3 = "<sgv_record><sgv_id>3</sgv_id><device_id>584923</device_id><datetime_recorded>"
+		String testSgv3 = "<sgv_record><sgv_id>3</sgv_id>"
+				+ "<device_id>584923</device_id><datetime_recorded>"
 				+ Util.convertDateToString(c.getTime())
 				+ "</datetime_recorded><sgv>130</sgv></sgv_record>";
 		String[] testXmlSgvs = { testSgv1, testSgv2, testSgv3 };
@@ -130,15 +133,15 @@ public class SampleDataTest extends CloopTests {
 		c.add(Calendar.MINUTE, -5);
 		String testIob1 = "<iob_record><datetime_iob>"
 				+ Util.convertDateToString(c.getTime())
-				+ "</datetime_iob><iob>2.0</iob></iob_record>";
+				+ "</datetime_iob><iob>2.0</iob><iob_bg>180</iob_bg></iob_record>";
 		c.add(Calendar.MINUTE, -5);
 		String testIob2 = "<iob_record><datetime_iob>"
 				+ Util.convertDateToString(c.getTime())
-				+ "</datetime_iob><iob>1.8</iob></iob_record>";
+				+ "</datetime_iob><iob>1.5</iob><iob_bg>165</iob_bg></iob_record>";
 		c.add(Calendar.MINUTE, -5);
 		String testIob3 = "<iob_record><datetime_iob>"
 				+ Util.convertDateToString(c.getTime())
-				+ "</datetime_iob><iob>1.5</iob></iob_record>";
+				+ "</datetime_iob><iob>1.0</iob><iob_bg>150</iob_bg></iob_record>";
 		String[] testXmlIobs = { testIob1, testIob2, testIob3 };
 
 		IOBDataSource iDS = new IOBDataSource(ctx);

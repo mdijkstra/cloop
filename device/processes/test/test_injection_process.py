@@ -26,7 +26,7 @@ class TestInjectionProcess(TestCase):
             self.fail("Fail: Test 1: units_intended wrong (" + str(rows[0][0]) + ")")
         if rows[0][1] != 3.31:
             self.fail("Fail: Test 1: units_delivered wrong (" + str(rows[0][1]) + ")")
-        if rows[0][3] != "successful":
+        if rows[0][3] != "delivered":
             self.fail("Fail: Test 1: status wrong (" + str(rows[0][3]) + ")")
 
         self.process.db.execute("select iob, datetime_iob from iob")
@@ -65,7 +65,7 @@ class TestInjectionProcess(TestCase):
             self.fail("Fail: Test 2: units_delivered wrong (" + str(rows[0][1]) + ")")
         if rows[0][2] is not None:
             self.fail("Fail: Test 2: temp_rate wrong (" + str(rows[0][2]) + ")")
-        if rows[0][3] != "successful":
+        if rows[0][3] != "delivered":
             self.fail("Fail: Test 2: status wrong (" + str(rows[0][3]) + ")")
 
         self.process.db.execute("select iob, datetime_iob from iob")
@@ -104,7 +104,7 @@ class TestInjectionProcess(TestCase):
             self.fail("Fail: Test 3: units_delivered wrong (" + str(rows[0][1]) + ")")
         if rows[0][2] != 0.0:
             self.fail("Fail: Test 3: temp_rate wrong (" + str(rows[0][2]) + ")")
-        if rows[0][3] != "successful":
+        if rows[0][3] != "delivered":
             self.fail("Fail: Test 3: status wrong (" + str(rows[0][3]) + ")")
 
         self.process.db.execute("select iob, datetime_iob from iob")
@@ -141,7 +141,7 @@ class TestInjectionProcess(TestCase):
             self.fail("Fail: Test 4: units_delivered wrong (" + str(rows[0][1]) + ")")
         if rows[0][2] is not None:
             self.fail("Fail: Test 4: temp_rate wrong (" + str(rows[0][2]) + ")")
-        if rows[0][3] != "successful":
+        if rows[0][3] != "delivered":
             self.fail("Fail: Test 4: status wrong (" + str(rows[0][3]) + ")")
 
         self.process.db.execute("select iob, datetime_iob from iob")

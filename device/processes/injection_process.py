@@ -89,7 +89,8 @@ class InjectionProcess():
 
         if not successfully_executed:
             # log in bd and exit
-            sql_fail_injection = "update injections set status = 'failed', transferred = 'no' where injection_id = " \
+            sql_fail_injection = "update injections set status = 'failed - not delivered', " \
+                                 "transferred = 'no' where injection_id = " \
                                  + str(injection_id)
             self.db.execute(sql_fail_injection)
             logging.info("SQL: " + sql_fail_injection)
@@ -99,7 +100,7 @@ class InjectionProcess():
                                          injection_id) + " of " + str(injection_units) + "u temp:" + str(temp_rate))
         else:
             # successful: update the injection, create alerts, log in db
-            sql_success_injection = "update injections set status = 'successful', transferred = 'no', \
+            sql_success_injection = "update injections set status = 'delivered', transferred = 'no', \
                 datetime_delivered = now() where injection_id = " + str(injection_id)
             self.db.execute(sql_success_injection)
             logging.info("SQL: " + sql_success_injection)
@@ -220,8 +221,8 @@ class InjectionProcess():
             # TODO: It may be easeir to refactor this method and not do everything in sql.
             temp = "update iob set iob_bg = (iob * " + str(
                 self.cloop_config.get_bg_sensitivity()) + ") + " + str(
-                    self.cloop_config.get_target_bg()) + " where iob_bg != (iob * " + str(
-                        self.cloop_config.get_bg_sensitivity()) + ") + " + str(self.cloop_config.get_target_bg())
+                self.cloop_config.get_target_bg()) + " where iob_bg != (iob * " + str(
+                self.cloop_config.get_bg_sensitivity()) + ") + " + str(self.cloop_config.get_target_bg())
             self.db.execute(temp)
             self.db_conn.commit()
 
@@ -259,7 +260,7 @@ class InjectionProcess():
                         + str(cur_iob_units) + "," + str(cur_bg_units) + "," + str(cur_bg) + "," + str(correction_units) \
                         + "," + str(carbs_to_cover) + "," + str(carbs_units) + "," \
                         + str(cur_basal_units) + ",'" + str(all_meal_carbs_absorbed) \
-                        + "','initial','awaiting completion')"
+                        + "','intended','awaiting completion')"
         logging.info("SQL: " + sql_to_insert)
         self.db.execute(sql_to_insert)
         self.db_conn.commit()
@@ -315,22 +316,6 @@ class InjectionProcess():
         logging.info("SQL: " + sql_get_courses)
         self.db.execute(sql_get_courses)
         return self.db.fetchall()
-
-    """ shouldn't be needed since we can now do boluses
-    def should_wait_for_course(self):
-        sql_to_wait = "select * from courses where \
-                        datetime_consumption > now()+ interval 50 minute \
-                        and datetime_consumption < now()+ interval 75 minute \
-                        and course_id not in (select course_id from courses_to_injections where \
-                        injection_id in (select injection_id from injections where status = 'successful'))"
-        logging.info("SQL: " + sql_to_wait)
-        self.db.execute(sql_to_wait)
-        rows = self.db.fetchall()
-        if len(rows) > 0:
-            return True
-        else:
-            return False
-    """
 
     def mark_courses_for_injection(self, courses, injection_id):
         if len(courses) <= 0:

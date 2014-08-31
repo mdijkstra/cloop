@@ -80,3 +80,10 @@ class Shutdown():
     def update_halts(self):
         self.db.execute("update halts set status = 'yes'")
         self.db_conn.commit()
+
+if __name__ == '__main__':
+    logging.info("\n\n\nShutdown process started")
+    process = Shutdown()
+    process.run()
+    logging.info("Shutdown process ended\n")
+

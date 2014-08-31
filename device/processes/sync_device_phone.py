@@ -272,14 +272,14 @@ class DeviceDBTransData():
                                "order by datetime_iob limit 10"
         self.db.execute(sql_set_transferring)
         self.db_conn.commit()
-        sql_select = "select datetime_iob, iob from iob where transferred = 'transferring'"
+        sql_select = "select datetime_iob, iob, iob_bg from iob where transferred = 'transferring'"
         logging.info('Exporting iob: ' + sql_select)
         self.db.execute(sql_select)
         xml = "<iobs>"
         outer_tag = "iob_record"
-        inner_tags = ["datetime_iob", "iob"]
+        inner_tags = ["datetime_iob", "iob", "iob_bg"]
         for row in self.db.fetchall():
-            values = [self.date_or_null(row[0]), row[1]]
+            values = [self.date_or_null(row[0]), row[1], row[2]]
             xml += build_xml_record(outer_tag, inner_tags, values)
         xml += "</iobs>"
         logging.info('returning the following xml from export_iob:' + xml)

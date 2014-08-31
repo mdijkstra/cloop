@@ -198,7 +198,7 @@ class InjectionProcess():
                         "(select injection_type from injections where injection_id = " + str(injection_id) + ")")
         max_interval = self.db.fetchall()[0][0]
         for i in range(0, max_interval + 5, 5):
-            sql_save_iob = "insert into iob (datetime_iob, iob) values ( " \
+            sql_save_iob = "insert into iob (datetime_iob, iob, iob_bg) values ( " \
                            + "from_unixtime(round(UNIX_TIMESTAMP( " \
                            + "(select datetime_delivered from injections where injection_id = " + str(
                 injection_id) + ")+ interval " + str(i) + " minute )/300)*300), " \
@@ -206,15 +206,23 @@ class InjectionProcess():
                            + "where iob_dist.interval = " + str(i) + " and injection_type=injections.injection_type" \
                            + ") / 100 " \
                            + "from injections where injection_id = " + str(injection_id) + "),0) \
+                            , 0  \
             ) \
             on duplicate key update transferred = 'no', \
             iob = iob + \
               ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = " \
                            + str(i) + " and injection_type=injections.injection_type) / 100 \
-              from injections where injection_id = " + str(injection_id) + "),0)"
+              from injections where injection_id = " + str(injection_id) + "),0), iob_bg = 0"
             if windowsConfig:
                 logging.info("SQL: " + sql_save_iob)
             self.db.execute(sql_save_iob)
+            # TODO: correct it so that the iob_bg is set properly.
+            # TODO: It may be easeir to refactor this method and not do everything in sql.
+            temp = "update iob set iob_bg = (iob * " + str(
+                self.cloop_config.get_bg_sensitivity()) + ") + " + str(
+                    self.cloop_config.get_target_bg()) + " where iob_bg != (iob * " + str(
+                        self.cloop_config.get_bg_sensitivity()) + ") + " + str(self.cloop_config.get_target_bg())
+            self.db.execute(temp)
             self.db_conn.commit()
 
     def add_alert(self, datetime_to_alert, code, alert_type, title, message):
@@ -375,7 +383,7 @@ class InjectionProcess():
             else:
                 time_interval = "15"
             sql_get_active_injections = "select * from injections where \
-                        status = 'successful' and datetime_delivered > now() - interval "+time_interval+" minute \
+                        status = 'successful' and datetime_delivered > now() - interval " + time_interval + " minute \
                             and injection_type = 'square'"
 
         else:

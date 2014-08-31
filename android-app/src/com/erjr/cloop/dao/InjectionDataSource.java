@@ -10,7 +10,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.erjr.cloop.entities.Injection;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class InjectionDataSource {
 

@@ -6,7 +6,7 @@ package com.erjr.cloop.entities;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 /**
  * @author erobinson

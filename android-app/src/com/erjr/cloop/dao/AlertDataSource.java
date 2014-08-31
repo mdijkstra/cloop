@@ -1,5 +1,6 @@
 package com.erjr.cloop.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -10,8 +11,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.erjr.cloop.entities.Alert;
-import com.erjr.cloop.entities.SGV;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class AlertDataSource {
 	// Database fields
@@ -93,5 +93,31 @@ public class AlertDataSource {
 		a.setDatetimeDismissed(Util.getCurrentDateTime());
 		a.setSrcDismissed("phone");
 		saveAlert(a);
+	}
+
+	public List<Alert> getAlertsByDateRange(Date startTime, Date endTime) {
+		List<Alert> Alerts = new ArrayList<Alert>();
+
+		String start = Util.convertDateToString(startTime);
+		String end = Util.convertDateToString(endTime);
+		String restriction = Alert.COL_DATETIME_TO_ALERT+ "> '" + start
+				+ "' AND " + Alert.COL_DATETIME_TO_ALERT + " < '" + end
+				+ "' ";
+		Cursor cursor = database.query(Alert.TABLE_ALERT, Alert.allColumns,
+				restriction, null, null, null, Alert.COL_DATETIME_TO_ALERT
+						+ " DESC");
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Alert course = cursorToAlert(cursor);
+			Alerts.add(course);
+			cursor.moveToNext();
+		}
+		// make sure to close the cursor
+		cursor.close();
+		if (Alerts.isEmpty()) {
+			return null;
+		}
+		return Alerts;
 	}
 }

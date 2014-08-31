@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.erjr.cloop.entities.Course;
 import com.erjr.cloop.entities.LogRecord;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class LogDataSource {
 	// Database fields

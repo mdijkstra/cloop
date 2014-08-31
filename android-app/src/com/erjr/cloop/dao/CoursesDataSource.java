@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.erjr.cloop.entities.Course;
-import com.erjr.cloop.entities.Course;
-import com.erjr.diabetesi1.Util;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
+
+import com.erjr.cloop.entities.Course;
+import com.erjr.cloop.main.Util;
 
 public class CoursesDataSource {
 
@@ -173,7 +172,7 @@ public class CoursesDataSource {
 		deleteCourse(course);
 	}
 
-	public List<Course> getCoursesByDateRange(Date startTime, Date endTime) {
+	public List<Course> getByDateRange(Date startTime, Date endTime) {
 		List<Course> courses = new ArrayList<Course>();
 
 		String start = Util.convertDateToString(startTime);

@@ -6,7 +6,7 @@ import android.content.Context;
 
 import com.erjr.cloop.dao.IOBDataSource;
 import com.erjr.cloop.dao.LogDataSource;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class LogRecord {
 
@@ -73,7 +73,6 @@ public class LogRecord {
 		message = Util.getValueFromXml(xml, "message");
 		option1 = Util.getValueFromXml(xml, "option1");
 		option2 = Util.getValueFromXml(xml, "option2");
-
 	}
 
 	public String toString() {

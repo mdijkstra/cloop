@@ -4,7 +4,7 @@
 package com.erjr.cloop.test;
 
 import com.erjr.cloop.dao.MySQLiteHelper;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,9 +25,10 @@ public class CloopTests {
 		db = sql.getWritableDatabase();
 	}
 
-	public void clearDB() {
+	public boolean clearDB() {
 		sql.dropTables(db);
 		sql.createTables(db);
+		return true;
 	}
 
 	public boolean runAllTests() {

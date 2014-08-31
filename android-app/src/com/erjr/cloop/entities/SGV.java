@@ -9,7 +9,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.erjr.cloop.dao.SGVDataSource;
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 /**
  * @author erobinson
@@ -40,7 +40,7 @@ public class SGV {
 	private Integer sgv;
 	private String inCloud = "no";
 
-	public void setFromXML(String xml) {
+	public void setFromXml(String xml) {
 		String sgv_id_str = Util.getValueFromXml(xml, COL_SGV_ID);
 		String device_id_str = Util.getValueFromXml(xml, COL_DEVICE_ID);
 
@@ -148,7 +148,7 @@ public class SGV {
 		SGVDataSource SGVDS = new SGVDataSource(context);
 		for (String sgvXml : sgvsXmlAsArray) {
 			SGV sgv = new SGV();
-			sgv.setFromXML(sgvXml);
+			sgv.setFromXml(sgvXml);
 			SGVDS.saveSGV(sgv);
 		}
 	}

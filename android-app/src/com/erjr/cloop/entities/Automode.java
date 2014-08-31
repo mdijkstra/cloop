@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import android.database.Cursor;
 
-import com.erjr.diabetesi1.Util;
+import com.erjr.cloop.main.Util;
 
 public class Automode {
 
@@ -42,11 +42,7 @@ public class Automode {
 
 	public String toString() {
 		String str = "";
-		if (isOn.equals("yes")) {
-			str = "Automode turned on ";
-		} else {
-			str = "Automode turned off ";
-		}
+		str = "Automode is " + getIsOn();
 		str += " at " + Util.convertDateToPrettyString(datetimeRecorded)
 				+ " id(" + automodeSwitchId + ").";
 		return str;

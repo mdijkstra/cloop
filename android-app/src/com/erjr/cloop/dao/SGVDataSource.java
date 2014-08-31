@@ -5,15 +5,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.erjr.cloop.entities.SGV;
-import com.erjr.cloop.entities.Course;
-import com.erjr.diabetesi1.Util;
-
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.erjr.cloop.entities.SGV;
+import com.erjr.cloop.main.Util;
 
 public class SGVDataSource {
 
@@ -98,11 +96,32 @@ public class SGVDataSource {
 		cgm.setSg(cursor.getInt(3));
 		return cgm;
 	}
+	
+	public List<SGV> getByDateRange(Date startTime,
+			Date endTime) {
+		List<SGV> sgvs = new ArrayList<SGV>();
 
-	public Integer getCount() {
-		// TODO Auto-generated method stub
-		
-		return null;
+		String start = Util.convertDateToString(startTime);
+		String end = Util.convertDateToString(endTime);
+		String restriction = SGV.COL_DATETIME_RECORDED+ "> '" + start
+				+ "' AND " + SGV.COL_DATETIME_RECORDED + " < '" + end
+				+ "' ";
+		Cursor cursor = database.query(SGV.TABLE_SGVS, SGV.allColumns,
+				restriction, null, null, null, SGV.COL_DATETIME_RECORDED
+						+ " DESC");
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			SGV course = cursorToSGV(cursor);
+			sgvs.add(course);
+			cursor.moveToNext();
+		}
+		// make sure to close the cursor
+		cursor.close();
+		if (sgvs.isEmpty()) {
+			return null;
+		}
+		return sgvs;
 	}
 
 	// public List<Course> getCoursesToTransfer() {

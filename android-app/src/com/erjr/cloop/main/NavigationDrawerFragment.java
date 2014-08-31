@@ -84,6 +84,10 @@ public class NavigationDrawerFragment extends Fragment {
 		// Select either the default item (0) or the last selected item.
 		selectItem(mCurrentSelectedPosition);
 	}
+	
+	public void setCurrent(int navPosition) {
+		mDrawerListView.setItemChecked(navPosition, true);
+	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

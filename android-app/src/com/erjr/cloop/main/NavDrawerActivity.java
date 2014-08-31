@@ -19,18 +19,17 @@ public class NavDrawerActivity extends Activity implements
 
 	public static final int NAV_POSITION_MAIN = 0;
 	public static final int NAV_POSITION_ADD_COURSE = 1;
-	public static final int NAV_POSITION_GRAPH = 2;
+	public static final int NAV_POSITION_DAY_GRAPH = 2;
 	public static final int NAV_POSITION_NIGHT = 3;
 	public static final int NAV_POSITION_SETTINGS = 4;
-	public static final int NAV_POSITION_DAY_GRAPH = 5;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
 
 	protected void setDrawer(int navDrawerFragmentId, int activityId,
-			int navposition) {
-		currentNavPosition = navposition;
+			int navPosition) {
+		currentNavPosition = navPosition;
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(navDrawerFragmentId);
 		mTitle = getTitle();
@@ -38,6 +37,7 @@ public class NavDrawerActivity extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(navDrawerFragmentId,
 				(DrawerLayout) findViewById(activityId));
+		mNavigationDrawerFragment.setCurrent(navPosition);
 	}
 
 	/**
@@ -71,8 +71,8 @@ public class NavDrawerActivity extends Activity implements
 		case NAV_POSITION_ADD_COURSE:
 			intent = new Intent(this, AddCourseActivity.class);
 			break;
-		case NAV_POSITION_GRAPH:
-			intent = new Intent(this, CgmGraphActivity.class);
+		case NAV_POSITION_DAY_GRAPH:
+			intent = new Intent(this, DayGraphActivity.class);
 			break;
 		case NAV_POSITION_NIGHT:
 			intent = new Intent(this, NightActivity.class);
@@ -80,8 +80,8 @@ public class NavDrawerActivity extends Activity implements
 		case NAV_POSITION_SETTINGS:
 			 intent = new Intent(this, SettingsActivity.class);
 			break;
-		case NAV_POSITION_DAY_GRAPH:
-			intent = new Intent(this, DayGraphActivity.class);
+		case 5:
+//			intent = new Intent(this, DayGraphActivity.class);
 			break;
 		case 6:
 			// intent = new Intent(this, MainActivity.class);

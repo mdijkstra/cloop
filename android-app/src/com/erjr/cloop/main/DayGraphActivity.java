@@ -72,7 +72,7 @@ public class DayGraphActivity extends NavDrawerActivity implements
 			c.setTime(Util.getCurrentDateTime());
 			c.set(Calendar.SECOND, 0);
 			c.set(Calendar.MINUTE, 0);
-			c.set(Calendar.HOUR, 0);
+			c.set(Calendar.HOUR_OF_DAY, 0);
 			graphStartTime = c.getTime();
 			c.add(Calendar.DATE, 1);
 			graphEndTime = c.getTime();
@@ -252,20 +252,20 @@ public class DayGraphActivity extends NavDrawerActivity implements
 		c.setTime(graphStartTime);
 		switch (position) {
 		case 0:
-			c.set(Calendar.HOUR, 6);
+			c.set(Calendar.HOUR_OF_DAY, 6);
 			graphStartTime = c.getTime();
-			c.set(Calendar.HOUR, 22);
+			c.set(Calendar.HOUR_OF_DAY, 22);
 			graphEndTime = c.getTime();
 			break;
 		case 1:
-			c.set(Calendar.HOUR, 9);
+			c.set(Calendar.HOUR_OF_DAY, 9);
 			graphEndTime = c.getTime();
 			c.add(Calendar.DATE, -1);
-			c.set(Calendar.HOUR, 20);
+			c.set(Calendar.HOUR_OF_DAY, 20);
 			graphStartTime = c.getTime();
 			break;
 		case 2:
-			c.set(Calendar.HOUR, 0);
+			c.set(Calendar.HOUR_OF_DAY, 0);
 			graphStartTime = c.getTime();
 			c.add(Calendar.DATE, 1);
 			graphEndTime = c.getTime();

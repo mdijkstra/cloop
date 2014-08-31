@@ -52,12 +52,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.erjr.cloop.main.CgmGraphActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_cgmgraph"
-            android:launchMode="singleInstance" >
-        </activity>
-        <activity
             android:name="com.erjr.cloop.main.NightActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_full_screen_bg"

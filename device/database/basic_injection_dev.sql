@@ -58,6 +58,7 @@ select * from automode_switch;
 select * from halts;
 
 
+
 insert into injections (injection_type,                     
 units_intended, units_delivered, temp_rate, datetime_intended,                     
 cur_iob_units, cur_bg_units, cur_bg, correction_units,                     
@@ -77,3 +78,13 @@ insert into alerts (datetime_recorded, datetime_to_alert, src, code, type, title
 INSERT OR REPLACE INTO alerts (alert_id,datetime_recorded,datetime_to_alert,src,code,type,title,message,value,option1,option2) 
 values (163,'2014-08-17T16:18:37','2014-08-17T16:18:08','device','process_injection','info','Injection #98 of 3.31 units was given at 2014-08-17 16:18:08.452801','null','null','null')
 insert into alerts (datetime_recorded,datetime_to_alert,src,code,type,title,message,value) values (now(), now(), 'test', 'mysql','Test','Test Alert','Some nice message','value')
+
+
+
+select injection_id from injections where datetime_intended + interval 3 minute > '2014-08-31T20:14:33' and datetime_intended - interval 3 minute < '2014-08-31T20:14:33' and units_intended = 1.0 order by datetime_intended asc limit 1
+insert into injections (injection_type,units_intended, units_delivered, datetime_intended, datetime_deliveredstatus) values ( 'bolus',1.0,1.0,'2014-08-31T20:14:33','2014-08-31T20:14:33','confirmed')
+insert into iob (datetime_iob, iob, iob_bg) values ( from_unixtime(round(UNIX_TIMESTAMP( '2014-08-31 20:14:33' + interval 0 minute )/300)*300), ifnull((2.5 * (select iob_dist_pct from iob_dist where iob_dist.interval = 0 and injection_type='bolus') / 100),0)                                 , 0)                 on duplicate key update transferred = 'no',                     iob = iob +                     ifnull((2.5 * (select iob_dist_pct from iob_dist where iob_dist.interval = 0 and injection_type='bolus') / 100),0), iob_bg = 0
+
+
+select datetime_recorded, sgv from sgvs where                         datetime_recorded = (select max(datetime_recorded) from sgvs                         where datetime_recorded < now() and datetime_recorded > now()- interval 20 minute)
+select carbs, course_id from courses where course_id in                 (select course_id from courses_to_injections where injection_id = 590)

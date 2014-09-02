@@ -36,34 +36,6 @@ else:
 
 
 class CloopConfig():
-    db_host = "localhost"
-    if windowsConfig:
-        db_port = 33062  # windows config
-    else:
-        db_port = 3306  # device config
-    db_user = "root"
-    db_pass = "raspberry"
-    db_db = "cloop"
-
-    def __init__(self):
-        self.db_conn = MySQLdb.connect(host=self.db_host,
-                                       port=self.db_port,
-                                       user=self.db_user,
-                                       passwd=self.db_pass,
-                                       db=self.db_db)
-        self.db = self.db_conn.cursor()
-
-    def __del__(self):
-        self.db.close()
-        self.db_conn.close()
-
-    def db_log(self, message_type, code, message):
-        sql = "insert into logs (src_device, datetime_logged, code, type, message) values " \
-              "('device', now(), '" + code + "','" + message_type + "','" + message + "')"
-        logging.info("SQL: " + sql)
-        self.db.execute(sql)
-        self.db_conn.commit()
-
     def get_temp_duration(self):
         return 30
 
@@ -79,7 +51,7 @@ class CloopConfig():
     def get_carb_sensitivity(self):
         return 13
 
-    def get_bg_sensitivity(self):
+    def get_bg_sensitivity(self, datetime=None):
         return 30
 
 

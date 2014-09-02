@@ -14,6 +14,7 @@ import signal
 import datetime
 import sys
 import cloop_config
+import cloop_db
 
 if "linux" in sys.platform:
     windowsConfig = False
@@ -36,32 +37,14 @@ else:
 
 
 class Shutdown():
-    db_host = "localhost"
-    if windowsConfig:
-        db_port = 33062  # windows config
-    else:
-        db_port = 3306  # device config
-    db_user = "root"
-    db_pass = "raspberry"
-    db_db = "cloop"
-
     def __init__(self):
-        self.db_conn = MySQLdb.connect(host=self.db_host,
-                                       port=self.db_port,
-                                       user=self.db_user,
-                                       passwd=self.db_pass,
-                                       db=self.db_db)
-        self.db = self.db_conn.cursor()
         self.cloop_config = cloop_config.CloopConfig()
-
-    def __del__(self):
-        self.db.close()
-        self.db_conn.close()
+        self.cloop_db = cloop_db.CloopDB()
 
     def run(self):
         if not self.is_shutdown_needed():
             return
-        self.cloop_config.db_log("INFO", "halt_process", "Going to halt at "+str(currentDate))
+        self.cloop_db.log("INFO", "halt_process", "Going to halt at "+str(currentDate))
         self.update_halts()
         self.shutdown()
 
@@ -70,16 +53,14 @@ class Shutdown():
             os.system("halt")
 
     def is_shutdown_needed(self):
-        self.db.execute("select * from halts where status = 'no'")
-        rows = self.db.fetchall()
+        rows = self.cloop_db.select("select * from halts where status = 'no'")
         if len(rows) >= 0:
             return True
         else:
             return False
 
     def update_halts(self):
-        self.db.execute("update halts set status = 'yes'")
-        self.db_conn.commit()
+        self.cloop_db.execute("update halts set status = 'yes'")
 
 if __name__ == '__main__':
     logging.info("\n\n\nShutdown process started")

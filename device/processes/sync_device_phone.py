@@ -14,6 +14,7 @@ import time
 import logging
 import signal
 import datetime
+import cloop_db
 # from bluetooth import *
 # from time import sleep
 
@@ -397,6 +398,7 @@ if __name__ == '__main__':
     logging.info('Going to try to sync device db and phone db...')
     db_trans = DeviceDBTransData()
     data_to_send = db_trans.get_data_to_send()
+    cloop_db = cloop_db.CloopDB()
     bt_trans = DeviceBTPhoneTransData()
     data_from_phone = bt_trans.transfer(data_to_send)
     if data_from_phone is not None:
@@ -406,6 +408,6 @@ if __name__ == '__main__':
         db_trans.import_data(data_from_phone)
     else:
         logging.warning('no data from phone')
-        cloop_config.db_log("FAIL", "sync_device_phone", "Failed to sync phone-device at " + str(now))
+        cloop_db.log("FAIL", "sync_device_phone", "Failed to sync phone-device at " + str(now))
     logging.info('DONE WITH PHONE SYNC\n\n\n\n')
-    cloop_config.db_log("SUCCESS", "sync_device_phone", "Successfully completed phone-device sync at " + str(now))
+    cloop_db.log("SUCCESS", "sync_device_phone", "Successfully completed phone-device sync at " + str(now))

@@ -19,6 +19,7 @@ import subprocess
 #from bluetooth import *
 #from time import sleep
 from cloop_config import CloopConfig
+import cloop_db
 
 dateFormat = "%Y-%m-%dT%H:%M:%S"
 mySQLDateFormat = "%Y-%m-%d %H:%M:%S"
@@ -90,10 +91,6 @@ class PumpDeviceDBTrans():
         self.db.close()
         self.db_conn.close()
 
-    def import_data(self, xml):
-        self.import_courses(xml)
-        print "TODO: Import the various data elements from xml (currently just imports courses)"
-
     ################### Internal methods below ############################
     # TODO: possibly switch from xml to json objects
     def import_sgvs(self, sgvs_xml):
@@ -128,10 +125,6 @@ class PumpDeviceDBTrans():
             self.db_conn.rollback()
             logging.error('importing sgv : ' + sgv_xml)
             logging.error("******* rolled back insert : " + sql)
-
-    def sgv_exists(self, datetime_recorded, device_id, sgv):
-        print "TODO: implement sgv_exists()"
-        return False
 
     # TODO: Delete below, just keeping as reference for now
     def course_xml_to_sql_insert(self, course_xml):
@@ -287,7 +280,8 @@ class DownloadPumpData():
 
         # decode the page number
         cur_page_data = self.file_to_bytes(download_file)
-        cur_page = int(cur_page_data[5]) - 1  #array style count
+        # array style count
+        cur_page = int(cur_page_data[5]) - 1
         if cur_page < 0 or cur_page > 500:
             logging.error("ERROR: Could not decode the current \
                      page (" + str(cur_page) + ")")
@@ -379,13 +373,14 @@ if __name__ == '__main__':
     # downlaod the data from the pump
     # parse it to get the latest sgv
     cloop_config = CloopConfig()
-    cloop_config.db_log("SUCCESS", "sync_device_pump", "Going to sync phone-pump at "+str(now))
+    db = cloop_db.CloopDB()
+    db.log("SUCCESS", "sync_device_pump", "Going to sync phone-pump at "+str(now))
     logging.info("NEW SYNC...")
     download_pump = DownloadPumpData()
     file_output = download_pump.download_cgm_data()
     cgm_xml = download_pump.cgm_data_file_to_sgv_xml(file_output)
     if cgm_xml == 'ERRORFileDoesNotExist':
-        cloop_config.db_log("FAIL", "sync_device_pump", "Failed to sync phone-pump at "+str(now))
+        db.log("FAIL", "sync_device_pump", "Failed to sync phone-pump at "+str(now))
         logging.error('Could not complete sync\n\n\n\n')
     else:
         #  last_sgv_xml = download_pump.get_latest_sgv()
@@ -393,7 +388,7 @@ if __name__ == '__main__':
         db_trans = PumpDeviceDBTrans()
         #  db_trans.import_sgv(latest_sgv_xml)
         db_trans.import_sgvs(cgm_xml)
-        cloop_config.db_log("SUCCESS", "sync_device_pump", "Successfully synced phone-pump sgvs at "+str(now))
+        db.log("SUCCESS", "sync_device_pump", "Successfully synced phone-pump sgvs at "+str(now))
         logging.info("DONE WITH SYNC.\n\n\n\n")
 
 

@@ -8,6 +8,7 @@
 # ############################################
 
 import signal
+import json
 import subprocess
 import time
 import os
@@ -42,24 +43,51 @@ class PumpInterface():
     decoding_dir = "/home/pi/diabetes/decoding-carelink"
     output_file_default = "/tmp/"
     download_dir = "/tmp/"
+    latest_dnld_file = "mm-latest.data"
     device_id = 584923
     port = "/dev/ttyUSB0"
     cur_page = None
+    bolus_strokes = 10
 
     def __init__(self):
         pass
 
-    def do_bolus(self, injection_units, include_init=None):
-        if include_init is None:
-            include_init = True
-        strokes = 10
+    def get_mm_latest(self, include_init=True, recent_minutes=60):
+        # sudo python bin/mm-pages.py --init --serial 584923 --port /dev/ttyUSB0 --query history 2 > temp.txt
+        # current_page = self.get_cur_hist_page(include_init)
+        data_file = self.download_dir+self.latest_dnld_file
+        self.rm_file(data_file)
+        
+        command = "sudo python"
+        command += " " + self.decoding_dir + "/bin/mm-latest.py"
+        if include_init:
+            command += " --init"
+        command += " --serial " + str(self.device_id)
+        command += " --port " + self.port
+        command += " --parser-out "+data_file
+        command += " "+str(recent_minutes)
+        for i in range(0, 2):
+            result = self.cli_w_time(command=command)
+            if result == 'ERRORTimeout':
+                logging.warning("WARNING: command timeout. Trying to clean \
+                         the stick buffer. On (" + str(i) + ") try")
+                self.run_stick()
+            else:
+                break
+
+        data = self.read_file(data_file)
+        if data is None:
+            return "ERRORFailedDownload"
+        return self.parse_json(data)
+
+    def do_bolus(self, injection_units, include_init=True):
         command = "sudo python"
         command += " " + self.decoding_dir + "/bin/mm-bolus.py"
         if include_init:
             command += " --init"
         command += " --serial " + str(self.device_id)
         command += " --port " + self.port
-        command += " --strokes "+str(strokes)
+        command += " --strokes "+str(self.bolus_strokes)
         command += " --units "+str(injection_units)
         timeout = 45
 
@@ -86,10 +114,7 @@ class PumpInterface():
             return "ERRORNoBolus"
         return "Successful"
 
-    def query_temp_basal(self, temp_rate, include_init=None):
-        if include_init is None:
-            include_init = True
-
+    def query_temp_basal(self, temp_rate, include_init=True):
         command = "sudo python"
         command += " " + self.decoding_dir + "/bin/mm-temp-basals.py"
         if include_init:
@@ -125,14 +150,11 @@ class PumpInterface():
             return "ERRORNoTempRate"
         return "Successful"
 
-    def set_temp_basal(self, temp_rate=None, temp_duration=None, include_init=None):
+    def set_temp_basal(self, temp_rate=None, temp_duration=None, include_init=True):
         if temp_rate is None or temp_duration is None:
             logging.info("Temp rate or duration is null")
             return "ERRORCouldNotSetTempRate"
         logging.info("Going to set a temp_rate of "+str(temp_rate)+" for "+str(temp_duration)+" minutes.")
-
-        if include_init is None:
-            include_init = True
 
         # download cgm data
         command = "sudo python"
@@ -197,3 +219,28 @@ class PumpInterface():
             os.remove(file_name)
         except OSError:
             pass
+
+    def parse_json(self, json_data):
+        """
+        convert the result of a mm-latest.py command to recent data
+        :param json_data:
+        :return: list of injection dict objects
+        """
+        if json_data is None:
+            return None
+        else:
+            return json.loads(json_data)
+
+    def read_file(self, data_file):
+        if not self.file_exists(data_file):
+            return None
+        with open (data_file, "r") as myfile:
+            data=myfile.read().replace('\n', '')
+        return data
+
+    def file_exists(self, data_file):
+        if os.path.isfile(data_file):
+            return True
+        else:
+            return False
+

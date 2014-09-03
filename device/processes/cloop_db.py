@@ -63,14 +63,16 @@ class CloopDB():
         self.db_conn.close()
 
     def select(self, sql):
-        logging.info("SQL: " + sql)
+        logging.info("SQL SELECT : " + sql)
         if sql[:6] != "select":
             return None
         self.db.execute(sql)
         return self.db.fetchall()
 
     def execute(self, sql):
-        logging.info("SQL: " + sql)
+        logging.info("SQL EXECUTE: " + sql)
+        if sql[:6] != "delete" and sql[:6] != "update" and sql[:6] != "insert":
+            return None
         try:
             self.db.execute(sql)
             self.db_conn.commit()
@@ -85,6 +87,8 @@ class CloopDB():
         self.execute("delete from sgvs")
         self.execute("delete from automode_switch")
         self.execute("delete from alerts")
+        self.execute("delete from halts")
+        self.execute("delete from logs")
 
     def log(self, message_type, code, message):
         sql = "insert into logs (src_device, datetime_logged, code, type, message) values " \

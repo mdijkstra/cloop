@@ -305,7 +305,6 @@ class InjectionProcess():
         sql_select_iob = "select datetime_iob, iob from iob where \
                         datetime_iob = (select max(datetime_iob) from iob \
                         where datetime_iob < now() and datetime_iob > now() - interval 10 minute)"
-        logging.info("SQL: " + sql_select_iob)
         cur_iobs = self.cloop_db.select(sql_select_iob)
         iob = 0
         for row in cur_iobs:
@@ -316,7 +315,6 @@ class InjectionProcess():
         sql_select_sgvs = "select datetime_recorded, sgv from sgvs where \
                         datetime_recorded = (select max(datetime_recorded) from sgvs \
                         where datetime_recorded < now() and datetime_recorded > now() - interval 20 minute)"
-        logging.info("SQL: " + sql_select_sgvs)
         sgvs = self.cloop_db.select(sql_select_sgvs)
         cur_bg = None
         for row in sgvs:
@@ -344,7 +342,6 @@ class InjectionProcess():
                         and datetime_consumption < now() + interval 40 minute \
                         and course_id not in (select course_id from courses_to_injections where \
                         injection_id in (select injection_id from injections where status in ('successful', 'delivered')))"
-        logging.info("SQL: " + sql_get_courses)
         return self.cloop_db.select(sql_get_courses)
 
     def mark_courses_for_injection(self, inj):
@@ -366,7 +363,6 @@ class InjectionProcess():
                                  "where status in ('successful','delivered') and " \
                                  "injection_id in (select distinct injection_id from courses_to_injections) " \
                                  "order by datetime_delivered desc limit 1"
-        logging.info("SQL: " + sql_get_last_injection)
         injs = self.cloop_db.select(sql_get_last_injection)
         last_injection = None
         for row in injs:
@@ -403,7 +399,6 @@ class InjectionProcess():
             sql_get_active_injections = "select * from injections where \
                         status = 'successful' and datetime_delivered > now() - interval 31 minute \
                                         and injection_type = 'square'"
-        logging.info("SQL: " + sql_get_active_injections)
         rows = self.cloop_db.select(sql_get_active_injections)
         if len(rows) > 0:
             return True
@@ -413,12 +408,10 @@ class InjectionProcess():
     def get_courses_covered(self, injection_id):
         sql_get_courses = "select carbs, course_id from courses where course_id in \
                 (select course_id from courses_to_injections where injection_id = " + str(injection_id) + ")"
-        logging.info("SQL: " + sql_get_courses)
         return self.cloop_db.select(sql_get_courses)
 
     def get_automode(self):
         sql_get_automode = "select is_on from automode_switch order by datetime_recorded desc limit 1"
-        logging.info("SQL: " + sql_get_automode)
         rows = self.cloop_db.select(sql_get_automode)
         if rows is None or len(rows) <= 0:
             return "off"

@@ -43,6 +43,7 @@ else:
 
 
 class Injection():
+    injection_id = None
     injection_type = None
     cur_iob_units = None
     cur_bg_units = None
@@ -88,7 +89,7 @@ class InjectionProcess():
             inj.carbs_to_cover += course[0]
         inj.low_limit_units = self.cloop_config.get_low_limit_units()
         inj.temp_duration = self.cloop_config.get_temp_duration()
-        inj.cur_basal_units = self.get_cur_basal_units(self.cloop_config.get_temp_duration())
+        inj.cur_basal_units = self.cloop_config.get_cur_basal_units()
         inj.all_meal_carbs_absorbed = self.get_all_meal_carbs_absorbed()
 
         if inj.cur_bg_units is None:
@@ -186,14 +187,7 @@ class InjectionProcess():
                 self.add_alert(now, "process_injection", "info", "Injected " + str(inj.injection_units) + "u",
                                "Injection #" + str(inj.injection_id) + " of " +
                                str(inj.injection_units) + " units was given at " + str(now))
-            courses = self.get_courses_covered(inj.injection_id)
-            if len(courses) > 0:
-                carbs = 0
-                for course in courses:
-                    carbs += course[0]
-                self.add_alert(now + datetime.timedelta(minutes=35), "process_injection", "alert", "Time to eat",
-                               "Try to eat " + str(carbs) + "g of carbs for injection " + str(
-                                   inj.injection_id) + " in 5 minutes")
+            self.add_time_to_eat_alert(inj)
             self.cloop_db.log("SUCCESS", "injection_process",
                               "Successfully able to execute " + inj.injection_type
                               + " injection #" + str(inj.injection_id) + " of " + str(
@@ -213,56 +207,7 @@ class InjectionProcess():
                                "Inject : " + str(inj.injection_units) + "u",
                                "Should inject " + str(inj.injection_units) + "u at "
                                + str(now) + " for " + str(inj.carbs_to_cover) + "g - " + str(inj.cur_bg))
-
-    # if automode == "off" or automode is None:
-    # return injection_type, temp_rate, injection_units, None
-    # if automode == "lowsOnly" and injection_type == "bolus":
-    # return injection_type, temp_rate, injection_units, None
-
-    # injection_id = self.create_injection_rec(injection_type, cur_iob_units, cur_bg_units, cur_bg,
-    # carbs_to_cover, carbs_units,
-    # cur_basal_units, all_meal_carbs_absorbed,
-    # correction_units, injection_units,
-    # temp_rate)
-    # self.mark_courses_for_injection(courses_to_cover, injection_id)
-    #return injection_type, temp_rate, injection_units, injection_id
-
-    """
-    def set_iob(self, injection_id):
-        # create iob based on iob dist in db (max 6 hrs)
-        # iterate by 5 min intervals
-        logging.info("Setting IOB for injection #" + str(injection_id))
-        self.db.execute("select max(iob_dist.interval) from iob_dist where injection_type = "
-                        "(select injection_type from injections where injection_id = " + str(injection_id) + ")")
-        max_interval = self.db.fetchall()[0][0]
-        for i in range(0, max_interval + 5, 5):
-            sql_save_iob = "insert into iob (datetime_iob, iob, iob_bg) values ( " \
-                           + "from_unixtime(round(UNIX_TIMESTAMP( " \
-                           + "(select datetime_delivered from injections where injection_id = " + str(
-                injection_id) + ")+ interval " + str(i) + " minute )/300)*300), " \
-                           + "ifnull((select units_delivered * (select iob_dist_pct from iob_dist " \
-                           + "where iob_dist.interval = " + str(i) + " and injection_type=injections.injection_type" \
-                           + ") / 100 " \
-                           + "from injections where injection_id = " + str(injection_id) + "),0) \
-                            , 0  \
-            ) \
-            on duplicate key update transferred = 'no', \
-            iob = iob + \
-              ifnull((select units_delivered * (select iob_dist_pct from iob_dist where iob_dist.interval = " \
-                           + str(i) + " and injection_type=injections.injection_type) / 100 \
-              from injections where injection_id = " + str(injection_id) + "),0), iob_bg = 0"
-            if windowsConfig:
-                logging.info("SQL: " + sql_save_iob)
-            self.db.execute(sql_save_iob)
-            # TODO: correct it so that the iob_bg is set properly.
-            # TODO: It may be easeir to refactor this method and not do everything in sql.
-            temp = "update iob set iob_bg = (iob * " + str(
-                self.cloop_config.get_bg_sensitivity()) + ") + " + str(
-                self.cloop_config.get_target_bg()) + " where iob_bg != (iob * " + str(
-                self.cloop_config.get_bg_sensitivity()) + ") + " + str(self.cloop_config.get_target_bg())
-            self.db.execute(temp)
-            self.db_conn.commit()
-    """
+                self.add_time_to_eat_alert(inj)
 
     def add_alert(self, datetime_to_alert, code, alert_type, title, message):
         sql_to_insert = "insert into alerts (datetime_recorded, datetime_to_alert, " \
@@ -273,9 +218,9 @@ class InjectionProcess():
 
     def create_injection_rec(self, inj):
         if inj.injection_type == "bolus":
-            #units_delivered = inj.units_intended
+            # units_delivered = inj.units_intended
             inj.temp_rate = "null"
-            #else:
+            # else:
             #units_delivered = inj.temp_rate / (60 / self.cloop_config.get_temp_duration()) - self.get_cur_basal_units(
             #    self.cloop_config.get_temp_duration())
         if inj.cur_bg_units is None:
@@ -352,11 +297,6 @@ class InjectionProcess():
             sql_to_mark += "(" + str(course[1]) + ", " + str(inj.injection_id) + "),"
         sql_to_mark = sql_to_mark[:-1]
         self.cloop_db.execute(sql_to_mark)
-
-    def get_cur_basal_units(self, duration=None):
-        if duration is None:
-            duration = self.cloop_config.get_temp_duration()
-        return 1.1 * (duration / 60)
 
     def get_all_meal_carbs_absorbed(self):
         sql_get_last_injection = "select datetime_delivered from injections " \
@@ -450,6 +390,12 @@ class InjectionProcess():
             return False
         else:
             return True
+
+    def add_time_to_eat_alert(self, inj):
+        if inj.carbs_to_cover is not None and inj.carbs_to_cover != 0:
+            self.add_alert(now + datetime.timedelta(minutes=35), "process_injection", "alert", "Time to eat",
+                           "Try to eat " + str(inj.carbs_to_cover) + "g of carbs for injection "
+                           + str(inj.injection_id) + " in 5 minutes")
 
 
 if __name__ == '__main__':

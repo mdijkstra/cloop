@@ -19,7 +19,8 @@ class TestConfirmInjectionProcess(TestCase):
                 "timestamp": "2014-08-31T20:14:33",\
                 "type": "normal",\
                 "amount": 1.0 \
-            },{\
+            }, \
+            { \
                 "programmed": 2.0,\
                 "_type": "Bolus",\
                 "_description": "Bolus 2014-08-31T20:14:33 head[4], body[0] op[0x01]",\
@@ -27,7 +28,32 @@ class TestConfirmInjectionProcess(TestCase):
                 "timestamp": "2014-08-31T20:02:33",\
                 "type": "normal",\
                 "amount": 1.5 \
-            }]'
+            }, \
+            { \
+                "timestamp": "2014-09-03T17:24:08", \
+                "_type": "TempBasal", \
+                "rate": 0.0, \
+                "_description": "TempBasal 2014-09-03T17:24:08 head[2], body[1] op[0x33]" \
+            }, \
+            { \
+                "timestamp": "2014-09-03T17:24:08", \
+                "_type": "TempBasalDuration", \
+                "duration (min)": 30, \
+                "_description": "TempBasalDuration 2014-09-03T17:24:08 head[2], body[0] op[0x16]" \
+            }, \
+            { \
+                "timestamp": "2014-09-03T17:31:06", \
+                "_type": "TempBasal", \
+                "rate": 0.0, \
+                "_description": "TempBasal 2014-09-03T17:31:06 head[2], body[1] op[0x33]" \
+            }, \
+            { \
+                "timestamp": "2014-09-03T17:31:06", \
+                "_type": "TempBasalDuration", \
+                "duration (min)": 30, \
+                "_description": "TempBasalDuration 2014-09-03T17:31:06 head[2], body[0] op[0x16]" \
+            } \
+            ]'
 
     def __init__(self, param1):
         super(TestConfirmInjectionProcess, self).__init__(param1)
@@ -38,13 +64,16 @@ class TestConfirmInjectionProcess(TestCase):
         self.cloop_db.execute(
             "insert into injections (datetime_intended, units_intended, injection_type, status) values "
             "('2014-08-31T20:00:00', 2.0, 'bolus', 'delivered')")
-        self.confirm.save_or_update_injection(self.records[0])
-        self.confirm.save_or_update_injection(self.records[1])
+        self.confirm.save_or_update_injection(self.records[0], None)
+        self.confirm.save_or_update_injection(self.records[1], None)
         self.check_injections()
 
-        self.confirm.save_or_update_injection(self.records[0])
-        self.confirm.save_or_update_injection(self.records[1])
+        self.confirm.save_or_update_injection(self.records[0], None)
+        self.confirm.save_or_update_injection(self.records[1], None)
         self.check_injections()
+
+        self.confirm.save_or_update_injection(self.records[2], self.records[3])
+        self.confirm.save_or_update_injection(self.records[4], self.records[5])
 
     def check_injections(self):
         sql_check_injections = "select injection_id, units_delivered, datetime_delivered, status " \
@@ -64,7 +93,7 @@ class TestConfirmInjectionProcess(TestCase):
 
     def test_update_iob(self):
         self.cloop_db.clear_db()
-        self.confirm.save_or_update_injection(self.records[0])
+        self.confirm.save_or_update_injection(self.records[0], None)
         self.confirm.update_iob()
         count = self.cloop_db.select("select count(*) from iob")
         self.assertEqual(count[0][0], 45, "Wrong iob count : " + str(count[0][0]))
@@ -89,7 +118,7 @@ class TestConfirmInjectionProcess(TestCase):
 
     def test_set_iob_bg(self):
         self.cloop_db.clear_db()
-        self.confirm.save_or_update_injection(self.records[0])
+        self.confirm.save_or_update_injection(self.records[0], None)
         self.confirm.update_iob()
         self.confirm.set_iob_bg()
         count = self.cloop_db.select("select max(iob_bg) from iob")

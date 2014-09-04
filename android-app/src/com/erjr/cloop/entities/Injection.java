@@ -113,9 +113,16 @@ public class Injection {
 		carbsUnits = Util.nullOrFloat(Util.getValueFromXml(xml, "carbs_units"));
 		curBasalUnits = Util.nullOrFloat(Util.getValueFromXml(xml,
 				"cur_basal_units"));
-		allMealCarbsAbsorbed = Util.getValueFromXml(xml,
-				"all_meal_carbs_absorbed").equalsIgnoreCase("true") ? true
-				: false;
+		
+		String allMealCarbsAbsorbedStr = Util.getValueFromXml(xml,
+				"all_meal_carbs_absorbed");
+		if (allMealCarbsAbsorbedStr == null
+				|| allMealCarbsAbsorbedStr.equalsIgnoreCase("false")) {
+			allMealCarbsAbsorbed = false;
+		} else {
+			allMealCarbsAbsorbed = true;
+		}
+		
 		status = Util.getValueFromXml(xml, "status");
 	}
 

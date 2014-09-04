@@ -88,3 +88,16 @@ insert into iob (datetime_iob, iob, iob_bg) values ( from_unixtime(round(UNIX_TI
 
 select datetime_recorded, sgv from sgvs where                         datetime_recorded = (select max(datetime_recorded) from sgvs                         where datetime_recorded < now() and datetime_recorded > now()- interval 20 minute)
 select carbs, course_id from courses where course_id in                 (select course_id from courses_to_injections where injection_id = 590)
+
+select datetime_recorded, sgv from sgvs where                         
+	datetime_recorded = (select max(datetime_recorded) from sgvs
+                         where datetime_recorded < now() and datetime_recorded > now()- interval 20 minute)
+
+
+
+
+select datetime_iob, iob from iob where                         datetime_iob = (select max(datetime_iob) from iob                         where datetime_iob < now() and datetime_iob > now() - interval 10 minute);
+select datetime_recorded, sgv from sgvs where                         datetime_recorded = (select max(datetime_recorded) from sgvs                         where datetime_recorded < now() and datetime_recorded > now() - interval 20 minute);
+select datetime_recorded, sgv from sgvs where                         datetime_recorded = (select max(datetime_recorded) from sgvs                         where datetime_recorded < now() and datetime_recorded > now()- interval 20 minute);
+select carbs, course_id from courses where                         datetime_consumption > now() - interval 25 minute                         and datetime_consumption < now() + interval 40 minute                         and course_id not in (select course_id from courses_to_injections where                         injection_id in (select injection_id from injections where status in ('successful', 'delivered')));
+select datetime_delivered from injections where status in ('successful','delivered') and injection_id in (select distinct injection_id from courses_to_injections) order by datetime_delivered desc limit 1;

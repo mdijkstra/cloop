@@ -55,25 +55,31 @@ class ConfirmInjectionProcess():
         recent_data = self.pump_interface.get_mm_latest(include_init)
         # for each injection get time
         if recent_data is not None:
-            for record in recent_data:
-                if record["_type"] == "Bolus":
-                    self.save_or_update_injection(record)
+            for i in range(0, len(recent_data), 1):
+                record1 = recent_data[i]
+                if record1["_type"] == "Bolus":
+                    self.save_or_update_injection(record1, None)
+                if record1["_type"] == "TempBasal" and i + 1 < len(recent_data) \
+                        and recent_data[i + 1]["_type"] == "TempBasalDuration":
+                    record2 = recent_data[i + 1]
+                    self.save_or_update_injection(record1, record2)
 
         self.update_iob()
         self.set_old_injs_to_fail()
 
-    def save_or_update_injection(self, record):
+    def save_or_update_injection(self, record1, record2):
+        units_intended, units_delivered = self.get_units_from_records(record1, record2)
         sql = "select injection_id from injections " \
-              "where datetime_intended + interval 3 minute > '" + record["timestamp"] \
-              + "' and datetime_intended - interval 3 minute < '" + record["timestamp"] \
-              + "' and units_intended = " + str(record["programmed"]) \
+              "where datetime_intended + interval 3 minute > '" + record1["timestamp"] \
+              + "' and datetime_intended - interval 3 minute < '" + record1["timestamp"] \
+              + "' and units_intended = " + units_intended \
               + " order by datetime_intended asc limit 1"
         possible_injs = self.cloop_db.select(sql)
         # if no existing injection
         if possible_injs is None or len(possible_injs) <= 0:
-            self.new_inj_from_json(record)
+            self.new_inj_from_json(record1, record2)
         else:
-            self.confirm_inj(record, possible_injs[0][0])
+            self.confirm_inj(record1, record2, possible_injs[0][0])
 
     def update_iob(self):
         max_interval_square, max_interval_bolus = self.get_max_intervals()
@@ -122,23 +128,42 @@ class ConfirmInjectionProcess():
               "where datetime_intended < now() - interval 20 minute and status = 'delivered'"
         self.cloop_db.execute(sql)
 
-    def new_inj_from_json(self, record):
+    def new_inj_from_json(self, record1, record2):
+        if record1["_type"] == "Bolus":
+            injection_type = "bolus"
+        else:
+            injection_type = "square"
+        units_intended, units_delivered = self.get_units_from_records(record1, record2)
+        datetime_intended = record1["timestamp"]
+        datetime_delivered = record1["timestamp"]
+
         sql = "insert into injections (injection_type," \
               "units_intended, units_delivered, " \
               "datetime_intended, datetime_delivered," \
               "status) values " \
-              "( 'bolus'," \
-              + str(record["programmed"]) + "," + str(record["amount"]) + ",'" + \
-              record["timestamp"] + "','" + record["timestamp"] + \
+              "( '" + injection_type + "'," \
+              + units_intended + "," + units_delivered + ",'" + \
+              datetime_intended + "','" + datetime_delivered + \
               "','confirmed')"
         self.cloop_db.execute(sql)
 
-    def confirm_inj(self, record, injection_id):
-        sql = "update injections set datetime_delivered = '" + str(record["timestamp"]) \
-              + "', units_delivered = " + str(record["amount"]) \
+    def confirm_inj(self, record1, record2, injection_id):
+        units_intended, units_delivered = self.get_units_from_records(record1, record2)
+        sql = "update injections set datetime_delivered = '" + str(record1["timestamp"]) \
+              + "', units_delivered = " + units_delivered \
               + ", status = 'confirmed', transferred = 'no'" \
               + " where injection_id = " + str(injection_id)
         self.cloop_db.execute(sql)
+
+    def get_units_from_records(self, record1, record2):
+        if record1["_type"] == "Bolus":
+            units_intended = str(record1["programmed"])
+            units_delivered = str(record1["amount"])
+        else:
+            units_intended = (record1["rate"] - self.cloop_config.get_cur_basal_units(60)) * \
+                             (record2["duration (min)"] / 60)
+            units_delivered = units_intended
+        return str(units_intended), str(units_delivered)
 
     def get_max_intervals(self):
         temp = self.cloop_db.select("select max(iob_dist.interval) from iob_dist where injection_type = 'bolus'")

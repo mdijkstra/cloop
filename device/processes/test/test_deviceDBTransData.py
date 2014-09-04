@@ -1,4 +1,5 @@
 from unittest import TestCase
+from device.processes import cloop_db
 
 __author__ = 'erobinson'
 from device.processes.sync_device_phone import DeviceDBTransData
@@ -6,6 +7,7 @@ from device.processes.sync_device_phone import DeviceDBTransData
 
 class TestDeviceDBTransData(TestCase):
     transData = DeviceDBTransData()
+    cloop_db = cloop_db.CloopDB()
 
     def test_course_xml_to_sql_insert(self):
         self.transData.db.execute("delete from courses_to_injections")
@@ -55,3 +57,22 @@ class TestDeviceDBTransData(TestCase):
               "<automode><is_on>off</is_on><datetime_recorded>2014-08-27T17:30:49</datetime_recorded><automode_switch_id>4</automode_switch_id></automode>" \
               "</automodes>"
         self.transData.import_data(xml)
+
+    def test_export_injs(self):
+        self.cloop_db.clear_db()
+        sql = "insert into injections (injection_type," \
+              "units_intended, units_delivered, " \
+              "datetime_intended, datetime_delivered," \
+              "status) values " \
+              "('bolus',2,1.5,now(),now(),'confirmed')"
+        self.transData.db.execute(sql)
+        self.transData.db_conn.commit()
+        xml = self.transData.export_injections()
+        expected = "<injections>" \
+                   "<injection><injection_id>381</injection_id><units_intended>2.0</units_intended>" \
+                   "<units_delivered>1.5</units_delivered><temp_rate>None</temp_rate><datetime_intended>2014-09-03T18:19:45</datetime_intended>" \
+                   "<datetime_delivered>2014-09-03T18:19:45</datetime_delivered><cur_iob_units>None</cur_iob_units><cur_bg_units>None</cur_bg_units>" \
+                   "<correction_units>None</correction_units><carbs_to_cover>None</carbs_to_cover><carbs_units>None</carbs_units>" \
+                   "<cur_basal_units>None</cur_basal_units><all_meal_carbs_absorbed>None</all_meal_carbs_absorbed><status>confirmed</status></injection>" \
+                   "</injections>"
+        self.assertEqual(xml, expected, "xml didn't come out correctly")

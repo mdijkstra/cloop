@@ -54,4 +54,7 @@ class CloopConfig():
     def get_bg_sensitivity(self, datetime=None):
         return 30
 
-
+    def get_cur_basal_units(self, duration=None):
+        if duration is None:
+            duration = self.get_temp_duration()
+        return 1.1 * (duration / 60)

@@ -78,6 +78,8 @@ class CloopDB():
             self.db_conn.commit()
         except:
             self.db_conn.rollback()
+            logging.info("SQL ERROR: " + sql)
+            self.log("error", "cloop_db", "Failed to run sql. Check logs to debug.")
 
     def clear_db(self):
         self.execute("delete from courses_to_injections")

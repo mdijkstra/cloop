@@ -68,11 +68,17 @@ class TestDeviceDBTransData(TestCase):
         self.transData.db.execute(sql)
         self.transData.db_conn.commit()
         xml = self.transData.export_injections()
-        expected = "<injections>" \
-                   "<injection><injection_id>381</injection_id><units_intended>2.0</units_intended>" \
-                   "<units_delivered>1.5</units_delivered><temp_rate>None</temp_rate><datetime_intended>2014-09-03T18:19:45</datetime_intended>" \
-                   "<datetime_delivered>2014-09-03T18:19:45</datetime_delivered><cur_iob_units>None</cur_iob_units><cur_bg_units>None</cur_bg_units>" \
-                   "<correction_units>None</correction_units><carbs_to_cover>None</carbs_to_cover><carbs_units>None</carbs_units>" \
-                   "<cur_basal_units>None</cur_basal_units><all_meal_carbs_absorbed>None</all_meal_carbs_absorbed><status>confirmed</status></injection>" \
-                   "</injections>"
-        self.assertEqual(xml, expected, "xml didn't come out correctly")
+        expected = ["</injection_id><units_intended>2.0</units_intended><units_delivered>1.5</units_delivered>"
+                    "<temp_rate>None</temp_rate><datetime_intended>2014-",
+
+                    "<datetime_delivered>2014-",
+
+                    "</datetime_delivered><cur_iob_units>None</cur_iob_units><cur_bg_units>None</cur_bg_units>"
+                    "<correction_units>None</correction_units>"
+                    "<carbs_to_cover>None</carbs_to_cover><carbs_units>None</carbs_units>"
+                    "<cur_basal_units>None</cur_basal_units>"
+                    "<all_meal_carbs_absorbed>None</all_meal_carbs_absorbed><status>confirmed</status></injection>"
+                    "</injections>"]
+
+        for str in expected:
+            self.assertIn(str, xml, "xml didn't come out correctly")

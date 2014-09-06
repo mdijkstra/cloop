@@ -18,6 +18,30 @@ USE `cloop`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `alert_types`
+--
+
+DROP TABLE IF EXISTS `alert_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `alert_types` (
+  `type` varchar(45) NOT NULL,
+  `description` varchar(500) NOT NULL,
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `alert_types`
+--
+
+LOCK TABLES `alert_types` WRITE;
+/*!40000 ALTER TABLE `alert_types` DISABLE KEYS */;
+INSERT INTO `alert_types` VALUES ('critical','Important alert: low bg and extremely low bg, multiple sync failure'),('info','Info that some action was taken: injection given, periodic bg'),('warning','Warning alert or take action: potential low, high, need injection or temp');
+/*!40000 ALTER TABLE `alert_types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `alerts`
 --
 
@@ -39,8 +63,10 @@ CREATE TABLE `alerts` (
   `transferred` varchar(45) NOT NULL DEFAULT 'NO',
   `datetime_dismissed` datetime DEFAULT NULL,
   `src_dismissed` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`alert_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`alert_id`),
+  KEY `alers_type_alert_types_idx` (`type`),
+  CONSTRAINT `alers_type_alert_types` FOREIGN KEY (`type`) REFERENCES `alert_types` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +89,9 @@ CREATE TABLE `automode_switch` (
   `automode_switch_id` int(11) NOT NULL,
   `datetime_recorded` datetime NOT NULL,
   `is_on` varchar(45) NOT NULL,
-  PRIMARY KEY (`automode_switch_id`)
+  PRIMARY KEY (`automode_switch_id`),
+  KEY `is_on_idx` (`is_on`),
+  CONSTRAINT `is_on` FOREIGN KEY (`is_on`) REFERENCES `automode_switches` (`is_on`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='table to record switching on and off the automatic mode. is_on = yes means the system will deliver insulin; is_on = no the device will take no actions. populated on the app and transferred over to the device';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -74,6 +102,30 @@ CREATE TABLE `automode_switch` (
 LOCK TABLES `automode_switch` WRITE;
 /*!40000 ALTER TABLE `automode_switch` DISABLE KEYS */;
 /*!40000 ALTER TABLE `automode_switch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `automode_switches`
+--
+
+DROP TABLE IF EXISTS `automode_switches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `automode_switches` (
+  `is_on` varchar(45) NOT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`is_on`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `automode_switches`
+--
+
+LOCK TABLES `automode_switches` WRITE;
+/*!40000 ALTER TABLE `automode_switches` DISABLE KEYS */;
+INSERT INTO `automode_switches` VALUES ('fullOn','The system will bolus and set temp rates'),('lowsOnly','The system will only sent temp rates and will not bolus'),('off','The system will not bolus or set temps');
+/*!40000 ALTER TABLE `automode_switches` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -170,18 +222,18 @@ CREATE TABLE `injections` (
   `temp_rate` float DEFAULT NULL,
   `datetime_intended` datetime NOT NULL,
   `datetime_delivered` datetime DEFAULT NULL,
-  `cur_iob_units` float NOT NULL,
+  `cur_iob_units` float DEFAULT NULL,
   `cur_bg_units` float DEFAULT NULL,
   `cur_bg` int(11) DEFAULT NULL,
-  `correction_units` float NOT NULL,
-  `carbs_to_cover` int(11) NOT NULL,
-  `carbs_units` float NOT NULL,
-  `cur_basal_units` float NOT NULL,
+  `correction_units` float DEFAULT NULL,
+  `carbs_to_cover` int(11) DEFAULT NULL,
+  `carbs_units` float DEFAULT NULL,
+  `cur_basal_units` float DEFAULT NULL,
   `all_meal_carbs_absorbed` varchar(45) DEFAULT NULL,
   `status` varchar(45) NOT NULL,
-  `transferred` varchar(45) NOT NULL DEFAULT 'NO',
+  `transferred` varchar(45) NOT NULL DEFAULT 'no',
   PRIMARY KEY (`injection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COMMENT='table to store injections intended/delivered';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -203,6 +255,7 @@ DROP TABLE IF EXISTS `iob`;
 CREATE TABLE `iob` (
   `datetime_iob` datetime NOT NULL,
   `iob` float NOT NULL,
+  `iob_bg` int(11) NOT NULL,
   `transferred` varchar(45) DEFAULT 'no',
   PRIMARY KEY (`datetime_iob`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -243,6 +296,30 @@ INSERT INTO `iob_dist` VALUES (0,100,'bolus'),(0,100,'square'),(5,100,'bolus'),(
 UNLOCK TABLES;
 
 --
+-- Table structure for table `log_types`
+--
+
+DROP TABLE IF EXISTS `log_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `log_types` (
+  `type` varchar(45) NOT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `log_types`
+--
+
+LOCK TABLES `log_types` WRITE;
+/*!40000 ALTER TABLE `log_types` DISABLE KEYS */;
+INSERT INTO `log_types` VALUES ('debug','probably not used'),('error','Errors'),('info','Info'),('warning','Warnings');
+/*!40000 ALTER TABLE `log_types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `logs`
 --
 
@@ -260,7 +337,7 @@ CREATE TABLE `logs` (
   `option2` varchar(500) DEFAULT NULL,
   `transferred` varchar(45) NOT NULL DEFAULT 'no',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COMMENT='table to record logs';
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COMMENT='table to record logs';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,7 +363,7 @@ CREATE TABLE `sgvs` (
   `sgv` int(11) DEFAULT NULL COMMENT 'blood glucose recorded',
   `transferred` varchar(45) NOT NULL DEFAULT 'no',
   PRIMARY KEY (`sgv_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='table to store cgm data that is read off the pump';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -311,4 +388,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-22 17:49:27
+-- Dump completed on 2014-09-06 18:07:27

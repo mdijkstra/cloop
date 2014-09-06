@@ -393,7 +393,7 @@ class InjectionProcess():
 
     def add_time_to_eat_alert(self, inj):
         if inj.carbs_to_cover is not None and inj.carbs_to_cover != 0:
-            self.add_alert(now + datetime.timedelta(minutes=35), "process_injection", "alert", "Time to eat",
+            self.add_alert(now + datetime.timedelta(minutes=35), "process_injection", "warning", "Time to eat",
                            "Try to eat " + str(inj.carbs_to_cover) + "g of carbs for injection "
                            + str(inj.injection_id) + " in 5 minutes")
 

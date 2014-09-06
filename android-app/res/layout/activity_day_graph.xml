@@ -14,7 +14,7 @@
         <LinearLayout
             android:id="@+id/graph"
             android:layout_width="match_parent"
-            android:layout_height="500dip"
+            android:layout_height="300dip"
             android:orientation="horizontal" >
         </LinearLayout>
 

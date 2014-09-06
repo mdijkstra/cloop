@@ -5,6 +5,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -16,6 +19,7 @@ public class AlertsManager extends BroadcastReceiver {
 
 	private static final Integer ALERT_ID_OFFSET = 1000;
 	private static int notificationId;
+	private static PendingIntent resultPendingIntent;
 
 	public static void showAlerts(Context context) {
 		AlertDataSource alertDS = new AlertDataSource(context);
@@ -24,14 +28,7 @@ public class AlertsManager extends BroadcastReceiver {
 			return;
 		}
 		Intent resultIntent = new Intent(context, MainActivity.class);
-//		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-//		// Adds the back stack for the Intent (but not the Intent itself)
-//		stackBuilder.addParentStack(MainActivity.class);
-//		// Adds the Intent that starts the Activity to the top of the stack
-//		stackBuilder.addNextIntent(resultIntent);
-//		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
-//				PendingIntent.FLAG_UPDATE_CURRENT);
-		PendingIntent resultPendingIntent =
+		resultPendingIntent =
 			    PendingIntent.getActivity(
 			    context,
 			    0,
@@ -39,35 +36,53 @@ public class AlertsManager extends BroadcastReceiver {
 			    PendingIntent.FLAG_NO_CREATE
 			);
 		for (Alert alert : alerts) {
-//			if(isAlreadyAlerted(context, 1000+alert.getAlertId())) {
-//				continue;
-//			}
-			
-//			Intent i = new Intent("DISMISS-INTENT");
-//			PendingIntent pI = PendingIntent.getBroadcast(context, 0, i, 0);
-//			registerReceiver(onRe)
-			
-			// setup dismiss intent so can record when alerts are dismissed
-//			Intent dismissIntent = new Intent(context, AlertsManager.class);
-//			dismissIntent.setAction("com.erjr.diabetesi1.AlertManager");
-//			dismissIntent.putExtra("alertId", alert.getAlertId());
-//			PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(
-//					context, 0, dismissIntent, 0);
-			// Builder builder = new Notification.Builder(this):
-			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-					context).setSmallIcon(R.drawable.ic_launcher)
-					.setContentTitle(alert.getType() + ": " + alert.getTitle())
-					.setContentText(alert.getMessage());
-
-			mBuilder.setDeleteIntent(getDeleteIntent(context, alert));
-			mBuilder.setContentIntent(resultPendingIntent);
-			NotificationManager mNotificationManager = (NotificationManager) context
-					.getSystemService(Context.NOTIFICATION_SERVICE);
-			
-			mNotificationManager.notify(alert.getAlertId(), mBuilder.build());
+			showAlert(alert, context);
 		}
 	}
 	
+	private static void showAlert(Alert alert, Context context) {
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				context).setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle(alert.getTitle())
+				.setContentText(alert.getMessage());
+		
+		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		
+		if(alert.getType().equalsIgnoreCase("critical")) {
+			// ring phone even if in silent
+			v.vibrate(2000);
+			MediaPlayer mp = MediaPlayer.create(context,
+					R.raw.alarm);
+			mp.start();
+			mp.start();
+			v.vibrate(2000);
+			long[] pattern = new long[3];
+			pattern[0] = 500;
+			pattern[1] = 500;
+			pattern[2] = 500;
+			v.vibrate(pattern, 2);
+		}
+		if(alert.getType().equalsIgnoreCase("warning")) {
+			// vibrate phone
+			// notify if not in silent mode
+			MediaPlayer mp = MediaPlayer.create(context,
+					R.raw.alarm);
+			v.vibrate(1000);
+			if(am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+				mp.start();
+			}
+		}
+		
+		
+		mBuilder.setDeleteIntent(getDeleteIntent(context, alert));
+		mBuilder.setContentIntent(resultPendingIntent);
+		NotificationManager mNotificationManager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		mNotificationManager.notify(alert.getAlertId(), mBuilder.build());
+	}
+
 	protected static PendingIntent getDeleteIntent(Context ctx, Alert alert) {
 		Intent intent = new Intent(ctx, AlertsManager.class);
 		intent.setAction("notification_cancelled");

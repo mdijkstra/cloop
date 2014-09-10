@@ -55,6 +55,7 @@ class ConfirmInjectionProcess():
         recent_data = self.pump_interface.get_mm_latest(include_init)
         # for each injection get time
         if recent_data is not None:
+            logging.info("Found "+str(len(recent_data))+" pieces of recent data. Processing..."+str(recent_data))
             for i in range(0, len(recent_data), 1):
                 record1 = recent_data[i]
                 if record1["_type"] == "Bolus":
@@ -63,7 +64,8 @@ class ConfirmInjectionProcess():
                         and recent_data[i + 1]["_type"] == "TempBasalDuration":
                     record2 = recent_data[i + 1]
                     self.save_or_update_injection(record1, record2)
-
+        else:
+            logging.info("Didn't find any recent data")
         self.update_iob()
         self.set_old_injs_to_fail()
 

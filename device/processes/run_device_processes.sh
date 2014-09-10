@@ -14,6 +14,8 @@ sudo python sync_device_pump.py
 sleep 2
 sudo python sync_device_phone.py
 sleep 20
+sudo python confirm_injection_process.py
+sleep 10
 sudo python injection_process.py
 sleep 30
 sudo python sync_device_phone.py

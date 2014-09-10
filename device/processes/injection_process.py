@@ -180,11 +180,11 @@ class InjectionProcess():
             self.cloop_db.execute(sql)
             self.mark_courses_for_injection(inj)
             if inj.injection_type == "square":
-                self.add_alert(now, "process_injection", "info", "Set Temp " + str(inj.temp_rate),
+                self.add_alert(now, "injection_process", "info", "Set Temp " + str(inj.temp_rate),
                                "Injection #" + str(inj.injection_id) + " with a rate of " +
                                str(inj.temp_rate) + " was given at " + str(now))
             else:
-                self.add_alert(now, "process_injection", "info", "Injected " + str(inj.injection_units) + "u",
+                self.add_alert(now, "injection_process", "info", "Injected " + str(inj.injection_units) + "u",
                                "Injection #" + str(inj.injection_id) + " of " +
                                str(inj.injection_units) + " units was given at " + str(now))
             self.add_time_to_eat_alert(inj)
@@ -200,10 +200,10 @@ class InjectionProcess():
                           + " iob:" + str(inj.cur_iob_units) + " meal_over:" + str(inj.all_meal_carbs_absorbed))
         if not self.is_recent_recommendation(inj.injection_type):
             if inj.injection_type == "square":
-                self.add_alert(now, "process_injection.should_temp", "warning", "Set Temp " + str(inj.temp_rate),
+                self.add_alert(now, "injection_process.should_temp", "warning", "Set Temp " + str(inj.temp_rate),
                                "Should set a temporary rate of " + str(inj.temp_rate))
             else:
-                self.add_alert(now, "process_injection.should_bolus", "warning",
+                self.add_alert(now, "injection_process.should_bolus", "warning",
                                "Inject : " + str(inj.injection_units) + "u",
                                "Should inject " + str(inj.injection_units) + "u at "
                                + str(now) + " for " + str(inj.carbs_to_cover) + "g - " + str(inj.cur_bg))
@@ -393,7 +393,7 @@ class InjectionProcess():
 
     def add_time_to_eat_alert(self, inj):
         if inj.carbs_to_cover is not None and inj.carbs_to_cover != 0:
-            self.add_alert(now + datetime.timedelta(minutes=35), "process_injection", "warning", "Time to eat",
+            self.add_alert(now + datetime.timedelta(minutes=35), "injection_process", "warning", "Time to eat",
                            "Try to eat " + str(inj.carbs_to_cover) + "g of carbs for injection "
                            + str(inj.injection_id) + " in 5 minutes")
 

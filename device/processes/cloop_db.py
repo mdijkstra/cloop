@@ -96,3 +96,4 @@ class CloopDB():
         sql = "insert into logs (src_device, datetime_logged, code, type, message) values " \
               "('device', now(), '" + code + "','" + message_type + "','" + message + "')"
         self.execute(sql)
+        

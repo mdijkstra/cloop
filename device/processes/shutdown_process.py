@@ -54,7 +54,7 @@ class Shutdown():
 
     def is_shutdown_needed(self):
         rows = self.cloop_db.select("select * from halts where status = 'no'")
-        if len(rows) >= 0:
+        if len(rows) > 0:
             return True
         else:
             return False
@@ -67,4 +67,3 @@ if __name__ == '__main__':
     process = Shutdown()
     process.run()
     logging.info("Shutdown process ended\n")
-

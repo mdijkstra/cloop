@@ -38,3 +38,4 @@ if [ -d /etc/profile.d ]; then
   done
   unset i
 fi
+TZ='America/New_York'; export TZ

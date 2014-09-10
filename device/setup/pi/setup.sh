@@ -67,3 +67,6 @@ echo "    in order to setup wifi"
 
 git config --global user.email edward.r.robinson@gmail.com
 git config --global user.name Edward
+
+echo "try: sudo tzselect "
+echo "or: sudo dpkg-reconfigure tzdata"

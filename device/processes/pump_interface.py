@@ -68,8 +68,8 @@ class PumpInterface():
         command += " "+str(recent_minutes)
         for i in range(0, 2):
             result = self.cli_w_time(command=command)
-            if result == 'ERRORTimeout':
-                logging.warning("WARNING: command timeout. Trying to clean \
+            if result != 'Successful':
+                logging.warning("WARNING: command failed. Trying to clean \
                          the stick buffer. On (" + str(i) + ") try")
                 self.run_stick()
             else:
@@ -89,31 +89,19 @@ class PumpInterface():
         command += " --port " + self.port
         command += " --strokes "+str(self.bolus_strokes)
         command += " --units "+str(injection_units)
-        timeout = 45
+        result = "ERRORNotRun"
+        for i in range(0, 2):
+            result = self.cli_w_time(command=command)
+            if result != 'Successful':
+                logging.warning("WARNING: command failed. Trying to clean \
+                         the stick buffer. On (" + str(i) + ") try")
+                self.run_stick()
+            else:
+                break
 
-        logging.info("INFO: About to execute command : \n\t" + command)
-        start = datetime.datetime.now()
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        out, err = process.communicate()
-        while process.poll() is None:
-            time.sleep(0.1)
-            now = datetime.datetime.now()
-            if (now - start).seconds > timeout:
-                os.kill(process.pid, signal.SIGKILL)
-                os.waitpid(-1, os.WNOHANG)
-                logging.info("STDOUT: " + out)
-                logging.info("STDERR: " + err)
-                logging.error("Reached timeout")
-                return 'ERRORTimeout'
-        logging.info("STDOUT: " + out)
-        logging.info("STDERR: " + err)
-        logging.info("RETURN CODE: " + str(process.returncode))
-        logging.info("ran command without timeout")
-        if "FAILED TO DOWNLOAD ANYTHING " in out:
-            logging.error("ERROR: could not do injection")
-            return "ERRORNoBolus"
-        return "Successful"
+        return result
 
+    # run command directly to get the std out
     def query_temp_basal(self, temp_rate, include_init=True):
         command = "sudo python"
         command += " " + self.decoding_dir + "/bin/mm-temp-basals.py"
@@ -142,6 +130,8 @@ class PumpInterface():
         logging.info("STDERR: " + err)
         logging.info("RETURN CODE: " + str(process.returncode))
         logging.info("ran command without timeout")
+        if process.returncode != 0:
+            return "ERRORCode-"+str(process.returncode)
         if "response: ReadBasalTemp:size[64]:data:{'duration': " not in out:
             logging.error("ERROR: no temp rate")
             return "ERRORNoTempRate"
@@ -168,7 +158,7 @@ class PumpInterface():
         command += " set"
         for i in range(0, 2):
             result = self.cli_w_time(command=command)
-            if result == 'ERRORTimeout':
+            if result != 'Successful':
                 logging.warning("WARNING: command timeout. Trying to clean \
                          the stick buffer. On (" + str(i) + ") try")
                 self.run_stick()
@@ -210,7 +200,10 @@ class PumpInterface():
         logging.info("STDERR: " + err)
         logging.info("RETURN CODE: " + str(process.returncode))
         logging.info("ran command without timeout")
-        return "SUCESSRanCommand"
+        if process.returncode != 0:
+            return "ERRORCode-"+str(process.returncode)
+        else:
+            return "Successful"
 
     def rm_file(self, file_name):
         if skip_commands:

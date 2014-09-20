@@ -102,6 +102,9 @@ public class DayGraphActivity extends NavDrawerActivity implements
 		XYSeriesRenderer mSgvRenderer = new XYSeriesRenderer();
 		mSgvRenderer.setColor(Color.BLUE);
 		mSgvRenderer.setDisplayChartValues(showGraphNums);
+		mRenderer.setLabelsTextSize(30);
+		mSgvRenderer.setChartValuesTextSize(40);
+		mIobRenderer.setChartValuesTextSize(40);
 		mRenderer.addSeriesRenderer(0, mIobRenderer);
 		mRenderer.addSeriesRenderer(1, mSgvRenderer);
 		mRenderer.setShowGridX(true);
@@ -147,8 +150,6 @@ public class DayGraphActivity extends NavDrawerActivity implements
 		if (mChart == null) {
 			mChart = ChartFactory.getTimeChartView(this, mDataset, mRenderer,
 					"HH:mm");
-			// mChart = ChartFactory.getCubeLineChartView(this, mDataset,
-			// mRenderer, 0.3f);
 			layout.addView(mChart);
 		} else {
 			mChart.repaint();

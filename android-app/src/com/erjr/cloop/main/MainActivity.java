@@ -218,6 +218,7 @@ public class MainActivity extends NavDrawerActivity implements
 
 	private void updateCourses(boolean isNext) {
 		Date[] dates = getDateRange(spinnerCoursesDatetimeStart, 1440, isNext);
+		spinnerCoursesDatetimeStart = dates[0];
 		CoursesDataSource coursesDS = new CoursesDataSource(getBaseContext());
 		List<Course> courses = coursesDS.getByDateRange(dates[0], dates[1]);
 		toastListUpdate((List<Object>) (List<?>) courses, "Courses", dates[0]);
@@ -226,6 +227,7 @@ public class MainActivity extends NavDrawerActivity implements
 
 	private void updateLogs(boolean isNext) {
 		Date[] dates = getDateRange(spinnerLogsDatetimeStart, 60, isNext);
+		spinnerLogsDatetimeStart = dates[0];
 		LogDataSource logDS = new LogDataSource(getBaseContext());
 		List<LogRecord> logs = logDS.getLogsByDateRange(dates[0], dates[1]);
 		toastListUpdate((List<Object>) (List<?>) logs, "Logs", dates[0]);
@@ -235,6 +237,7 @@ public class MainActivity extends NavDrawerActivity implements
 	private void updateInjections(boolean isNext) {
 		Date[] dates = getDateRange(spinnerInjectionsDatetimeStart, 1440,
 				isNext);
+		spinnerInjectionsDatetimeStart = dates[0];
 		InjectionDataSource InjectionsDS = new InjectionDataSource(
 				getBaseContext());
 		List<Injection> Injections = InjectionsDS.getInjectionsByDateRange(
@@ -246,6 +249,7 @@ public class MainActivity extends NavDrawerActivity implements
 
 	private void updateHalts(boolean isNext) {
 		Date[] dates = getDateRange(spinnerHaltsDatetimeStart, 1440, isNext);
+		spinnerHaltsDatetimeStart = dates[0];
 		HaltDataSource hDS = new HaltDataSource(getBaseContext());
 		List<Halt> halts = hDS.getByDateRange(dates[0], dates[1]);
 		toastListUpdate((List<Object>) (List<?>) halts, "Halts", dates[0]);
@@ -254,6 +258,7 @@ public class MainActivity extends NavDrawerActivity implements
 
 	private void updateAutos(boolean isNext) {
 		Date[] dates = getDateRange(spinnerAutosDatetimeStart, 1440, isNext);
+		spinnerAutosDatetimeStart = dates[0];
 		AutomodeDataSource aDS = new AutomodeDataSource(getBaseContext());
 		List<Automode> autos = aDS.getAutosByDateRange(dates[0], dates[1]);
 		toastListUpdate((List<Object>) (List<?>) autos, "Automodes", dates[0]);
@@ -262,6 +267,7 @@ public class MainActivity extends NavDrawerActivity implements
 
 	private void updateAlerts(boolean isNext) {
 		Date[] dates = getDateRange(spinnerAlertsDatetimeStart, 360, isNext);
+		spinnerAlertsDatetimeStart = dates[0];
 		AlertDataSource aDS = new AlertDataSource(getBaseContext());
 		List<Alert> alerts = aDS.getAlertsByDateRange(dates[0], dates[1]);
 		toastListUpdate((List<Object>) (List<?>) alerts, "Alerts", dates[0]);
@@ -275,12 +281,12 @@ public class MainActivity extends NavDrawerActivity implements
 					getBaseContext(),
 					"No " + listedItems.toLowerCase() + " to show for "
 							+ Util.convertDateToPrettyString(startDate));
+		} else {
+			Util.toast(
+					getBaseContext(),
+					listedItems + " for "
+							+ Util.convertDateToPrettyString(startDate));
 		}
-		// update
-		Util.toast(
-				getBaseContext(),
-				listedItems + " for "
-						+ Util.convertDateToPrettyString(startDate));
 	}
 
 	private Date[] getDateRange(Date startTime, int minutesDelta, boolean next) {

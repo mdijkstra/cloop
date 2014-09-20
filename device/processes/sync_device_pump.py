@@ -195,8 +195,8 @@ class DownloadPumpData():
         command += " --save "
         for i in range(0, 2):
             result = self.cli_w_time(command=command)
-            if result == 'ERRORTimeout':
-                logging.warning("WARNING: command timeout. Trying to clean \
+            if result != 'Successful':
+                logging.warning("WARNING: command failed. Trying to clean \
                          the stick buffer. On (" + str(i) + ") try")
                 self.run_stick()
             elif not os.path.isfile(data_file):
@@ -242,9 +242,10 @@ class DownloadPumpData():
         command += " " + self.decoding_dir + "/decocare/stick.py"
         command += " " + self.port
         result = self.cli_w_time(command=command, timeout=30)
-        if result == 'ERRORTimeout':
-            logging.error("WARNING: sticky command timeout.")
-        logging.info("successfully ran sticky")
+        if result != 'Successful':
+            logging.error("WARNING: sticky command failed.")
+        else:
+            logging.info("successfully ran sticky")
 
     def get_cur_cgm_page(self, include_init=True):
         logging.info("going to try to download the current cgm page")
@@ -263,10 +264,11 @@ class DownloadPumpData():
         command += " --prefix ReadCurGlucosePageNumber"
         command += " --save "
         command += " sleep 0"
+
         for i in range(0, 2):
             result = self.cli_w_time(command=command)
-            if result == 'ERRORTimeout':
-                logging.warning("WARNING: command timeout. Trying to clean \
+            if result != 'Successful':
+                logging.warning("WARNING: command failed. Trying to clean \
                          the stick buffer. On (" + str(i) + ") try")
                 self.run_stick()
             elif not os.path.isfile(download_file):
@@ -319,7 +321,10 @@ class DownloadPumpData():
         logging.info("STDERR: " + err)
         logging.info("RETURN CODE: " + str(process.returncode))
         logging.info("ran command without timeout")
-        return "SUCESSRanCommand"
+        if process.returncode != 0:
+            return "ERRORCode-"+str(process.returncode)
+        else:
+            return "Successful"
 
     def file_to_bytes(self, file_name):
         logging.debug("file_to_bytes (" + file_name + ")")
@@ -372,15 +377,16 @@ class DownloadPumpData():
 if __name__ == '__main__':
     # downlaod the data from the pump
     # parse it to get the latest sgv
+    logging.info("\n\nNew pump sync\n")
     cloop_config = CloopConfig()
     db = cloop_db.CloopDB()
-    db.log("SUCCESS", "sync_device_pump", "Going to sync phone-pump at "+str(now))
+    db.log("SUCCESS", "sync_device_pump", "Going to sync device-pump at "+str(now))
     logging.info("NEW SYNC...")
     download_pump = DownloadPumpData()
     file_output = download_pump.download_cgm_data()
     cgm_xml = download_pump.cgm_data_file_to_sgv_xml(file_output)
     if cgm_xml == 'ERRORFileDoesNotExist':
-        db.log("FAIL", "sync_device_pump", "Failed to sync phone-pump at "+str(now))
+        db.log("FAIL", "sync_device_pump", "Failed to sync device-pump at "+str(now))
         logging.error('Could not complete sync\n\n\n\n')
     else:
         #  last_sgv_xml = download_pump.get_latest_sgv()
@@ -388,8 +394,8 @@ if __name__ == '__main__':
         db_trans = PumpDeviceDBTrans()
         #  db_trans.import_sgv(latest_sgv_xml)
         db_trans.import_sgvs(cgm_xml)
-        db.log("SUCCESS", "sync_device_pump", "Successfully synced phone-pump sgvs at "+str(now))
-        logging.info("DONE WITH SYNC.\n\n\n\n")
+        db.log("SUCCESS", "sync_device_pump", "Successfully synced device-pump sgvs at "+str(now))
+        logging.info("\nDONE WITH SYNC.\n\n\n\n")
 
 
 

@@ -71,7 +71,7 @@ class ConfirmInjectionProcess():
         sql = "select injection_id, status from injections " \
               "where datetime_intended + interval 3 minute > '" + record1["timestamp"] \
               + "' and datetime_intended - interval 3 minute < '" + record1["timestamp"] \
-              + "' and units_intended = " + units_intended \
+              + "' and abs(units_intended - " + units_intended + ") <= 1e-6 " \
               + " order by datetime_intended asc limit 1"
         possible_injs = self.cloop_db.select(sql)
         # if no existing injection
@@ -80,7 +80,7 @@ class ConfirmInjectionProcess():
         elif possible_injs[0][1] != "confirmed" and possible_injs[0][1] != "successful":
             self.confirm_inj(record1, record2, possible_injs[0][0])
         else:
-            logging.info("Injection already successful.")
+            logging.info("Injection #"+str(possible_injs[0][0])+" already successful.")
 
     def update_iob(self):
         max_interval_square, max_interval_bolus = self.get_max_intervals()

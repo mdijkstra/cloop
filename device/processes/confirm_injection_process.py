@@ -47,9 +47,6 @@ class ConfirmInjectionProcess():
     cloop_db = cloop_db.CloopDB()
     pump_interface = pump_interface.PumpInterface()
 
-    def __init__(self):
-        print "none"
-
     def run(self, include_init=True):
         # download from pump
         recent_data = self.pump_interface.get_mm_latest(include_init=include_init, recent_minutes=240)
@@ -71,7 +68,7 @@ class ConfirmInjectionProcess():
 
     def save_or_update_injection(self, record1, record2):
         units_intended, units_delivered = self.get_units_from_records(record1, record2)
-        sql = "select injection_id from injections " \
+        sql = "select injection_id, status from injections " \
               "where datetime_intended + interval 3 minute > '" + record1["timestamp"] \
               + "' and datetime_intended - interval 3 minute < '" + record1["timestamp"] \
               + "' and units_intended = " + units_intended \
@@ -80,8 +77,10 @@ class ConfirmInjectionProcess():
         # if no existing injection
         if possible_injs is None or len(possible_injs) <= 0:
             self.new_inj_from_json(record1, record2)
-        else:
+        elif possible_injs[0][1] != "confirmed" and possible_injs[0][1] != "successful":
             self.confirm_inj(record1, record2, possible_injs[0][0])
+        else:
+            logging.info("Injection already successful.")
 
     def update_iob(self):
         max_interval_square, max_interval_bolus = self.get_max_intervals()

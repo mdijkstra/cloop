@@ -52,6 +52,25 @@ class TestConfirmInjectionProcess(TestCase):
                 "_type": "TempBasalDuration", \
                 "duration (min)": 30, \
                 "_description": "TempBasalDuration 2014-09-03T17:31:06 head[2], body[0] op[0x16]" \
+            }, { \
+                "_type": "BolusWizard", \
+                "bg": 250, \
+                "correction_estimate": 0.8, \
+                "unknown_byte[10]": 0, \
+                "_description": "BolusWizard 2014-09-20T21:38:41 head[2], body[13] op[0x5b]", \
+                "timestamp": "2014-09-20T21:38:41", \
+                "sensitivity": 30, \
+                "carb_input": 0, \
+                "bg_target_high": 130, \
+                "unabsorbed_insulin_total": 2.9, \
+                "_byte[5]": 40, \
+                "unabsorbed_insulin_count": "??", \
+                "_byte[7]": 0, \
+                "unknown_byte[8]": 0, \
+                "carb_ratio": 14, \
+                "food_estimate": 0.0, \
+                "bg_target_low": 100, \
+                "bolus_estimate": 1.1 \
             } \
             ]'
 

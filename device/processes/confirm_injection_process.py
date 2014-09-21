@@ -52,7 +52,7 @@ class ConfirmInjectionProcess():
 
     def run(self, include_init=True):
         # download from pump
-        recent_data = self.pump_interface.get_mm_latest(include_init)
+        recent_data = self.pump_interface.get_mm_latest(include_init=include_init, recent_minutes=240)
         # for each injection get time
         if recent_data is not None:
             logging.info("Found "+str(len(recent_data))+" pieces of recent data. Processing..."+str(recent_data))

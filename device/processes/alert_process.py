@@ -43,5 +43,8 @@ else:
 
 
 class AlertProcess():
+    def __init__(self):
+        pass
+
     cloop_db = cloop_db.CloopDB()
     cloop_config = cloop_config.CloopConfig()

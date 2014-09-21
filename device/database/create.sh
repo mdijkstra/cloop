@@ -1,2 +1,2 @@
 echo "The password is: raspberry"
-mysql -u root -p < db_create.sql 
+mysql -u root -praspberry < db_create.sql 

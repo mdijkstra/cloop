@@ -19,7 +19,7 @@ fi
 
 nohup sudo /home/pi/diabetes/decoding-carelink/insert.sh &
 #wifi command not needed using wicd-curses to control wifi
-#nohup sudo /home/pi/diabetes/cloop/device/setup/pi/wireless.sh &
+nohup sudo /home/pi/diabetes/cloop/device/setup/pi/wireless.sh &
 
 
 exit 0

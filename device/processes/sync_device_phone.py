@@ -57,13 +57,14 @@ class DeviceBTPhoneTransData:
     def transfer(self, xml_to_send):
         logging.info("going to try to sync via BT")
         if self.socket is None:
+            logging.error("Socket is None :(")
             return None
         self.write(xml_to_send)
         time.sleep(2)
         read_str = self.read()
-        logging.info("**summary of bt**")
-        logging.info("wrote the following to bt  : " + xml_to_send)
-        logging.info("read the following from bt : " + read_str)
+        #logging.info("**summary of bt**")
+        #logging.info("wrote the following to bt  : " + xml_to_send)
+        #logging.info("read the following from bt : " + read_str)
         return read_str
 
     def read(self):
@@ -75,7 +76,7 @@ class DeviceBTPhoneTransData:
                     break
                 if "</EOM>" in data:
                     break
-            logging.info("DeviceBTPhoneTransData.read read : [%s]" % data)
+            #logging.info("DeviceBTPhoneTransData.read read : [%s]" % data)
         except IOError:
             return ""
         return data

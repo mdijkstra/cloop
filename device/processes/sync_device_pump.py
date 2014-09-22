@@ -118,7 +118,7 @@ class PumpDeviceDBTrans():
         sql += " and datetime_recorded = '" + datetime_recorded + "'"
         sql += ") limit 1"
         try:
-            logging.debug("Running sql '" + sql + "'")
+            #logging.debug("Running sql '" + sql + "'")
             self.db.execute(sql)
             self.db_conn.commit()
         except:

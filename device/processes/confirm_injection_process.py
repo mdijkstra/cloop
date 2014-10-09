@@ -46,10 +46,12 @@ class ConfirmInjectionProcess():
     cloop_config = cloop_config.CloopConfig()
     cloop_db = cloop_db.CloopDB()
     pump_interface = pump_interface.PumpInterface()
+    recent_minutes=2880
 
     def run(self, include_init=True):
         # download from pump
-        recent_data = self.pump_interface.get_mm_latest(include_init=include_init, recent_minutes=240)
+        recent_data = self.pump_interface.get_mm_latest(include_init=include_init, 
+          recent_minutes=self.recent_minutes)
         # for each injection get time
         if recent_data is not None:
             logging.info("Found "+str(len(recent_data))+" pieces of recent data. Processing..."+str(recent_data))

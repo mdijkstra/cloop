@@ -40,7 +40,7 @@ else:
 
 
 class PumpInterface():
-    decoding_dir = "/home/pi/diabetes/decoding-carelink"
+    decoding_dir = "/home/erobinson/diabetes/decoding-carelink"
     output_file_default = "/tmp/"
     download_dir = "/tmp/"
     latest_dnld_file = "mm-latest.data"

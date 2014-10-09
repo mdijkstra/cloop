@@ -147,7 +147,7 @@ class PumpDeviceDBTrans():
 
 
 class DownloadPumpData():
-    decoding_dir = "/home/pi/diabetes/decoding-carelink"
+    decoding_dir = "/home/erobinson/diabetes/decoding-carelink"
     output_file_default = "/tmp/"
     cgm_download_dir = "/tmp/"
     device_id = 584923
@@ -283,7 +283,8 @@ class DownloadPumpData():
         # decode the page number
         cur_page_data = self.file_to_bytes(download_file)
         # array style count
-        cur_page = int(cur_page_data[5]) - 1
+        cur_page = int(cur_page_data[3])
+	# cur_page = int(cur_page_data[5]) - 1
         if cur_page < 0 or cur_page > 500:
             logging.error("ERROR: Could not decode the current \
                      page (" + str(cur_page) + ")")

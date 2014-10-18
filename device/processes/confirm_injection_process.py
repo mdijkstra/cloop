@@ -46,7 +46,7 @@ class ConfirmInjectionProcess():
     cloop_config = cloop_config.CloopConfig()
     cloop_db = cloop_db.CloopDB()
     pump_interface = pump_interface.PumpInterface()
-    recent_minutes=2880
+    recent_minutes=4880
 
     def run(self, include_init=True):
         # download from pump

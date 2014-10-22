@@ -147,10 +147,10 @@ class PumpDeviceDBTrans():
 
 
 class DownloadPumpData():
-    decoding_dir = "/home/erobinson/diabetes/decoding-carelink"
-    output_file_default = "/tmp/"
-    cgm_download_dir = "/tmp/"
-    device_id = 584923
+    decoding_dir = "~/diabetes/cloop/"
+    output_file_default = decoding_dir + "tmp/"
+    cgm_download_dir = decoding_dir + "tmp/"
+    device_id = 740926
     port = "/dev/ttyUSB0"
     cur_page = None
 
